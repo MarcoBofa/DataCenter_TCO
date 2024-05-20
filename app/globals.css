@@ -1,0 +1,44 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+  font-family: "Bebas Neue";
+  src: url("/fonts/BebasNeue/BebasNeue-Regular.woff2") format("woff2");
+  font-weight: 400;
+  font-display: swap;
+}
+
+.titlehome {
+  font-family: "Baba Neue", sans-serif;
+}
+.shadow-top {
+  box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
+}
+
+.homebtn:hover {
+  background-color: #1a202c; /* Maintain the gray-900 color on hover */
+  border: 2px solid #f97316;
+  border-color: #f97316; /* Maintain the orange-500 border color on hover */
+  color: white; /* Maintain the white text color on hover */
+}
+
+.removebtn {
+  border: 2px solid transparent; /* Add a transparent border */
+  padding: 0.1rem;
+}
+
+.removebtn:hover {
+  background-color: #ffffff; /* Maintain the gray-900 color on hover */
+  border: 2px solid #ff1111;
+  border-color: #ff1111; /* Maintain the orange-500 border color on hover */
+  color: #ff1111;
+}
+
+.logo {
+  fill: blue; /* Change color */
+}
+
+.react-hot-toast-container {
+  width: 800px;
+}
