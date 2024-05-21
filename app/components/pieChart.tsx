@@ -101,7 +101,7 @@ const PieChart: React.FC<pieProps> = ({
   };
 
   return (
-    <div className="w-[550px] h-[550px] text-xl">
+    <div className="lg:w-[550px] lg:h-[550px] w-[400px] h-[400px] text-xl">
       <Pie data={data} options={options} />
     </div>
   );

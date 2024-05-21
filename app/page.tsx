@@ -145,7 +145,7 @@ export default function Home() {
           className="w-7/8 bg-white pb-10 rounded-2xl mb-4 relative"
           key={cluster.id}
         >
-          <div className="p-4 font-bold w-full text-left">SERVER</div>
+          <div className="p-4 font-bold w-full lg:text-left">SERVER</div>
           <div className="flex justify-between items-center p-4">
             <Server
               index={cluster.id}

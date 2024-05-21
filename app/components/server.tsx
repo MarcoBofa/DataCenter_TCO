@@ -322,7 +322,7 @@ const Server: React.FC<ServerProps> = ({
       <div className="flex flex-wrap items-center w-full">
         <select
           {...register("mode")}
-          className="max-w-[200px] xs:flex-grow p-2 rounded border-gray border-2 mb-2 mr-[50px]"
+          className="w-full sm:w-[180px] p-2 rounded border-gray border-2 mb-2 sm:mr-[50px]"
           id="mode"
         >
           <option value="Guided">Guided</option>
@@ -330,7 +330,7 @@ const Server: React.FC<ServerProps> = ({
         </select>
         <select
           {...register("cpu")}
-          className="w-full sm:w-[190px] p-2 rounded border-gray border-2 mb-2 mr-[50px]"
+          className="w-full sm:w-[190px] p-2 rounded border-gray border-2 mb-2 sm:mr-[50px]"
         >
           <option value="intel_plat">Intel Xeon Platinum</option>
           <option value="intel_gold">Intel Xeon Gold</option>
@@ -341,20 +341,20 @@ const Server: React.FC<ServerProps> = ({
           <option value="amd_bergamo">AMD EPYC Bergamo</option>
         </select>
         <div className="flex flex-wrap justify-center items-center w-full xs:w-auto">
-          <div className="w-[285px] border-green-500 bg-green-100 border-2 font-bold py-1 px-3 rounded-lg shadow mb-2 mr-[50px]">
+          <div className="w-[285px] border-green-500 bg-green-100 border-2 font-bold py-1 px-3 rounded-lg shadow mb-2 sm:mr-[50px]">
             Total Cores: {totalCores}
           </div>
-          <div className="w-[285px] border-sky-500 bg-sky-100 border-2 font-bold py-1 px-3 rounded-lg shadow mb-2 mr-[50px]">
+          <div className="w-[285px] border-sky-500 bg-sky-100 border-2 font-bold py-1 px-3 rounded-lg shadow mb-2 sm:mr-[50px]">
             Total Mem: {totalRam} GB
           </div>
-          <div className="w-[285px] border-red-500 border-2 bg-red-100 font-bold py-1 px-3 rounded-lg shadow mb-2 mr-[50px]">
+          <div className="w-[285px] border-red-500 border-2 bg-red-100 font-bold py-1 px-3 rounded-lg shadow mb-2 sm:mr-[50px]">
             Total Storage: {totalStorage} GB
           </div>
         </div>
       </div>
 
       <div className="flex flex-wrap items-center w-full ">
-        <div className="flex flex-col space-y-1 w-full sm:w-[190px] mb-2 mr-[48px]">
+        <div className="flex flex-col space-y-1 w-full sm:w-[190px] mb-2 sm:mr-[46px]">
           <label className="block text-sm" htmlFor="homeNodeCount">
             Number of Nodes
           </label>
@@ -366,7 +366,7 @@ const Server: React.FC<ServerProps> = ({
             placeholder="1"
           />
         </div>
-        <div className="flex flex-col space-y-1 w-full sm:w-[190px] mb-2 mr-[50px]">
+        <div className="flex flex-col space-y-1 w-full sm:w-[190px] mb-2 sm:mr-[50px]">
           <label className="block text-sm" htmlFor="processorsPerNode">
             Processors Per Node
           </label>
@@ -379,7 +379,7 @@ const Server: React.FC<ServerProps> = ({
             <option value="2">2</option>
           </select>
         </div>
-        <div className="flex flex-col space-y-1 w-full sm:w-[200px] mb-2 mr-[50px]">
+        <div className="flex flex-col space-y-1 w-full sm:w-[200px] mb-2 sm:mr-[50px]">
           <label className="block text-sm" htmlFor="coresPerProcessor">
             Cores per Processors
           </label>
@@ -405,7 +405,7 @@ const Server: React.FC<ServerProps> = ({
             <option value="96">96</option>
           </select>
         </div>
-        <div className="flex flex-col space-y-1 w-full sm:w-[200px] mb-2 mr-[50px]">
+        <div className="flex flex-col space-y-1 w-full sm:w-[200px] mb-2 sm:mr-[50px]">
           <label className="block text-sm" htmlFor="ramPerNode">
             Ram per Node
           </label>
@@ -428,7 +428,7 @@ const Server: React.FC<ServerProps> = ({
             <option value="2048">2048</option>
           </select>
         </div>
-        <div className="flex flex-col space-y-1 w-full sm:w-[200px] mb-2 mr-[50px]">
+        <div className="flex flex-col space-y-1 w-full sm:w-[200px] mb-2 sm:mr-[50px]">
           <label className="block text-sm" htmlFor="typeOfSSD">
             Type of SSD
           </label>
@@ -442,7 +442,7 @@ const Server: React.FC<ServerProps> = ({
             <option value="low_ssd">Low Performance</option>
           </select>
         </div>
-        <div className="flex flex-col space-y-1 w-full sm:w-[200px] mb-2 mr-[50px]">
+        <div className="flex flex-col space-y-1 w-full sm:w-[200px] mb-2 sm:mr-[50px]">
           <label className="block text-sm" htmlFor="storagePerNode">
             Storage per Node (GB)
           </label>
@@ -457,7 +457,7 @@ const Server: React.FC<ServerProps> = ({
       </div>
 
       <div className="flex flex-wrap items-center w-full">
-        <div className="flex flex-col space-y-1 w-full sm:w-[200px] mb-2 mr-[50px]">
+        <div className="flex flex-col space-y-1 w-full sm:w-[200px] mb-2 sm:mr-[50px]">
           <label className="block text-sm" htmlFor="gpu">
             Add GPU
           </label>
@@ -473,7 +473,7 @@ const Server: React.FC<ServerProps> = ({
 
         {gpu === "Yes" && (
           <>
-            <div className="flex flex-col space-y-1 w-full sm:w-[200px] mb-2 mr-[50px]">
+            <div className="flex flex-col space-y-1 w-full sm:w-[200px] mb-2 sm:mr-[50px]">
               <label className="block text-sm" htmlFor="gpu_perNode">
                 GPU Per Node
               </label>
@@ -489,7 +489,7 @@ const Server: React.FC<ServerProps> = ({
                 <option value="8">8</option>
               </select>
             </div>
-            <div className="flex flex-col space-y-1 w-full sm:w-[200px] mb-2 mr-[50px]">
+            <div className="flex flex-col space-y-1 w-full sm:w-[200px] mb-2 sm:mr-[50px]">
               <label className="block text-sm" htmlFor="gpu_model">
                 GPU Model
               </label>
