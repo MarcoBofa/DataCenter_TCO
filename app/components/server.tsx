@@ -330,7 +330,7 @@ const Server: React.FC<ServerProps> = ({
         </select>
         <select
           {...register("cpu")}
-          className="max-w-[200px] xs:flex-grow p-2 rounded border-gray border-2 mb-2 mr-[50px]"
+          className="w-full sm:w-[190px] p-2 rounded border-gray border-2 mb-2 mr-[50px]"
         >
           <option value="intel_plat">Intel Xeon Platinum</option>
           <option value="intel_gold">Intel Xeon Gold</option>
@@ -353,8 +353,8 @@ const Server: React.FC<ServerProps> = ({
         </div>
       </div>
 
-      <div className="flex flex-wrap items-center w-full">
-        <div className="flex flex-col space-y-1 w-full xs:w-[200px] mb-2 mr-[50px]">
+      <div className="flex flex-wrap items-center w-full ">
+        <div className="flex flex-col space-y-1 w-full sm:w-[190px] mb-2 mr-[48px]">
           <label className="block text-sm" htmlFor="homeNodeCount">
             Number of Nodes
           </label>
@@ -366,7 +366,7 @@ const Server: React.FC<ServerProps> = ({
             placeholder="1"
           />
         </div>
-        <div className="flex flex-col space-y-1 w-full xs:w-[200px] mb-2 mr-[50px]">
+        <div className="flex flex-col space-y-1 w-full sm:w-[190px] mb-2 mr-[50px]">
           <label className="block text-sm" htmlFor="processorsPerNode">
             Processors Per Node
           </label>

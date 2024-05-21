@@ -68,7 +68,7 @@ const PieChart: React.FC<pieProps> = ({
       legend: {
         labels: {
           font: {
-            size: 20, // Set the font size here
+            size: 15, // Set the font size here
           },
         },
       },
@@ -81,8 +81,13 @@ const PieChart: React.FC<pieProps> = ({
               (acc: number, curr: number) => acc + curr,
               0
             );
-            const percentage = ((value / total) * 100).toFixed(2) + "%";
-            return `${label}: ${percentage}`;
+            const percentage = ((value / total) * 100).toFixed(0) + "%"; // Remove decimals
+            const formattedValue =
+              "$" +
+              value.toLocaleString("en-US", {
+                maximumFractionDigits: 0,
+              }); // Add thousand separators
+            return `${label}: ${formattedValue} (${percentage})`;
           },
         },
         titleFont: {
@@ -96,7 +101,7 @@ const PieChart: React.FC<pieProps> = ({
   };
 
   return (
-    <div className="w-[700px] h-[700px] text-xl">
+    <div className="w-[550px] h-[550px] text-xl">
       <Pie data={data} options={options} />
     </div>
   );

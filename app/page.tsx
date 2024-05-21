@@ -128,7 +128,7 @@ export default function Home() {
   );
 
   return (
-    <main className="flex flex-col text-center justify-center space-y-[50px] items-center bg-grey-100 h-full bg-gray-100 pb-[50px]">
+    <main className="flex flex-col text-center justify-center space-y-[50px] text-sm items-center bg-grey-100 h-full bg-gray-100 pb-[50px]">
       <div className="text-2xl font-bold mt-[20px]">
         DATA CENTER TCO CALCULATOR
       </div>
@@ -225,8 +225,8 @@ export default function Home() {
         />
       </div>
 
-      <div className="flex w-7/8 bg-white pb-2 rounded-2xl items-center text-xl justify-center">
-        <div className="flex flex-row items-center justify-center w-[500px] mt-2 h-[70px] border-emerald-500 bg-emerald-100 border-2 font-bold py-1 px-3 rounded-lg shadow mr-4">
+      <div className="flex flex-wrap w-7/8 bg-white p-2 rounded-2xl items-center lg:text-lg justify-center px-4 ">
+        <div className="flex items-center justify-center w-[500px] mt-2 h-[70px] border-emerald-500 bg-emerald-100 border-2 font-bold py-1 px-3 rounded-lg shadow lg:mr-4 ">
           <div className="font-bold mr-1">TOTAL COST = $</div>
           {totalCost.toLocaleString("en-US", { maximumFractionDigits: 0 })}
         </div>
@@ -240,8 +240,10 @@ export default function Home() {
         </div>
       </div>
       <div className="flex flex-wrap justify-center items-center w-full">
-        <div className="flex flex-col items-center lg:mr-[100px]">
-          <h1>Pie Chart Example</h1>
+        <div className="flex flex-col items-center lg:mr-[100px] mb-3">
+          <h1 className="mb-3 font-bold text-lg">
+            Total Cost Without Amortization
+          </h1>
           <PieChart
             serverCost={totalServerCost}
             networkCost={totalNetCost}
@@ -251,8 +253,10 @@ export default function Home() {
             softwareLicenseCost={softwareLicenseCost}
           />
         </div>
-        <div className="flex flex-col items-center">
-          <h1>Pie Chart Example</h1>
+        <div className="flex flex-col items-center mb-3">
+          <h1 className="mb-3 font-bold text-lg">
+            Yearly Cost Considering Amortization
+          </h1>
           <PieChart
             serverCost={totalServerCost / 5}
             networkCost={totalNetCost / 5}
