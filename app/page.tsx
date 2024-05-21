@@ -226,11 +226,11 @@ export default function Home() {
       </div>
 
       <div className="flex flex-wrap w-7/8 bg-white p-2 rounded-2xl items-center lg:text-lg justify-center px-4 ">
-        <div className="flex items-center justify-center w-[500px] mt-2 h-[70px] border-emerald-500 bg-emerald-100 border-2 font-bold py-1 px-3 rounded-lg shadow lg:mr-4 ">
+        <div className="flex items-center justify-center w-[500px] mt-2 h-[50px] sm:h-[70px] border-emerald-500 bg-emerald-100 border-2 font-bold py-1 px-3 rounded-lg shadow lg:mr-4 ">
           <div className="font-bold mr-1">TOTAL COST = $</div>
           {totalCost.toLocaleString("en-US", { maximumFractionDigits: 0 })}
         </div>
-        <div className="flex flex-row items-center justify-center w-[500px] mt-2 h-[70px] border-amber-500 bg-amber-100 border-2 font-bold py-1 px-3 rounded-lg shadow">
+        <div className="flex flex-row items-center justify-center w-[500px] mt-2 h-[50px] sm:h-[70px] border-amber-500 bg-amber-100 border-2 font-bold py-1 px-3 rounded-lg shadow">
           <div className="font-bold mr-1">MAX POWER CONSUMPTION = </div>
           {(
             (totalNetworkConsumption + totalServerConsumption) *

@@ -84,13 +84,13 @@ const SoftwareLicense: React.FC<softwareProps> = ({
 
   return (
     <div className="flex flex-wrap items-center w-full">
-      <div className="flex flex-col space-y-1 w-full xs:w-[350px] mb-2 p-4 mr-[40px]">
+      <div className="flex flex-col space-y-1 w-full sm:w-[310px] mb-2 p-4 sm:mr-[40px]">
         <label className="block text-sm" htmlFor="os">
           Operating System
         </label>
         <select
           {...register("os")}
-          className="max-w-[350px] xs:flex-grow p-2 rounded border-gray border-2 mb-2"
+          className="w-full sm:w-[310px] p-2 rounded border-gray border-2 mb-2"
           id="os"
         >
           <option value="suse">SUSE Linux Enterprise Server</option>
@@ -100,7 +100,7 @@ const SoftwareLicense: React.FC<softwareProps> = ({
         </select>
       </div>
       {os === "custom" && (
-        <div className="flex flex-col space-y-1 w-full xs:w-[350px] mb-2 mr-[40px]">
+        <div className="flex flex-col space-y-1 w-full sm:w-[350px] mb-2 p-4 sm:mr-[40px]">
           <label
             className="block text-sm text-center ml-5"
             htmlFor="priceLicense"
@@ -109,7 +109,7 @@ const SoftwareLicense: React.FC<softwareProps> = ({
           </label>
           <input
             {...register("priceLicense", { valueAsNumber: true })}
-            className="max-w-[350px] xs:flex-grow p-2 rounded border-gray border-2 mb-2"
+            className="w-full sm:w-[350px] p-2 rounded border-gray border-2 mb-2"
             type="number"
             step="1"
             placeholder="0"
@@ -117,7 +117,7 @@ const SoftwareLicense: React.FC<softwareProps> = ({
           />{" "}
         </div>
       )}
-      <div className="w-[400px] border-yellow-500 bg-yellow-100 border-2 font-bold py-1 px-3 rounded-lg mt-4 shadow mr-[50px]">
+      <div className="sm:w-[400px] w-full border-yellow-500 bg-yellow-100 border-2 font-bold py-1 px-3 rounded-lg mt-4 shadow ml-4 mr-4 sm:mr-[50px]">
         Software License Cost: $
         {softwareCost.toLocaleString("en-US", { maximumFractionDigits: 0 })}
       </div>

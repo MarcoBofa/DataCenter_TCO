@@ -101,33 +101,33 @@ const PowerDistribution: React.FC<powerProps> = ({
 
   return (
     <div className="flex flex-wrap items-center w-full">
-      <div className="flex flex-col space-y-1 w-full xs:w-[350px] mb-2 p-4 mr-[40px]">
+      <div className="flex flex-col space-y-1 w-full sm:w-[320px] mb-2 p-4 sm:mr-[40px]">
         <label className="block text-sm text-center ml-5" htmlFor="pue">
           Desired Power Usage Effectives (PUE)
         </label>
         <input
           {...register("pue", { valueAsNumber: true })}
-          className="max-w-[350px] xs:flex-grow p-2 rounded border-gray border-2 mb-2"
+          className="sm:w-[320px] w-full p-2 rounded border-gray border-2 mb-2"
           type="number"
           step="0.01"
           placeholder="1.35"
           id="pue"
         />
       </div>
-      <div className="flex flex-col space-y-1 w-full xs:w-[250px] mb-2 mr-[40px]">
+      <div className="flex flex-col space-y-1 w-full sm:w-[250px] p-4 mb-2 sm:mr-[40px]">
         <label className="block text-sm" htmlFor="cooling">
           Cooling
         </label>
         <select
           {...register("cooling")}
-          className="max-w-[250px] xs:flex-grow p-2 rounded border-gray border-2 mb-2"
+          className="w-full sm:w-[250px] p-2 rounded border-gray border-2 mb-2 sm:mr-[40px]"
           id="cooling"
         >
           <option value="liquid">Liquid</option>
           <option value="Air">Air</option>
         </select>
       </div>
-      <div className="w-[450px] border-cyan-500 bg-cyan-100 border-2 font-bold py-1 px-3 rounded-lg mt-4 shadow mr-[50px]">
+      <div className="w-[450px] border-cyan-500 bg-cyan-100 border-2 font-bold py-1 px-3 rounded-lg mt-4 shadow ml-4 mr-4 sm:mr-[50px]">
         Power Distribution & Cooling cost: $
         {pdCost.toLocaleString("en-US", { maximumFractionDigits: 0 })}
       </div>

@@ -255,19 +255,19 @@ const Network: React.FC<NetworkProps> = ({
       <div className="flex flex-wrap items-center w-full">
         <select
           {...register("provider")}
-          className="max-w-[250px] xs:flex-grow p-2 rounded border-gray border-2 mb-2 mr-[50px]"
+          className="w-full sm:w-[200px] p-2 rounded border-gray border-2 mb-3 sm:mr-[50px]"
         >
           <option value="infiniband">Nvidia Mellanox Infiniband</option>
           <option value="slingshot">HPE Cray Slingshot</option>
         </select>
-        <div className="w-[450px] border-orange-500 bg-orange-100 border-2 font-bold py-1 px-3 rounded-lg shadow mb-2 mr-[50px]">
+        <div className="w-[450px] border-orange-500 bg-orange-100 border-2 font-bold py-1 px-3 rounded-lg shadow mb-2 sm:mr-[50px]">
           Network Cost: $
           {totalNetCost.toLocaleString("en-US", { maximumFractionDigits: 0 })}
         </div>
       </div>
 
       <div className="flex flex-wrap items-center w-full">
-        <div className="flex flex-col space-y-1 w-full xs:w-[250px] mb-2 mr-[50px]">
+        <div className="flex flex-col space-y-1 w-full sm:w-[200px] mb-2 sm:mr-[50px]">
           <label className="block text-sm" htmlFor="tier">
             Tier Level
           </label>
@@ -282,7 +282,7 @@ const Network: React.FC<NetworkProps> = ({
             <option value="4">4</option>
           </select>
         </div>
-        <div className="flex flex-col space-y-1 w-full xs:w-[200px] mb-2 mr-[50px]">
+        <div className="flex flex-col space-y-1 w-full sm:w-[200px] mb-2 sm:mr-[50px]">
           <label className="block text-sm" htmlFor="topology">
             Topology
           </label>
@@ -296,7 +296,7 @@ const Network: React.FC<NetworkProps> = ({
             <option value="Dragonfly">Dragonfly</option>
           </select>
         </div>
-        <div className="flex flex-col space-y-1 w-full xs:w-[200px] mb-2 mr-[50px]">
+        <div className="flex flex-col space-y-1 w-full sm:w-[200px] mb-2 sm:mr-[50px]">
           <label className="block text-sm" htmlFor="bandwidth">
             Bandwidth
           </label>

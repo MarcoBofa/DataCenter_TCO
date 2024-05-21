@@ -70,13 +70,13 @@ const PowerCost: React.FC<powerProps> = ({
 
   return (
     <div className="flex flex-wrap items-center w-full">
-      <div className="flex flex-col space-y-1 w-full xs:w-[350px] mb-2 p-4 mr-[40px]">
+      <div className="flex flex-col space-y-1 w-full sm:w-[350px] mb-2 p-4 sm:mr-[40px]">
         <label className="block text-sm" htmlFor="choice">
           Do you know expected Server Peak utilization?
         </label>
         <select
           {...register("choice")}
-          className="max-w-[350px] xs:flex-grow p-2 rounded border-gray border-2 mb-2"
+          className="w-full sm:w-[350px] p-2 rounded border-gray border-2 mb-2"
           id="choice"
         >
           <option value="no">No</option>
@@ -84,13 +84,13 @@ const PowerCost: React.FC<powerProps> = ({
         </select>
       </div>
       {choice === "yes" && (
-        <div className="flex flex-col space-y-1 w-full xs:w-[350px] mb-2 mr-[40px]">
+        <div className="flex flex-col space-y-1 w-full sm:w-[350px] mb-2 p-4 sm:mr-[40px]">
           <label className="block text-sm text-center ml-5" htmlFor="usage">
             Expected Peak Server Utilization (%)
           </label>
           <input
             {...register("usage", { valueAsNumber: true })}
-            className="max-w-[350px] xs:flex-grow p-2 rounded border-gray border-2 mb-2"
+            className="w-full sm:w-[350px] p-2 rounded border-gray border-2 mb-2"
             type="number"
             step="1"
             placeholder="60%"
@@ -98,7 +98,7 @@ const PowerCost: React.FC<powerProps> = ({
           />{" "}
         </div>
       )}
-      <div className="w-[400px] border-fuchsia-500 bg-fuchsia-100 border-2 font-bold py-1 px-3 rounded-lg mt-4 shadow mr-[50px]">
+      <div className="sm:w-[400px] w-full border-fuchsia-500 bg-fuchsia-100 border-2 font-bold py-1 px-3 rounded-lg mt-4 shadow ml-4 mr-4 sm:mr-[50px]">
         Energy Cost (Year): $
         {costOfPower.toLocaleString("en-US", { maximumFractionDigits: 0 })}
       </div>

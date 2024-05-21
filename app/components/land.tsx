@@ -63,22 +63,22 @@ const Land: React.FC<LandProps> = ({
       <div className="flex flex-wrap items-center w-full">
         <select
           {...register("mode")}
-          className="max-w-[200px] xs:flex-grow p-2 rounded border-gray border-2 mb-2 mr-[50px]"
+          className="w-full sm:w-[200px] p-2 rounded border-gray border-2 mb-3 sm:mr-[50px]"
         >
           <option value="Guided">Guided</option>
           <option value="Customizable">Customizable</option>
         </select>
-        <div className="w-[285px] border-sky-500 bg-sky-100 text-center border-2 font-bold py-1 px-3 rounded-lg shadow mb-2 mr-[50px]">
+        <div className="w-full sm:w-[285px] border-sky-500 bg-sky-100 text-center border-2 font-bold py-1 px-3 rounded-lg shadow mb-2 sm:mr-[50px]">
           GOI: {GOI.toFixed(1)} $/ft^2
         </div>
-        <div className="w-[450px] border-indigo-500 text-center bg-indigo-100 border-2 font-bold py-1 px-3 rounded-lg shadow mb-2 mr-[50px]">
+        <div className="w-[450px] border-indigo-500 text-center bg-indigo-100 border-2 font-bold py-1 px-3 rounded-lg shadow mb-2 sm:mr-[50px]">
           Property Value: $
           {propertyValue.toLocaleString("en-US", { maximumFractionDigits: 0 })}
         </div>
       </div>
 
       <div className="flex flex-wrap items-center w-full">
-        <div className="flex flex-col space-y-1 w-full xs:w-[200px] mb-2 mr-[50px]">
+        <div className="flex flex-col space-y-1 w-full sm:w-[200px] mb-2 sm:mr-[50px]">
           <label className="block text-sm" htmlFor="ft">
             Square Footage (kft^2)
           </label>
@@ -93,7 +93,7 @@ const Land: React.FC<LandProps> = ({
             id="ft"
           />
         </div>
-        <div className="flex flex-col space-y-1 w-full xs:w-[200px] mb-2 mr-[50px]">
+        <div className="flex flex-col space-y-1 w-full sm:w-[200px] mb-2 sm:mr-[50px]">
           <label className="block text-sm" htmlFor="occupancy">
             Occupancy (%)
           </label>
@@ -105,7 +105,7 @@ const Land: React.FC<LandProps> = ({
             id="occupancy"
           />
         </div>
-        <div className="flex flex-col space-y-1 w-full xs:w-[200px] mb-2 mr-[50px]">
+        <div className="flex flex-col space-y-1 w-full sm:w-[200px] mb-2 sm:mr-[50px]">
           <label className="block text-sm" htmlFor="powerRating">
             Power Rating Facility (MW)
           </label>
@@ -118,7 +118,7 @@ const Land: React.FC<LandProps> = ({
             id="powerRating"
           />
         </div>
-        <div className="flex flex-col space-y-1 w-full xs:w-[200px] mb-2 mr-[50px]">
+        <div className="flex flex-col space-y-1 w-full sm:w-[200px] mb-2 sm:mr-[50px]">
           <label className="block text-sm" htmlFor="rentalRate">
             Rental Rates ($Kw/mo)
           </label>
@@ -130,7 +130,7 @@ const Land: React.FC<LandProps> = ({
             id="rentalRate"
           />
         </div>
-        <div className="flex flex-col space-y-1 w-full xs:w-[200px] mb-2 mr-[50px]">
+        <div className="flex flex-col space-y-1 w-full sm:w-[200px] mb-2 sm:mr-[50px]">
           <label className="block text-sm" htmlFor="cap">
             Cap Rate
           </label>
