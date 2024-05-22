@@ -15,6 +15,9 @@
 .shadow-top {
   box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
 }
+.test-bg {
+  background-color: #ccff33;
+}
 
 .homebtn:hover {
   background-color: #1a202c; /* Maintain the gray-900 color on hover */

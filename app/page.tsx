@@ -1,4 +1,5 @@
 "use client";
+import "../app/globals.css";
 import React, { useState, useEffect, useCallback } from "react";
 import Land from "./components/land";
 import Server from "./components/server";
@@ -9,6 +10,7 @@ import PowerDistribution from "./components/powerDistribution";
 import PowerCost from "./components/powerCost";
 import { copyFileSync } from "fs";
 import SoftwareLicense from "./components/softwareLicense";
+import Storage from "./components/storage";
 
 interface serverClusterProps {
   id: string;
@@ -18,8 +20,19 @@ interface serverClusterProps {
   coreNumber: number;
 }
 
+interface storageClusterProps {
+  id: string;
+  nodeCount: number;
+  totalCost: number;
+  consumption: number;
+  storage: number;
+}
+
 export default function Home() {
   const [serverClusters, setServerClusters] = useState<serverClusterProps[]>(
+    []
+  );
+  const [storageCluster, setStorageClusters] = useState<storageClusterProps[]>(
     []
   );
   const [totalCost, setTotalCost] = useState(0);
@@ -35,6 +48,8 @@ export default function Home() {
   const [totalServerCost, setTotalServerCost] = useState(0);
   const [coresNumber, setCoreNumber] = useState(0);
   const [softwareLicenseCost, setSoftwareLicenseCost] = useState(0);
+  const [totalStorageCost, setTotalStorageCost] = useState(0);
+  const [totalStorage, setTotalStorage] = useState(0);
 
   const [pue, setPueValue] = useState(1.35);
 
@@ -57,11 +72,32 @@ export default function Home() {
       0
     );
 
+    const tmp_storage = storageCluster.reduce(
+      (sum, cluster) => sum + cluster.storage,
+      0
+    );
+
+    const tmp_storage_consumption = storageCluster.reduce(
+      (sum, cluster) => sum + cluster.consumption,
+      0
+    );
+
+    const tmp_storage_cost = storageCluster.reduce(
+      (sum, cluster) => sum + cluster.totalCost,
+      0
+    );
+    setTotalStorageCost(tmp_storage_cost);
+    setTotalStorage(tmp_storage);
+
     setCoreNumber(totalCoreNumber);
-    setTotalServerConsumption(totalServerP);
+    setTotalServerConsumption(totalServerP + tmp_storage_consumption);
     setTotalNodeCount(totalNode);
     setTotalCost(
-      totalServerCosttemp + totalNetCost + propertyValue + totalPCost
+      totalServerCosttemp +
+        totalNetCost +
+        propertyValue +
+        totalPCost +
+        tmp_storage_cost
     );
     setTotalServerCost(totalServerCosttemp);
   }, [
@@ -71,6 +107,7 @@ export default function Home() {
     totalServerConsumption,
     totalPCost,
     coresNumber,
+    storageCluster,
   ]);
 
   const addServerCluster = () => {
@@ -86,8 +123,25 @@ export default function Home() {
     ]);
   };
 
+  const addStorageCluster = () => {
+    setStorageClusters([
+      ...storageCluster,
+      {
+        id: uuidv4(),
+        nodeCount: 1,
+        totalCost: 0,
+        consumption: 0,
+        storage: 0,
+      },
+    ]);
+  };
+
   const removeServerCluster = (id: string) => {
     setServerClusters(serverClusters.filter((cluster) => cluster.id !== id));
+  };
+
+  const removeStorageCluster = (id: string) => {
+    setStorageClusters(storageCluster.filter((cluster) => cluster.id !== id));
   };
 
   const updateServerCluster = useCallback((id: string, newCost: number) => {
@@ -121,6 +175,36 @@ export default function Home() {
           cluster.id === id
             ? { ...cluster, serverConsumption: newCons }
             : cluster
+        )
+      );
+    },
+    []
+  );
+
+  const updateStorageNodeConsumption = useCallback(
+    (id: string, newCons: number) => {
+      setStorageClusters((prevClusters) =>
+        prevClusters.map((cluster) =>
+          cluster.id === id ? { ...cluster, consumption: newCons } : cluster
+        )
+      );
+    },
+    []
+  );
+
+  const updateStorageAmount = useCallback((id: string, newNode: number) => {
+    setStorageClusters((prevClusters) =>
+      prevClusters.map((cluster) =>
+        cluster.id === id ? { ...cluster, storage: newNode } : cluster
+      )
+    );
+  }, []);
+
+  const updateStorageClusterCost = useCallback(
+    (id: string, newCost: number) => {
+      setStorageClusters((prevClusters) =>
+        prevClusters.map((cluster) =>
+          cluster.id === id ? { ...cluster, totalCost: newCost } : cluster
         )
       );
     },
@@ -164,13 +248,43 @@ export default function Home() {
           </div>
         </div>
       ))}
+      {storageCluster.map((cluster) => (
+        <div
+          className="w-7/8 bg-white pb-10 rounded-2xl mb-4 relative"
+          key={cluster.id}
+        >
+          <div className="p-4 font-bold w-full lg:text-left">STORAGE</div>
+          <div className="flex justify-between items-center p-4">
+            <Storage
+              index={cluster.id}
+              nodeCount={cluster.nodeCount}
+              updateStorageClusterCost={updateStorageClusterCost}
+              updateStorageAmount={updateStorageAmount}
+              updateStorageNodeConsumption={updateStorageNodeConsumption}
+            />
+            <button
+              onClick={() => removeStorageCluster(cluster.id)}
+              className="ml-2 p-1 bg-red-500 text-white rounded hover:bg-red-700 absolute right-4 bottom-4"
+            >
+              Remove Storage Node
+            </button>
+          </div>
+        </div>
+      ))}
       <div className="flex justify-between items-center mt-4">
         <button
           onClick={addServerCluster}
-          className="p-2 bg-blue-500 text-white rounded hover:bg-blue-700"
+          className="p-2 bg-blue-500 text-white rounded hover:bg-blue-700 mr-5"
         >
           Add Server Node
         </button>
+        <button
+          onClick={addStorageCluster}
+          className="p-2 bg-emerald-500 text-white rounded hover:bg-emerald-700"
+        >
+          Add Storage Node
+        </button>
+        {totalStorageCost}
       </div>
 
       <div className="w-7/8 bg-white pb-10 rounded-2xl">
