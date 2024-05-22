@@ -284,7 +284,6 @@ export default function Home() {
         >
           Add Storage Node
         </button>
-        {totalStorageCost}
       </div>
 
       <div className="w-7/8 bg-white pb-10 rounded-2xl">
