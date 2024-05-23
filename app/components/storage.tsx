@@ -74,6 +74,10 @@ const Storage: React.FC<StorageProps> = ({
       }
     }
 
+    if (choice === "custom") {
+      cost = amount * price;
+    }
+
     setStorageCost(cost);
     let consumption = storageConsumption * amount;
 
@@ -100,7 +104,7 @@ const Storage: React.FC<StorageProps> = ({
       {choice == "custom" && (
         <div className="flex flex-col space-y-1 w-full sm:w-[250px] mb-2 p-4 sm:mr-[40px]">
           <label className="block text-sm text-center ml-5" htmlFor="price">
-            Price per GB
+            Price per TB
           </label>
           <input
             {...register("price", { valueAsNumber: true })}
