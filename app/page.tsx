@@ -11,6 +11,7 @@ import PowerCost from "./components/powerCost";
 import { copyFileSync } from "fs";
 import SoftwareLicense from "./components/softwareLicense";
 import Storage from "./components/storage";
+import Labor from "./components/labor";
 
 interface serverClusterProps {
   id: string;
@@ -50,6 +51,7 @@ export default function Home() {
   const [softwareLicenseCost, setSoftwareLicenseCost] = useState(0);
   const [totalStorageCost, setTotalStorageCost] = useState(0);
   const [totalStorage, setTotalStorage] = useState(0);
+  const [laborCost, setLaborCost] = useState(0);
 
   const [pue, setPueValue] = useState(1.35);
 
@@ -335,6 +337,15 @@ export default function Home() {
           nodeCount={totalNodeCount}
           costOfPower={costOfPower}
           setCostOfPower={setCostOfPower}
+        />
+      </div>
+
+      <div className="w-7/8 bg-white pb-10 rounded-2xl">
+        <div className="p-4 font-bold w-full text-left">WORKFORCE</div>
+        <Labor
+          nodeCount={totalNodeCount}
+          laborCost={costOfPower}
+          setLaborCost={setLaborCost}
         />
       </div>
 
