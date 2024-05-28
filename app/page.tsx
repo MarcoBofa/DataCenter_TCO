@@ -352,6 +352,13 @@ export default function Home() {
           laborChoice={laborChoice}
           setLaborCost={setLaborCost}
           setLaborChoice={setLaborChoice}
+          tcoCost={
+            propertyValue +
+            totalServerCost +
+            totalNetCost +
+            totalStorageCost +
+            totalPCost
+          }
         />
       </div>
       <div className="flex flex-wrap w-7/8 bg-white p-2 rounded-2xl items-center lg:text-lg justify-center px-4 ">

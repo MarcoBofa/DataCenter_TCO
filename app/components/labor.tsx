@@ -16,6 +16,7 @@ interface localProps {
 
 interface laborProps {
   nodeCount: number;
+  tcoCost: number;
   laborCost: number;
   laborChoice: boolean;
   setLaborCost: (cost: number) => void;
@@ -24,6 +25,7 @@ interface laborProps {
 
 const Labor: React.FC<laborProps> = ({
   nodeCount,
+  tcoCost,
   laborCost,
   laborChoice,
   setLaborCost,
@@ -50,30 +52,68 @@ const Labor: React.FC<laborProps> = ({
     let baseCost = 0;
     let totalCost = 0;
     let totalEmp = 0;
-    Object.keys(selectedRoles).forEach((role) => {
-      for (const category in SALARIES) {
-        if (role in SALARIES[category as keyof typeof SALARIES]) {
-          const salaryString = SALARIES[category as keyof typeof SALARIES][
-            role as keyof (typeof SALARIES)[keyof typeof SALARIES]
-          ] as string;
-          const salary = parseFloat(salaryString.replace(/[^0-9.-]+/g, ""));
-          const additionalCostPercentage =
-            ADDITIONAL_COST_PERCENTAGES[role as Role] || 0;
-          const totalRoleCost = salary * (1 + additionalCostPercentage);
-          const numEmployees = selectedRoles[role as Role] || 0;
-          baseCost += salary * numEmployees;
-          totalCost += totalRoleCost * numEmployees;
-          totalEmp += numEmployees;
+
+    if (choice === "custom") {
+      Object.keys(selectedRoles).forEach((role) => {
+        for (const category in SALARIES) {
+          if (role in SALARIES[category as keyof typeof SALARIES]) {
+            const salaryString = SALARIES[category as keyof typeof SALARIES][
+              role as keyof (typeof SALARIES)[keyof typeof SALARIES]
+            ] as string;
+            const salary = parseFloat(salaryString.replace(/[^0-9.-]+/g, ""));
+            const additionalCostPercentage =
+              ADDITIONAL_COST_PERCENTAGES[role as Role] || 0;
+            const totalRoleCost = salary * (1 + additionalCostPercentage);
+            const numEmployees = selectedRoles[role as Role] || 0;
+            baseCost += salary * numEmployees;
+            totalCost += totalRoleCost * numEmployees;
+            totalEmp += numEmployees;
+          }
         }
+      });
+    } else {
+      let tmp = tcoCost / 5;
+
+      let baseEmployees = 5;
+      const additionalEmployeesPer100Nodes = 2;
+      const additionalEmployees =
+        Math.ceil(nodeCount / 100) * additionalEmployeesPer100Nodes;
+
+      totalEmp = baseEmployees + additionalEmployees;
+
+      baseCost = totalEmp * 110000;
+
+      let tmp_cost = baseCost * 1.25;
+
+      if (tmp_cost / tmp > 0.5) {
+        totalEmp = Math.ceil(tmp / (150000 * 1.25));
+        baseCost = 110000 * totalEmp;
+        tmp_cost = totalEmp * (110000 * 1.25);
       }
-    });
+
+      totalCost = tmp_cost;
+
+      if (totalEmp < 5) {
+        totalEmp = 5;
+        baseCost = 110000 * totalEmp;
+        totalCost = totalEmp * 110000 * 1.25;
+      }
+    }
 
     setLaborChoice(include);
     setTotalBaseLaborCost(baseCost);
     setTotalLaborCost(totalCost);
     setTotalEmployees(totalEmp);
     setLaborCost(totalCost);
-  }, [selectedRoles, nodeCount, setLaborCost, include, setLaborChoice]);
+  }, [
+    selectedRoles,
+    nodeCount,
+    setLaborCost,
+    include,
+    setLaborChoice,
+    tcoCost,
+    choice,
+  ]);
 
   const handleRoleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const role = event.target.value as Role;
@@ -118,7 +158,7 @@ const Labor: React.FC<laborProps> = ({
         </div>
         <div className="flex flex-col space-y-1 w-full sm:w-[250px] sm:mr-[15px]">
           <label className="block text-sm" htmlFor="choice">
-            Selection
+            Estimation
           </label>
           <select
             {...register("choice")}
@@ -129,9 +169,14 @@ const Labor: React.FC<laborProps> = ({
             <option value="custom">Custom</option>
           </select>
         </div>
+        <div className="flex flex-col space-y-1 w-full sm:w-[250px] min-w-[100px] sm:mr-[15px] rounded">
+          <label className="block text-sm h-[40px] border-gray-00 border-2 pt-2 mt-[23px]">
+            Total Employees: {totalEmployees}
+          </label>
+        </div>
         {choice === "custom" && (
           <>
-            <div className="flex flex-col space-y-1 w-full sm:w-[250px] sm:mr-[15px]">
+            <div className="flex flex-col space-y-1 w-full sm:w-[250px]">
               <label className="block text-sm" htmlFor="role">
                 Select a role
               </label>
@@ -151,11 +196,6 @@ const Labor: React.FC<laborProps> = ({
                   </optgroup>
                 ))}
               </select>
-            </div>
-            <div className="flex flex-col space-y-1 w-full sm:w-[250px] min-w-[100px]">
-              <label className="block text-sm h-[40px] border-gray-00 border-2 pt-2 mt-[23px]">
-                Total Employees: {totalEmployees}
-              </label>
             </div>
           </>
         )}
