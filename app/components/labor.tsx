@@ -11,21 +11,27 @@ import toast from "react-hot-toast";
 
 interface localProps {
   choice: string;
+  include: boolean;
 }
 
 interface laborProps {
   nodeCount: number;
   laborCost: number;
+  laborChoice: boolean;
   setLaborCost: (cost: number) => void;
+  setLaborChoice: (choice: boolean) => void;
 }
 
 const Labor: React.FC<laborProps> = ({
   nodeCount,
   laborCost,
+  laborChoice,
   setLaborCost,
+  setLaborChoice,
 }) => {
   const { register, watch } = useForm<localProps>({
     defaultValues: {
+      include: false,
       choice: "guided",
     },
   });
@@ -38,6 +44,7 @@ const Labor: React.FC<laborProps> = ({
   }>({});
 
   const choice = watch("choice");
+  const include = watch("include");
 
   useEffect(() => {
     let baseCost = 0;
@@ -60,11 +67,13 @@ const Labor: React.FC<laborProps> = ({
         }
       }
     });
+
+    setLaborChoice(include);
     setTotalBaseLaborCost(baseCost);
     setTotalLaborCost(totalCost);
     setTotalEmployees(totalEmp);
     setLaborCost(totalCost);
-  }, [selectedRoles]);
+  }, [selectedRoles, nodeCount, setLaborCost, include, setLaborChoice]);
 
   const handleRoleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const role = event.target.value as Role;
@@ -92,9 +101,22 @@ const Labor: React.FC<laborProps> = ({
   };
 
   return (
-    <div className="flex flex-col items-center w-full p-4">
-      <div className="flex flex-col sm:flex-row items-center space-y-4 sm:space-y-0 sm:space-x-4 mb-4 w-full">
-        <div className="flex flex-col space-y-1 w-full sm:w-[250px]">
+    <div className="flex flex-wrap items-center w-full p-4">
+      <div className="flex flex-wrap items-center space-y-4 sm:space-y-0 mb-4 w-full">
+        <div className="flex flex-col space-y-1 w-full sm:w-[250px] sm:mr-[15px]">
+          <label className="block text-sm" htmlFor="include">
+            Include in Total Cost?
+          </label>
+          <select
+            {...register("include")}
+            className="w-full sm:w-[250px] p-2 rounded border-gray border-2 mb-2"
+            id="include"
+          >
+            <option value="true">Yes</option>
+            <option value="false">No</option>
+          </select>
+        </div>
+        <div className="flex flex-col space-y-1 w-full sm:w-[250px] sm:mr-[15px]">
           <label className="block text-sm" htmlFor="choice">
             Selection
           </label>
@@ -109,7 +131,7 @@ const Labor: React.FC<laborProps> = ({
         </div>
         {choice === "custom" && (
           <>
-            <div className="flex flex-col space-y-1 w-full sm:w-[250px]">
+            <div className="flex flex-col space-y-1 w-full sm:w-[250px] sm:mr-[15px]">
               <label className="block text-sm" htmlFor="role">
                 Select a role
               </label>

@@ -12,6 +12,7 @@ interface pieProps {
   energyCost: number;
   powerAndCoolingCost: number;
   softwareLicenseCost: number;
+  laborCost?: number; // Optional labor cost
 }
 
 const PieChart: React.FC<pieProps> = ({
@@ -21,27 +22,37 @@ const PieChart: React.FC<pieProps> = ({
   energyCost,
   powerAndCoolingCost,
   softwareLicenseCost,
+  laborCost, // Optional labor cost
 }) => {
+  const costs = [
+    serverCost,
+    networkCost,
+    buildingCost,
+    energyCost,
+    powerAndCoolingCost,
+    softwareLicenseCost,
+  ];
+
+  if (laborCost !== undefined) {
+    costs.push(laborCost);
+  }
+
+  const labels = [
+    "Server Cost",
+    "Network Cost",
+    "Building Cost",
+    "Energy Cost",
+    "Power & Cooling Cost",
+    "Software Cost",
+    "Labor Cost", // Label for the labor cost
+  ];
+
   const data = {
-    labels: [
-      "Server Cost",
-      "Network Cost",
-      "Building Cost",
-      "Energy Cost",
-      "Power & Cooling Cost",
-      "Software Cost",
-    ],
+    labels: labels.slice(0, costs.length), // Adjust labels based on the number of costs
     datasets: [
       {
         label: "Cost",
-        data: [
-          serverCost,
-          networkCost,
-          buildingCost,
-          energyCost,
-          powerAndCoolingCost,
-          softwareLicenseCost,
-        ],
+        data: costs,
         backgroundColor: [
           "rgba(40, 206, 40, 0.2)",
           "rgba(249, 115, 22 , 0.2)",
@@ -49,6 +60,7 @@ const PieChart: React.FC<pieProps> = ({
           "rgba(217, 70, 239, 0.2)",
           "rgba(34, 211, 238 , 0.3)",
           "rgba(251, 219, 91, 0.3)",
+          "rgba(75, 192, 192, 0.3)", // Color for the labor cost
         ],
         borderColor: [
           "rgba(40, 206, 40, 1)",
@@ -57,6 +69,7 @@ const PieChart: React.FC<pieProps> = ({
           "rgba(217, 70, 239, 1)",
           "rgba(34, 211, 238 , 1)",
           "rgba(251, 191, 36 , 1)",
+          "rgba(75, 192, 192, 1)", // Border color for the labor cost
         ],
         borderWidth: 2,
       },

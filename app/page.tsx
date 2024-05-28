@@ -52,6 +52,7 @@ export default function Home() {
   const [totalStorageCost, setTotalStorageCost] = useState(0);
   const [totalStorage, setTotalStorage] = useState(0);
   const [laborCost, setLaborCost] = useState(0);
+  const [laborChoice, setLaborChoice] = useState(false);
 
   const [pue, setPueValue] = useState(1.35);
 
@@ -99,7 +100,8 @@ export default function Home() {
         totalNetCost +
         propertyValue +
         totalPCost +
-        tmp_storage_cost
+        tmp_storage_cost +
+        (laborChoice ? laborCost : 0)
     );
     setTotalServerCost(totalServerCosttemp);
   }, [
@@ -110,6 +112,8 @@ export default function Home() {
     totalPCost,
     coresNumber,
     storageCluster,
+    laborChoice,
+    laborCost,
   ]);
 
   const addServerCluster = () => {
@@ -345,10 +349,11 @@ export default function Home() {
         <Labor
           nodeCount={totalNodeCount}
           laborCost={costOfPower}
+          laborChoice={laborChoice}
           setLaborCost={setLaborCost}
+          setLaborChoice={setLaborChoice}
         />
       </div>
-
       <div className="flex flex-wrap w-7/8 bg-white p-2 rounded-2xl items-center lg:text-lg justify-center px-4 ">
         <div className="flex items-center justify-center w-[500px] mt-2 h-[50px] sm:h-[70px] border-emerald-500 bg-emerald-100 border-2 font-bold py-1 px-3 rounded-lg shadow lg:mr-4 ">
           <div className="font-bold mr-1">TOTAL COST = $</div>
@@ -388,6 +393,20 @@ export default function Home() {
             powerAndCoolingCost={totalPCost / 7}
             energyCost={costOfPower}
             softwareLicenseCost={softwareLicenseCost / 5}
+          />
+        </div>
+        <div className="flex flex-col items-center mb-3">
+          <h1 className="mb-3 font-bold text-lg">
+            Yearly Cost (w/ Salary) Considering Amortization
+          </h1>
+          <PieChart
+            serverCost={totalServerCost / 5}
+            networkCost={totalNetCost / 5}
+            buildingCost={propertyValue / 20}
+            powerAndCoolingCost={totalPCost / 7}
+            energyCost={costOfPower}
+            softwareLicenseCost={softwareLicenseCost / 5}
+            laborCost={laborCost}
           />
         </div>
       </div>
