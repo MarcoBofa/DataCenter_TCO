@@ -239,13 +239,13 @@ const Labor: React.FC<laborProps> = ({
         </div>
       )}
       <div className="flex w-full flex-wrap text-center justify-center ">
-        <div className="w-full sm:w-[400px] border-cyan-500 bg-cyan-100 border-2 font-bold py-2 px-4 rounded-lg mt-4 shadow md:mr-5">
+        <div className="w-full sm:w-[400px] border-cyan-500 bg-cyan-100 border-2 font-bold py-1 px-4 rounded-lg mt-4 shadow md:mr-5">
           Total (Base salary) Labor Cost: $
           {totalBaseLaborCost.toLocaleString("en-US", {
             maximumFractionDigits: 0,
           })}
         </div>
-        <div className="w-full sm:w-[400px] border-green-500 bg-green-100 border-2 font-bold py-2 px-4 rounded-lg mt-4 shadow">
+        <div className="w-full sm:w-[400px] border-green-500 bg-green-100 border-2 font-bold py-1 px-4 rounded-lg mt-4 shadow">
           Total Compensation Cost: $
           {totalLaborCost.toLocaleString("en-US", { maximumFractionDigits: 0 })}
         </div>

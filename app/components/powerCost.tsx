@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useEffect } from "react";
 
@@ -36,6 +36,8 @@ const PowerCost: React.FC<powerProps> = ({
     },
   });
 
+  const [avgCons, setAvgCons] = useState(0);
+
   const onSubmit = (data: LocalProps) => {
     // Here you would send the data to the backend
     console.log(data);
@@ -59,6 +61,7 @@ const PowerCost: React.FC<powerProps> = ({
       ((eCost * 30 * 24 * 12) / 1000) * pue * (spue * avgCons + netConsumption);
 
     setCostOfPower(cost);
+    setAvgCons(avgCons);
   }, [
     pue,
     netConsumption,
@@ -113,9 +116,15 @@ const PowerCost: React.FC<powerProps> = ({
           />{" "}
         </div>
       )}
-      <div className="sm:w-[400px] w-full border-fuchsia-500 bg-fuchsia-100 border-2 font-bold py-1 px-3 rounded-lg mt-4 shadow ml-4 mr-4 sm:mr-[50px]">
-        Energy Cost (Year): $
-        {costOfPower.toLocaleString("en-US", { maximumFractionDigits: 0 })}
+      <div className="flex w-full flex-wrap text-center justify-center ">
+        <div className="w-full sm:w-[400px] border-lime-500 bg-lime-100 border-2 font-bold py-1 px-4 rounded-lg mt-4 shadow md:mr-5">
+          Energy Cost (Year): $
+          {costOfPower.toLocaleString("en-US", { maximumFractionDigits: 0 })}
+        </div>
+        <div className="w-full sm:w-[400px] border-fuchsia-500 bg-fuchsia-100 border-2 font-bold py-1 px-4 rounded-lg mt-4 shadow">
+          Average Consumption:{" "}
+          {avgCons.toLocaleString("en-US", { maximumFractionDigits: 0 })} W
+        </div>
       </div>
     </div>
   );

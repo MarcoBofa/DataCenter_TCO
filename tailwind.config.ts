@@ -16,6 +16,7 @@ module.exports = {
         "gray-95": "#141414",
         "gray-96": "#131313",
         ciao: "#ccff33",
+        greenish: "#AFFE01",
         nav: "#21253a",
         settings: "#f2f3f8",
         textSettings: "#636c9b",
