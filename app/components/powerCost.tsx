@@ -6,6 +6,7 @@ import { useEffect } from "react";
 interface LocalProps {
   usage: number;
   choice: string;
+  eCost: number;
 }
 
 interface powerProps {
@@ -31,6 +32,7 @@ const PowerCost: React.FC<powerProps> = ({
     defaultValues: {
       usage: 60,
       choice: "no",
+      eCost: 0.11,
     },
   });
 
@@ -41,8 +43,9 @@ const PowerCost: React.FC<powerProps> = ({
 
   const usage = watch("usage");
   const choice = watch("choice");
+  const eCost = watch("eCost");
 
-  const electricityCost = 0.14;
+  const electricityCost = 0.11;
   const spue = 1.07;
 
   useEffect(() => {
@@ -53,9 +56,7 @@ const PowerCost: React.FC<powerProps> = ({
       serverConsumption * 0.4 * (1 - (usage ? usage / 100 : 0.3));
 
     cost =
-      ((electricityCost * 30 * 24 * 12) / 1000) *
-      pue *
-      (spue * avgCons + netConsumption);
+      ((eCost * 30 * 24 * 12) / 1000) * pue * (spue * avgCons + netConsumption);
 
     setCostOfPower(cost);
   }, [
@@ -66,10 +67,24 @@ const PowerCost: React.FC<powerProps> = ({
     costOfPower,
     usage,
     choice,
+    eCost,
   ]);
 
   return (
     <div className="flex flex-wrap items-center w-full">
+      <div className="flex flex-col space-y-1 w-full sm:w-[250px] mb-2 p-4 sm:mr-[40px]">
+        <label className="block text-sm text-center ml-5" htmlFor="eCost">
+          Electricity cost ($/kWh)
+        </label>
+        <input
+          {...register("eCost", { valueAsNumber: true })}
+          className="w-full sm:w-[250px] p-2 rounded border-gray border-2 mb-2"
+          type="number"
+          step="0.01"
+          placeholder="0.11"
+          id="eCost"
+        />{" "}
+      </div>
       <div className="flex flex-col space-y-1 w-full sm:w-[350px] mb-2 p-4 sm:mr-[40px]">
         <label className="block text-sm" htmlFor="choice">
           Do you know expected Server Peak utilization?
@@ -84,13 +99,13 @@ const PowerCost: React.FC<powerProps> = ({
         </select>
       </div>
       {choice === "yes" && (
-        <div className="flex flex-col space-y-1 w-full sm:w-[350px] mb-2 p-4 sm:mr-[40px]">
+        <div className="flex flex-col space-y-1 w-full sm:w-[300px] mb-2 p-4 sm:mr-[40px]">
           <label className="block text-sm text-center ml-5" htmlFor="usage">
             Expected Peak Server Utilization (%)
           </label>
           <input
             {...register("usage", { valueAsNumber: true })}
-            className="w-full sm:w-[350px] p-2 rounded border-gray border-2 mb-2"
+            className="w-full sm:w-[300px] p-2 rounded border-gray border-2 mb-2"
             type="number"
             step="1"
             placeholder="60%"
