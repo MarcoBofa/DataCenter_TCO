@@ -117,6 +117,9 @@ const Server: React.FC<ServerProps> = ({
       psu_800w * 0.04 * homeNodeCount * 2;
 
     switch (cpu) {
+      case "intel_max":
+        p += 350 * homeNodeCount * processorsPerNode;
+        break;
       case "intel_plat":
         p += 331 * homeNodeCount * processorsPerNode;
         break;
@@ -188,6 +191,9 @@ const Server: React.FC<ServerProps> = ({
 
   useEffect(() => {
     switch (cpu) {
+      case "intel_max":
+        cost_core = 226;
+        break;
       case "intel_plat":
         cost_core = 151;
         break;
@@ -341,6 +347,7 @@ const Server: React.FC<ServerProps> = ({
           {...register("cpu")}
           className="w-full sm:w-[190px] p-2 rounded border-gray border-2 mb-2 sm:mr-[50px]"
         >
+          <option value="intel_max">Intel Xeon Max Series</option>
           <option value="intel_plat">Intel Xeon Platinum</option>
           <option value="intel_gold">Intel Xeon Gold</option>
           <option value="intel_sil">Intel Xeon Silver</option>
