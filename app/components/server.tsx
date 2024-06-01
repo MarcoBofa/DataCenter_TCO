@@ -154,6 +154,10 @@ const Server: React.FC<ServerProps> = ({
           p += 300 * homeNodeCount * gpu_perNode;
           break;
         }
+        case "A40": {
+          p += 185 * homeNodeCount * gpu_perNode;
+          break;
+        }
         case "A30": {
           p += 165 * homeNodeCount * gpu_perNode;
           break;
@@ -235,6 +239,10 @@ const Server: React.FC<ServerProps> = ({
         }
         case "A100_80": {
           costGpu = A100_80;
+          break;
+        }
+        case "A40": {
+          costGpu = A40;
           break;
         }
         case "A30": {
