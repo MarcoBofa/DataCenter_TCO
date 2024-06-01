@@ -102,6 +102,7 @@ const Server: React.FC<ServerProps> = ({
   const H100 = 30000;
   const A100_40 = 8000;
   const A100_80 = 13000;
+  const A40 = 6000;
   const A30 = 5000;
   const T4 = 1000;
   const V100 = 3000;
