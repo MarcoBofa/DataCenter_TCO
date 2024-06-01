@@ -121,9 +121,19 @@ const PowerCost: React.FC<powerProps> = ({
           Energy Cost (Year): $
           {costOfPower.toLocaleString("en-US", { maximumFractionDigits: 0 })}
         </div>
-        <div className="w-full sm:w-[400px] border-fuchsia-500 bg-fuchsia-100 border-2 font-bold py-1 px-4 rounded-lg mt-4 shadow">
-          Average Consumption:{" "}
-          {avgCons.toLocaleString("en-US", { maximumFractionDigits: 0 })} W
+        <div className="w-full sm:w-[400px] border-fuchsia-500 bg-fuchsia-100 border-2 font-bold py-1 px-4 rounded-lg mt-4 shadow md:mr-5">
+          Server Average Consumption:{" "}
+          {(avgCons * spue).toLocaleString("en-US", {
+            maximumFractionDigits: 0,
+          })}{" "}
+          W
+        </div>
+        <div className="w-full sm:w-[400px] border-teal-500 bg-teal-100 border-2 font-bold py-1 px-4 rounded-lg mt-4 shadow">
+          Total Average Consumption:{" "}
+          {((spue * avgCons + netConsumption) * pue).toLocaleString("en-US", {
+            maximumFractionDigits: 0,
+          })}{" "}
+          W
         </div>
       </div>
     </div>
