@@ -146,15 +146,15 @@ const Server: React.FC<ServerProps> = ({
     if (gpu == "Yes") {
       switch (gpu_model) {
         case "H100": {
-          p += 350 * homeNodeCount * gpu_perNode;
+          p += 700 * homeNodeCount * gpu_perNode;
           break;
         }
         case "A100_40": {
-          p += 250 * homeNodeCount * gpu_perNode;
+          p += 350 * homeNodeCount * gpu_perNode;
           break;
         }
         case "A100_80": {
-          p += 300 * homeNodeCount * gpu_perNode;
+          p += 400 * homeNodeCount * gpu_perNode;
           break;
         }
         case "A40": {

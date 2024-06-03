@@ -48,7 +48,7 @@ const PowerCost: React.FC<powerProps> = ({
   const eCost = watch("eCost");
 
   const electricityCost = 0.11;
-  const spue = 1.07;
+  const spue = 1.1;
 
   useEffect(() => {
     let cost = 0;
@@ -124,6 +124,13 @@ const PowerCost: React.FC<powerProps> = ({
         <div className="w-full sm:w-[400px] border-fuchsia-500 bg-fuchsia-100 border-2 font-bold py-1 px-4 rounded-lg mt-4 shadow md:mr-5">
           Server Average Consumption:{" "}
           {(avgCons * spue).toLocaleString("en-US", {
+            maximumFractionDigits: 0,
+          })}{" "}
+          W
+        </div>
+        <div className="w-full sm:w-[400px] border-fuchsia-500 bg-fuchsia-100 border-2 font-bold py-1 px-4 rounded-lg mt-4 shadow md:mr-5">
+          Server Peak Consumption:{" "}
+          {(serverConsumption * spue).toLocaleString("en-US", {
             maximumFractionDigits: 0,
           })}{" "}
           W
