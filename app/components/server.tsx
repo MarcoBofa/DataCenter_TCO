@@ -106,6 +106,7 @@ const Server: React.FC<ServerProps> = ({
   const A30 = 5000;
   const T4 = 1000;
   const V100 = 3000;
+  const NVlinkSwitch = 1.3;
 
   const calcPowerRating = () => {
     let p = 0;
@@ -146,23 +147,23 @@ const Server: React.FC<ServerProps> = ({
     if (gpu == "Yes") {
       switch (gpu_model) {
         case "H100": {
-          p += 700 * homeNodeCount * gpu_perNode;
+          p += NVlinkSwitch * 700 * homeNodeCount * gpu_perNode;
           break;
         }
         case "A100_40": {
-          p += 350 * homeNodeCount * gpu_perNode;
+          p += NVlinkSwitch * 350 * homeNodeCount * gpu_perNode;
           break;
         }
         case "A100_80": {
-          p += 400 * homeNodeCount * gpu_perNode;
+          p += NVlinkSwitch * 400 * homeNodeCount * gpu_perNode;
           break;
         }
         case "A40": {
-          p += 185 * homeNodeCount * gpu_perNode;
+          p += NVlinkSwitch * 185 * homeNodeCount * gpu_perNode;
           break;
         }
         case "A30": {
-          p += 165 * homeNodeCount * gpu_perNode;
+          p += NVlinkSwitch * 165 * homeNodeCount * gpu_perNode;
           break;
         }
         case "T4": {
@@ -170,7 +171,7 @@ const Server: React.FC<ServerProps> = ({
           break;
         }
         case "V100": {
-          p += 250 * homeNodeCount * gpu_perNode;
+          p += NVlinkSwitch * 250 * homeNodeCount * gpu_perNode;
           break;
         }
       }
