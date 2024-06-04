@@ -44,6 +44,13 @@ const PowerDistribution: React.FC<powerProps> = ({
   const upsPrice50 = 28000;
   const smartPduPrice17 = 3300;
   const ATSprice = 1189;
+  const transformerCostPerKVA = 150; // Example cost per kVA
+
+  const CRAH = 2000;
+  const chillers = 1000;
+  const tonCooling = 3.517;
+  const coolingTowers = 200;
+  const otherCoolingCost = 150;
 
   useEffect(() => {
     let cost = 0;
@@ -64,36 +71,51 @@ const PowerDistribution: React.FC<powerProps> = ({
       }
       case 2: {
         cost +=
-          Math.ceil((totalConsumption * 0.9 * pue) / 150000) *
-            generatorPrice150 +
+          Math.ceil((totalConsumption * 1 * pue) / 150000) * generatorPrice150 +
           ATSprice;
         cost +=
-          Math.ceil((totalConsumption * 0.9) / 50000) * upsPrice50 +
-          Math.ceil((totalConsumption * 0.9) / 17300) * smartPduPrice17;
+          Math.ceil((totalConsumption * 1) / 50000) * upsPrice50 +
+          Math.ceil((totalConsumption * 1) / 17300) * smartPduPrice17;
         break;
       }
       case 3: {
         cost +=
-          Math.ceil((totalConsumption * 1.25 * pue) / 150000) *
+          Math.ceil((totalConsumption * 1.3 * pue) / 150000) *
             (generatorPrice150 + ATSprice) +
-          Math.ceil((totalConsumption * 1.25) / 50000) * upsPrice50 +
-          Math.ceil((totalConsumption * 1.25) / 17300) * smartPduPrice17;
+          Math.ceil((totalConsumption * 1.3) / 50000) * upsPrice50 +
+          Math.ceil((totalConsumption * 1.3) / 17300) * smartPduPrice17;
 
         break;
       }
       case 4: {
         cost +=
-          Math.ceil((totalConsumption * 1.5 * pue) / 150000) *
+          Math.ceil((totalConsumption * 1.6 * pue) / 150000) *
             (generatorPrice150 + ATSprice) +
-          Math.ceil((totalConsumption * 1.5) / 50000) * upsPrice50 +
-          Math.ceil((totalConsumption * 1.5) / 17300) * smartPduPrice17;
+          Math.ceil((totalConsumption * 1.6) / 50000) * upsPrice50 +
+          Math.ceil((totalConsumption * 1.6) / 17300) * smartPduPrice17;
         break;
       }
     }
 
     if (cooling == "liquid") {
-      cost = (totalConsumption / 1000) * 1500;
+      cost = (totalConsumption / 1000) * 1600;
     }
+
+    const load =
+      (totalConsumption - totalConsumption * (pue - 1)) / 1000 / tonCooling;
+
+    cost +=
+      load * chillers +
+      load * coolingTowers +
+      load * CRAH +
+      load * otherCoolingCost;
+
+    // Calculate kVA
+    const kVA = totalConsumption / 0.9 / 1000;
+
+    // Calculate transformer cost
+    const transformerCost = kVA * transformerCostPerKVA;
+    cost += transformerCost;
 
     setPDcost(cost);
     setPueValue(pue);
