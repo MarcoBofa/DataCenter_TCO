@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useEffect } from "react";
 
@@ -36,6 +36,8 @@ const PowerDistribution: React.FC<powerProps> = ({
     // Here you would send the data to the backend
     console.log(data);
   };
+
+  const [sliderValue, setSliderValue] = useState(0);
 
   const pue = watch("pue");
   const cooling = watch("cooling");
@@ -117,6 +119,8 @@ const PowerDistribution: React.FC<powerProps> = ({
     const transformerCost = kVA * transformerCostPerKVA;
     cost += transformerCost;
 
+    cost = cost * (1 + sliderValue / 100);
+
     setPDcost(cost);
     setPueValue(pue);
   }, [pue, cooling, pdCost, tier, totalConsumption]);
@@ -152,6 +156,21 @@ const PowerDistribution: React.FC<powerProps> = ({
       <div className="w-[450px] border-cyan-500 bg-cyan-100 border-2 font-bold py-1 px-3 rounded-lg mt-4 shadow ml-4 mr-4 sm:mr-[50px]">
         Power Distribution & Cooling cost: $
         {pdCost.toLocaleString("en-US", { maximumFractionDigits: 0 })}
+      </div>
+      <div className="flex flex-col space-y-1 w-full sm:w-[700px] mb-2 sm:mr-[50px] items-center">
+        <label className="block text-sm text-center" htmlFor="cost-slider">
+          Adjust Cost (%)
+        </label>
+        <input
+          type="range"
+          id="cost-slider"
+          min="-99"
+          max="99"
+          value={sliderValue}
+          onChange={(e) => setSliderValue(Number(e.target.value))}
+          className="w-full"
+        />
+        <div className="text-center">{sliderValue}%</div>
       </div>
     </div>
   );

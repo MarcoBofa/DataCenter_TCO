@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useEffect } from "react";
 
@@ -46,6 +46,8 @@ const Network: React.FC<NetworkProps> = ({
     // Here you would send the data to the backend
     console.log(data);
   };
+
+  const [sliderValue, setSliderValue] = useState(0);
 
   const provider = watch("provider");
   const topology = watch("topology");
@@ -238,6 +240,8 @@ const Network: React.FC<NetworkProps> = ({
       cost = cost * 0.9;
     }
 
+    cost = cost * (1 + sliderValue / 100);
+
     setTotalNetworkConsumption(netConsumption);
     setTotalNetCost(cost);
     setTier(tierLevel);
@@ -248,6 +252,7 @@ const Network: React.FC<NetworkProps> = ({
     tierLevel,
     topology,
     totalNetworkConsumption,
+    sliderValue,
   ]);
 
   return (
@@ -311,6 +316,21 @@ const Network: React.FC<NetworkProps> = ({
             <option value="400">400</option>
           </select>
         </div>
+      </div>
+      <div className="flex flex-col space-y-1 w-full sm:w-[700px] mb-2 sm:mr-[50px] items-center">
+        <label className="block text-sm text-center" htmlFor="cost-slider">
+          Adjust Cost (%)
+        </label>
+        <input
+          type="range"
+          id="cost-slider"
+          min="-99"
+          max="99"
+          value={sliderValue}
+          onChange={(e) => setSliderValue(Number(e.target.value))}
+          className="w-full"
+        />
+        <div className="text-center">{sliderValue}%</div>
       </div>
     </div>
   );
