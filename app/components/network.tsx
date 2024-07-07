@@ -328,7 +328,7 @@ const Network: React.FC<NetworkProps> = ({
           max="99"
           value={sliderValue}
           onChange={(e) => setSliderValue(Number(e.target.value))}
-          className="w-full"
+          className="w-full cursor-pointer"
         />
         <div className="text-center">{sliderValue}%</div>
       </div>

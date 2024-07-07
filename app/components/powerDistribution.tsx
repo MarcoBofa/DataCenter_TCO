@@ -32,12 +32,12 @@ const PowerDistribution: React.FC<powerProps> = ({
     },
   });
 
+  const [sliderValue, setSliderValue] = useState(0);
+
   const onSubmit = (data: LocalProps) => {
     // Here you would send the data to the backend
     console.log(data);
   };
-
-  const [sliderValue, setSliderValue] = useState(0);
 
   const pue = watch("pue");
   const cooling = watch("cooling");
@@ -123,7 +123,7 @@ const PowerDistribution: React.FC<powerProps> = ({
 
     setPDcost(cost);
     setPueValue(pue);
-  }, [pue, cooling, pdCost, tier, totalConsumption]);
+  }, [pue, cooling, pdCost, tier, totalConsumption, sliderValue]);
 
   return (
     <div className="flex flex-wrap items-center w-full">
@@ -157,7 +157,7 @@ const PowerDistribution: React.FC<powerProps> = ({
         Power Distribution & Cooling cost: $
         {pdCost.toLocaleString("en-US", { maximumFractionDigits: 0 })}
       </div>
-      <div className="flex flex-col space-y-1 w-full sm:w-[700px] mb-2 sm:mr-[50px] items-center">
+      <div className="flex flex-col space-y-1 w-full sm:w-[700px] mb-2 sm:mr-[50px] ml-4 items-center">
         <label className="block text-sm text-center" htmlFor="cost-slider">
           Adjust Cost (%)
         </label>
@@ -168,7 +168,7 @@ const PowerDistribution: React.FC<powerProps> = ({
           max="99"
           value={sliderValue}
           onChange={(e) => setSliderValue(Number(e.target.value))}
-          className="w-full"
+          className="w-full cursor-pointer"
         />
         <div className="text-center">{sliderValue}%</div>
       </div>

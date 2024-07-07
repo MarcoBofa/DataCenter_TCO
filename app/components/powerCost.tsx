@@ -36,6 +36,7 @@ const PowerCost: React.FC<powerProps> = ({
     },
   });
 
+  const [sliderValue, setSliderValue] = useState(0);
   const [avgCons, setAvgCons] = useState(0);
 
   const onSubmit = (data: LocalProps) => {
@@ -60,6 +61,8 @@ const PowerCost: React.FC<powerProps> = ({
     cost =
       ((eCost * 30 * 24 * 12) / 1000) * pue * (spue * avgCons + netConsumption);
 
+    cost = cost * (1 + sliderValue / 100);
+
     setCostOfPower(cost);
     setAvgCons(avgCons);
   }, [
@@ -71,6 +74,7 @@ const PowerCost: React.FC<powerProps> = ({
     usage,
     choice,
     eCost,
+    sliderValue,
   ]);
 
   return (
@@ -139,6 +143,21 @@ const PowerCost: React.FC<powerProps> = ({
           })}{" "}
           W
         </div>
+      </div>
+      <div className="flex flex-col space-y-1 w-full sm:w-[700px] mb-2 mt-4 sm:mr-[50px] ml-4 items-center">
+        <label className="block text-sm text-center" htmlFor="cost-slider">
+          Adjust Cost (%)
+        </label>
+        <input
+          type="range"
+          id="cost-slider"
+          min="-99"
+          max="99"
+          value={sliderValue}
+          onChange={(e) => setSliderValue(Number(e.target.value))}
+          className="w-full cursor-pointer"
+        />
+        <div className="text-center">{sliderValue}%</div>
       </div>
     </div>
   );
