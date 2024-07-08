@@ -156,6 +156,11 @@ const PowerCost: React.FC<powerProps> = ({
           value={sliderValue}
           onChange={(e) => setSliderValue(Number(e.target.value))}
           className="w-full cursor-pointer"
+          style={{
+            accentColor: "teal", // Change the thumb color
+            background:
+              "linear-gradient(to right, teal 0%, teal 50%, gray 50%, gray 100%)", // Change the track color
+          }}
         />
         <div className="text-center">{sliderValue}%</div>
       </div>

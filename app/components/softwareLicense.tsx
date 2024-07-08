@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useEffect } from "react";
 
@@ -32,6 +32,8 @@ const SoftwareLicense: React.FC<softwareProps> = ({
     // Here you would send the data to the backend
     console.log(data);
   };
+
+  const [sliderValue, setSliderValue] = useState(0);
 
   const priceLicense = watch("priceLicense");
   const os = watch("os");
@@ -79,8 +81,18 @@ const SoftwareLicense: React.FC<softwareProps> = ({
 
     cost += IBM_spectrum * nodeCount + IDPS + nodeCount;
 
+    cost = cost * (1 + sliderValue / 100);
+
     setSoftwareCost(cost);
-  }, [os, priceLicense, nodeCount, softwareCost, setSoftwareCost, cores]);
+  }, [
+    os,
+    priceLicense,
+    nodeCount,
+    softwareCost,
+    setSoftwareCost,
+    cores,
+    sliderValue,
+  ]);
 
   return (
     <div className="flex flex-wrap items-center w-full">
@@ -105,7 +117,7 @@ const SoftwareLicense: React.FC<softwareProps> = ({
             className="block text-sm text-center ml-5"
             htmlFor="priceLicense"
           >
-            Price Per License $
+            Price Per OS License $
           </label>
           <input
             {...register("priceLicense", { valueAsNumber: true })}
@@ -120,6 +132,26 @@ const SoftwareLicense: React.FC<softwareProps> = ({
       <div className="sm:w-[400px] w-full border-yellow-500 bg-yellow-100 border-2 font-bold py-1 px-3 rounded-lg mt-4 shadow ml-4 mr-4 sm:mr-[50px]">
         Software License Cost: $
         {softwareCost.toLocaleString("en-US", { maximumFractionDigits: 0 })}
+      </div>
+      <div className="flex flex-col space-y-1 w-full sm:w-[700px] mb-2 mt-4 sm:mr-[50px] ml-4 items-center">
+        <label className="block text-sm text-center" htmlFor="cost-slider">
+          Adjust Cost (%)
+        </label>
+        <input
+          type="range"
+          id="cost-slider"
+          min="-99"
+          max="99"
+          value={sliderValue}
+          onChange={(e) => setSliderValue(Number(e.target.value))}
+          className="w-full cursor-pointer"
+          style={{
+            accentColor: "teal", // Change the thumb color
+            background:
+              "linear-gradient(to right, teal 0%, teal 50%, gray 50%, gray 100%)", // Change the track color
+          }}
+        />
+        <div className="text-center">{sliderValue}%</div>
       </div>
     </div>
   );
