@@ -316,26 +316,26 @@ const Network: React.FC<NetworkProps> = ({
             <option value="400">400</option>
           </select>
         </div>
-      </div>
-      <div className="flex flex-col space-y-1 w-full sm:w-[700px] mb-2 mt-4 sm:mr-[50px] ml-4 items-center">
-        <label className="block text-sm text-center" htmlFor="cost-slider">
-          Adjust Cost (%)
-        </label>
-        <input
-          type="range"
-          id="cost-slider"
-          min="-99"
-          max="99"
-          value={sliderValue}
-          onChange={(e) => setSliderValue(Number(e.target.value))}
-          className="w-full cursor-pointer"
-          style={{
-            accentColor: "teal", // Change the thumb color
-            background:
-              "linear-gradient(to right, teal 0%, teal 50%, gray 50%, gray 100%)", // Change the track color
-          }}
-        />
-        <div className="text-center">{sliderValue}%</div>
+        <div className="flex flex-col space-y-1 w-full sm:w-[690px] mb-2 mt-4 xl:mr-[300px] ml-4 items-center">
+          <label className="block text-sm text-center" htmlFor="cost-slider">
+            Adjust Cost (%)
+          </label>
+          <input
+            type="range"
+            id="cost-slider"
+            min="-99"
+            max="99"
+            value={sliderValue}
+            onChange={(e) => setSliderValue(Number(e.target.value))}
+            className="w-full cursor-pointer"
+            style={{
+              accentColor: "teal", // Change the thumb color
+              background:
+                "linear-gradient(to right, teal 0%, teal 50%, gray 50%, gray 100%)", // Change the track color
+            }}
+          />
+          <div className="text-center">{sliderValue}%</div>
+        </div>
       </div>
     </div>
   );

@@ -158,7 +158,7 @@ const PowerDistribution: React.FC<powerProps> = ({
         Power Distribution & Cooling cost: $
         {pdCost.toLocaleString("en-US", { maximumFractionDigits: 0 })}
       </div>
-      <div className="flex flex-col space-y-1 w-full sm:w-[700px] mb-2 mt-4 sm:mr-[50px] ml-4 items-center">
+      <div className="flex flex-col space-y-1 w-full sm:w-[700px] mb-2 mt-4 sm:mr-[50px] ml-4 items-center mr-4">
         <label className="block text-sm text-center" htmlFor="cost-slider">
           Adjust Cost (%)
         </label>

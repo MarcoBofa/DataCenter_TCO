@@ -3,6 +3,13 @@ import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useEffect } from "react";
 
+import { styled } from "@mui/material/styles";
+import Box from "@mui/material/Box";
+import Grid from "@mui/material/Grid";
+import Typography from "@mui/material/Typography";
+import Slider from "@mui/material/Slider";
+import MuiInput from "@mui/material/Input";
+
 interface LocalProps {
   usage: number;
   choice: string;
@@ -18,6 +25,10 @@ interface powerProps {
   pue: number;
   setCostOfPower: (value: number) => void;
 }
+
+const Input = styled(MuiInput)`
+  width: 42px;
+`;
 
 const PowerCost: React.FC<powerProps> = ({
   tier,
@@ -42,6 +53,24 @@ const PowerCost: React.FC<powerProps> = ({
   const onSubmit = (data: LocalProps) => {
     // Here you would send the data to the backend
     console.log(data);
+  };
+
+  const [value, setValue] = React.useState(30);
+
+  const handleSliderChange = (event: Event, newValue: number | number[]) => {
+    setValue(newValue as number);
+  };
+
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setValue(event.target.value === "" ? 0 : Number(event.target.value));
+  };
+
+  const handleBlur = () => {
+    if (value < -99) {
+      setValue(-99);
+    } else if (value > 99) {
+      setValue(99);
+    }
   };
 
   const usage = watch("usage");
@@ -144,7 +173,7 @@ const PowerCost: React.FC<powerProps> = ({
           W
         </div>
       </div>
-      <div className="flex flex-col space-y-1 w-full sm:w-[700px] mb-2 mt-4 sm:mr-[50px] ml-4 items-center">
+      <div className="flex flex-col space-y-1 w-full sm:w-[700px] mb-2 mt-4 sm:mr-[50px] ml-4 items-center mr-4">
         <label className="block text-sm text-center" htmlFor="cost-slider">
           Adjust Cost (%)
         </label>
@@ -163,6 +192,51 @@ const PowerCost: React.FC<powerProps> = ({
           }}
         />
         <div className="text-center">{sliderValue}%</div>
+      </div>
+      <div className="flex flex-col space-y-1 w-full sm:w-[700px] mb-2 mt-4 sm:mr-[50px] ml-4 items-center mr-4">
+        <Box sx={{ width: 700 }}>
+          <Typography id="input-slider" gutterBottom>
+            Adjust Cost (%)
+          </Typography>
+          <Grid container spacing={2} alignItems="center">
+            <Grid item></Grid>
+            <Grid item xs>
+              <Slider
+                value={typeof value === "number" ? value : 0}
+                onChange={handleSliderChange}
+                aria-labelledby="input-slider"
+                min={-99}
+                max={99}
+                sx={{
+                  "& .MuiSlider-thumb": {
+                    color: "#38b2ac", // Tailwind teal 500 color
+                  },
+                  "& .MuiSlider-track": {
+                    color: "#38b2ac", // Tailwind teal 500 color
+                  },
+                  "& .MuiSlider-rail": {
+                    color: "lightgray", // Light gray track color
+                  },
+                }}
+              />
+            </Grid>
+            <Grid item>
+              <Input
+                value={value}
+                size="small"
+                onChange={handleInputChange}
+                onBlur={handleBlur}
+                inputProps={{
+                  step: 10,
+                  min: -99,
+                  max: 99,
+                  type: "number",
+                  "aria-labelledby": "input-slider",
+                }}
+              />
+            </Grid>
+          </Grid>
+        </Box>
       </div>
     </div>
   );
