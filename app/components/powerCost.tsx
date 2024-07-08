@@ -55,21 +55,19 @@ const PowerCost: React.FC<powerProps> = ({
     console.log(data);
   };
 
-  const [value, setValue] = React.useState(30);
-
   const handleSliderChange = (event: Event, newValue: number | number[]) => {
-    setValue(newValue as number);
+    setSliderValue(newValue as number);
   };
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setValue(event.target.value === "" ? 0 : Number(event.target.value));
+    setSliderValue(event.target.value === "" ? 0 : Number(event.target.value));
   };
 
   const handleBlur = () => {
-    if (value < -99) {
-      setValue(-99);
-    } else if (value > 99) {
-      setValue(99);
+    if (sliderValue < -99) {
+      setSliderValue(-99);
+    } else if (sliderValue > 99) {
+      setSliderValue(99);
     }
   };
 
@@ -174,35 +172,15 @@ const PowerCost: React.FC<powerProps> = ({
         </div>
       </div>
       <div className="flex flex-col space-y-1 w-full sm:w-[700px] mb-2 mt-4 sm:mr-[50px] ml-4 items-center mr-4">
-        <label className="block text-sm text-center" htmlFor="cost-slider">
-          Adjust Cost (%)
-        </label>
-        <input
-          type="range"
-          id="cost-slider"
-          min="-99"
-          max="99"
-          value={sliderValue}
-          onChange={(e) => setSliderValue(Number(e.target.value))}
-          className="w-full cursor-pointer"
-          style={{
-            accentColor: "teal", // Change the thumb color
-            background:
-              "linear-gradient(to right, teal 0%, teal 50%, gray 50%, gray 100%)", // Change the track color
-          }}
-        />
-        <div className="text-center">{sliderValue}%</div>
-      </div>
-      <div className="flex flex-col space-y-1 w-full sm:w-[700px] mb-2 mt-4 sm:mr-[50px] ml-4 items-center mr-4">
-        <Box sx={{ width: 700 }}>
+        <Box sx={{ width: "100%" }}>
           <Typography id="input-slider" gutterBottom>
-            Adjust Cost (%)
+            Adjust Cost ({sliderValue}%)
           </Typography>
           <Grid container spacing={2} alignItems="center">
             <Grid item></Grid>
             <Grid item xs>
               <Slider
-                value={typeof value === "number" ? value : 0}
+                value={typeof sliderValue === "number" ? sliderValue : 0}
                 onChange={handleSliderChange}
                 aria-labelledby="input-slider"
                 min={-99}
@@ -217,17 +195,18 @@ const PowerCost: React.FC<powerProps> = ({
                   "& .MuiSlider-rail": {
                     color: "lightgray", // Light gray track color
                   },
+                  height: 7,
                 }}
               />
             </Grid>
             <Grid item>
               <Input
-                value={value}
+                value={sliderValue}
                 size="small"
                 onChange={handleInputChange}
                 onBlur={handleBlur}
                 inputProps={{
-                  step: 10,
+                  step: 1,
                   min: -99,
                   max: 99,
                   type: "number",

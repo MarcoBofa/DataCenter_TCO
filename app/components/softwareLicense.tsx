@@ -3,6 +3,13 @@ import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useEffect } from "react";
 
+import { styled } from "@mui/material/styles";
+import Box from "@mui/material/Box";
+import Grid from "@mui/material/Grid";
+import Typography from "@mui/material/Typography";
+import Slider from "@mui/material/Slider";
+import MuiInput from "@mui/material/Input";
+
 interface LocalProps {
   priceLicense: number;
   os: string;
@@ -14,6 +21,10 @@ interface softwareProps {
   cores: number;
   setSoftwareCost: (value: number) => void;
 }
+
+const Input = styled(MuiInput)`
+  width: 42px;
+`;
 
 const SoftwareLicense: React.FC<softwareProps> = ({
   nodeCount,
@@ -45,6 +56,22 @@ const SoftwareLicense: React.FC<softwareProps> = ({
   const IBM_spectrum = 800;
   const firewalls_paloaltoPanorama = 9500;
   const IDPS = 99;
+
+  const handleSliderChange = (event: Event, newValue: number | number[]) => {
+    setSliderValue(newValue as number);
+  };
+
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSliderValue(event.target.value === "" ? 0 : Number(event.target.value));
+  };
+
+  const handleBlur = () => {
+    if (sliderValue < -99) {
+      setSliderValue(-99);
+    } else if (sliderValue > 99) {
+      setSliderValue(99);
+    }
+  };
 
   useEffect(() => {
     let cost = 0;
@@ -133,25 +160,51 @@ const SoftwareLicense: React.FC<softwareProps> = ({
         Software License Cost: $
         {softwareCost.toLocaleString("en-US", { maximumFractionDigits: 0 })}
       </div>
-      <div className="flex flex-col space-y-1 w-full sm:w-[700px] mb-2 mt-4 xl:mr-[300px] ml-4 mr-4 items-center">
-        <label className="block text-sm text-center" htmlFor="cost-slider">
-          Adjust Cost (%)
-        </label>
-        <input
-          type="range"
-          id="cost-slider"
-          min="-99"
-          max="99"
-          value={sliderValue}
-          onChange={(e) => setSliderValue(Number(e.target.value))}
-          className="w-full cursor-pointer"
-          style={{
-            accentColor: "teal", // Change the thumb color
-            background:
-              "linear-gradient(to right, teal 0%, teal 50%, gray 50%, gray 100%)", // Change the track color
-          }}
-        />
-        <div className="text-center">{sliderValue}%</div>
+      <div className="flex flex-col space-y-1 w-full sm:w-[700px] mb-2 mt-4 xl:mr-[200px] ml-4 items-center mr-4">
+        <Box sx={{ width: "100%" }}>
+          <Typography id="input-slider" gutterBottom>
+            Adjust Cost ({sliderValue}%)
+          </Typography>
+          <Grid container spacing={2} alignItems="center">
+            <Grid item></Grid>
+            <Grid item xs>
+              <Slider
+                value={typeof sliderValue === "number" ? sliderValue : 0}
+                onChange={handleSliderChange}
+                aria-labelledby="input-slider"
+                min={-99}
+                max={99}
+                sx={{
+                  "& .MuiSlider-thumb": {
+                    color: "#38b2ac", // Tailwind teal 500 color
+                  },
+                  "& .MuiSlider-track": {
+                    color: "#38b2ac", // Tailwind teal 500 color
+                  },
+                  "& .MuiSlider-rail": {
+                    color: "lightgray", // Light gray track color
+                  },
+                  height: 7,
+                }}
+              />
+            </Grid>
+            <Grid item>
+              <Input
+                value={sliderValue}
+                size="small"
+                onChange={handleInputChange}
+                onBlur={handleBlur}
+                inputProps={{
+                  step: 1,
+                  min: -99,
+                  max: 99,
+                  type: "number",
+                  "aria-labelledby": "input-slider",
+                }}
+              />
+            </Grid>
+          </Grid>
+        </Box>
       </div>
     </div>
   );
