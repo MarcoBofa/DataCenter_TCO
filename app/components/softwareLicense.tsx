@@ -190,6 +190,7 @@ const SoftwareLicense: React.FC<softwareProps> = ({
             </Grid>
             <Grid item>
               <Input
+                className="mb-7"
                 value={sliderValue}
                 size="small"
                 onChange={handleInputChange}

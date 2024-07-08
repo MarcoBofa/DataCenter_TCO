@@ -373,6 +373,7 @@ const Network: React.FC<NetworkProps> = ({
               </Grid>
               <Grid item>
                 <Input
+                  className="mb-7"
                   value={sliderValue}
                   size="small"
                   onChange={handleInputChange}

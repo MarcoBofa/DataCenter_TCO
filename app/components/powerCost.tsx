@@ -201,6 +201,7 @@ const PowerCost: React.FC<powerProps> = ({
             </Grid>
             <Grid item>
               <Input
+                className="mb-7"
                 value={sliderValue}
                 size="small"
                 onChange={handleInputChange}
