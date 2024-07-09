@@ -1,4 +1,5 @@
 "use client";
+import "../globals.css";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useEffect } from "react";
@@ -315,9 +316,26 @@ const Network: React.FC<NetworkProps> = ({
           </select>
         </div>
         <div className="flex flex-col space-y-1 w-full sm:w-[200px] mb-2 sm:mr-[50px]">
-          <label className="block text-sm" htmlFor="topology">
-            Topology
-          </label>
+          <div className="flex flex-row items-center justify-center relative">
+            <label className="block text-sm" htmlFor="topology">
+              Topology
+            </label>
+            <div className="flex hoverable-button justify-center items-center w-[13px] h-[13px] ml-[6px] mt-[2px] rounded-full bg-gray-200 text-xs leading-none cursor-pointer">
+              i
+            </div>
+          </div>
+          <span
+            className="z-10 display-on-hover absolute top-[-90px] xs:top-[-95px] sm:top-[-105px] md:top-[-63px] lg:top-[-52px] left-0 right-0 mx-auto p-2 text-white bg-gray-400 text-xs sm:text-sm rounded-lg shadow"
+            style={{
+              width: "1200px", // Maximum width to match the original design
+            }}
+          >
+            <span className="font-bold">Networking Costs</span> cover the cost
+            for all the components of both internal and external network
+            connections of the Data center. So it includes Clusters
+            Interconnects, cabling, NICs, switches, routers, load balancers,
+            firewalls and others.
+          </span>
           <select
             {...register("topology")}
             className="flex-grow p-2 rounded border-2"
