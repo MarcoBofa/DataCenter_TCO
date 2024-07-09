@@ -313,11 +313,11 @@ export default function Home() {
             <div className="p-4 font-bold w-full text-left">
               POWER DISTRIBUTION AND COOLING INFRASTRUCTURE
             </div>
-            <div className="flex hoverable-button justify-center items-center w-[13px] h-[13px] ml-[-5px] rounded-full bg-gray-200 text-xs leading-none cursor-pointer">
+            <div className="flex hoverable-button justify-center items-center w-[13px] h-[13px] mr-[5px] xs:ml-[-6px] rounded-full bg-gray-200 text-xs leading-none cursor-pointer">
               i
             </div>
             <span
-              className="z-10 display-on-hover absolute top-[-120px] sm:top-[-143px] md:top-[-105px] lg:top-[-83px] left-0 right-0 mx-auto p-2 text-white bg-gray-400 text-xs sm:text-sm rounded-lg shadow"
+              className="z-10 display-on-hover absolute top-[-155px] xs:top-[-120px] sm:top-[-133px] md:top-[-105px] lg:top-[-83px] left-0 right-0 mx-auto p-2 text-white bg-gray-400 text-xs sm:text-sm rounded-lg shadow"
               style={{
                 width: "calc(100% - 40px)", // Full width minus 20px margin on each side
                 maxWidth: "1200px", // Maximum width to match the original design
