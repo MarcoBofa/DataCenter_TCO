@@ -307,9 +307,33 @@ export default function Home() {
         />
       </div>
 
-      <div className="w-7/8 bg-white pb-10 rounded-2xl">
-        <div className="p-4 font-bold w-full text-left">
-          POWER DISTRIBUTION AND COOLING INFRASTRUCTURE
+      <div className="w-7/8 bg-white pb-10 rounded-2xl relative">
+        <div className="flex flex-row">
+          <div className="flex flex-row items-center">
+            <div className="p-4 font-bold w-full text-left">
+              POWER DISTRIBUTION AND COOLING INFRASTRUCTURE
+            </div>
+            <div className="flex hoverable-button justify-center items-center w-[13px] h-[13px] ml-[-5px] rounded-full bg-gray-200 text-xs leading-none cursor-pointer">
+              i
+            </div>
+            <span
+              className="z-10 display-on-hover absolute top-[-110px] md:top-[-83px] left-0 right-0 mx-auto p-2 text-white bg-gray-400 text-xs sm:text-sm rounded-lg shadow"
+              style={{
+                width: "calc(100% - 40px)", // Full width minus 20px margin on each side
+                maxWidth: "1200px", // Maximum width to match the original design
+              }}
+            >
+              <span className="font-bold">Power Distribution Cost</span>{" "}
+              represent the cost to procure all the components necessary to
+              supply the facility with the power needed which includes things
+              such as transformers, PDUs, Power Cords, connectors, power
+              breakers, UPSes, backup generators, ATSes etc.
+              <span className="font-bold"> Cooling Infrastructure</span> instead
+              include the cost to procure the components necessary to cool down
+              the facility, such as CRAC/CRAH systems, liquid cooling components
+              etc.
+            </span>
+          </div>
         </div>
         <PowerDistribution
           tier={tier}

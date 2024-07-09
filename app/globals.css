@@ -45,3 +45,24 @@
 .react-hot-toast-container {
   width: 800px;
 }
+
+.hoverable-button:hover + .display-on-hover {
+  opacity: 1;
+  transition: opacity 0.2s ease-in-out;
+}
+.display-on-hover {
+  opacity: 0;
+  transition: opacity 0.2s ease-in-out;
+}
+
+.important-style {
+  position: absolute;
+  left: 10;
+  z-index: 10;
+}
+
+.important {
+  position: absolute;
+  left: 125px;
+  z-index: 10;
+}
