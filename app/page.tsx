@@ -300,14 +300,17 @@ export default function Home() {
               i
             </div>
             <span
-              className="z-10 display-on-hover absolute top-[-155px] xs:top-[-120px] sm:top-[-133px] md:top-[-105px] lg:top-[-123px] left-0 right-0 mx-auto p-2 text-white bg-gray-400 text-xs sm:text-sm rounded-lg shadow"
+              className="z-10 display-on-hover absolute top-[-90px] xs:top-[-95px] sm:top-[-105px] md:top-[-63px] lg:top-[-62px] left-0 right-0 mx-auto p-2 text-white bg-gray-400 text-xs sm:text-sm rounded-lg shadow"
               style={{
                 width: "calc(100% - 40px)", // Full width minus 20px margin on each side
                 maxWidth: "1200px", // Maximum width to match the original design
               }}
             >
-              <span className="font-bold">Networking Costs</span> cover both
-              internal and external network connections.
+              <span className="font-bold">Networking Costs</span> cover the cost
+              for all the components of both internal and external network
+              connections of the Data center. So it includes Clusters
+              Interconnects, cabling, NICs, switches, routers, load balancers,
+              firewalls and others.
             </span>
           </div>
         </div>
