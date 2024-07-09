@@ -317,20 +317,20 @@ export default function Home() {
               i
             </div>
             <span
-              className="z-10 display-on-hover absolute top-[-110px] md:top-[-83px] left-0 right-0 mx-auto p-2 text-white bg-gray-400 text-xs sm:text-sm rounded-lg shadow"
+              className="z-10 display-on-hover absolute top-[-120px] sm:top-[-143px] md:top-[-105px] lg:top-[-83px] left-0 right-0 mx-auto p-2 text-white bg-gray-400 text-xs sm:text-sm rounded-lg shadow"
               style={{
                 width: "calc(100% - 40px)", // Full width minus 20px margin on each side
                 maxWidth: "1200px", // Maximum width to match the original design
               }}
             >
               <span className="font-bold">Power Distribution Cost</span>{" "}
-              represent the cost to procure all the components necessary to
-              supply the facility with the power needed which includes things
-              such as transformers, PDUs, Power Cords, connectors, power
-              breakers, UPSes, backup generators, ATSes etc.
-              <span className="font-bold"> Cooling Infrastructure</span> instead
-              include the cost to procure the components necessary to cool down
-              the facility, such as CRAC/CRAH systems, liquid cooling components
+              represents the cost of procuring all the components necessary to
+              supply the facility with power. This includes transformers, PDUs,
+              power cords, connectors, power breakers, UPS systems, backup
+              generators, ATS units, and more.
+              <span className="font-bold"> Cooling Infrastructure</span> covers
+              the cost of acquiring the components needed to cool down the
+              facility, such as CRAC/CRAH systems, liquid cooling components.
               etc.
             </span>
           </div>
