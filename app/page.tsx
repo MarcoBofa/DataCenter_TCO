@@ -292,8 +292,26 @@ export default function Home() {
         </button>
       </div>
 
-      <div className="w-7/8 bg-white pb-10 rounded-2xl">
-        <div className="p-4 font-bold w-full text-left">NETWORKING</div>
+      <div className="w-7/8 bg-white pb-10 rounded-2xl relative">
+        <div className="flex flex-row">
+          <div className="flex flex-row items-center">
+            <div className="p-4 font-bold w-full text-left">NETWORKING</div>
+            <div className="flex hoverable-button justify-center items-center w-[13px] h-[13px] ml-[-6px] rounded-full bg-gray-200 text-xs leading-none cursor-pointer">
+              i
+            </div>
+            <span
+              className="z-10 display-on-hover absolute top-[-155px] xs:top-[-120px] sm:top-[-133px] md:top-[-105px] lg:top-[-123px] left-0 right-0 mx-auto p-2 text-white bg-gray-400 text-xs sm:text-sm rounded-lg shadow"
+              style={{
+                width: "calc(100% - 40px)", // Full width minus 20px margin on each side
+                maxWidth: "1200px", // Maximum width to match the original design
+              }}
+            >
+              <span className="font-bold">Networking Costs</span> cover both
+              internal and external network connections.
+            </span>
+          </div>
+        </div>
+
         <Network
           homeBandwidth={bandwidth}
           setBandwidth={setBandwidth}
