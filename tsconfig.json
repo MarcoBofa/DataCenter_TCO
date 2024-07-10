@@ -1,6 +1,5 @@
 {
   "compilerOptions": {
-    "target": "es5",
     "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "skipLibCheck": true,
@@ -27,8 +26,7 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts",
-    "app/context/useContext.tsx",
-    "app/api/auth/[...nextauth]/route.ts"
+    "app/components/chart.js"
   ],
   "exclude": ["node_modules"]
 }

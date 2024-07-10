@@ -1,5 +1,4 @@
 "use client";
-import "../app/globals.css";
 import React, { useState, useEffect, useCallback } from "react";
 import Land from "./components/land";
 import Server from "./components/server";
@@ -8,7 +7,6 @@ import PieChart from "./components/pieChart";
 import { v4 as uuidv4 } from "uuid";
 import PowerDistribution from "./components/powerDistribution";
 import PowerCost from "./components/powerCost";
-import { copyFileSync } from "fs";
 import SoftwareLicense from "./components/softwareLicense";
 import Storage from "./components/storage";
 import Labor from "./components/labor";

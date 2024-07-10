@@ -2,7 +2,6 @@
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useEffect } from "react";
-import "../globals.css";
 
 import { styled } from "@mui/material/styles";
 import Box from "@mui/material/Box";

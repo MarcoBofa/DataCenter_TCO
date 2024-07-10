@@ -1,15 +1,14 @@
 "use client";
-import "../globals.css";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
-import { useEffect } from "react";
+import "./comp.css";
 
 import { styled } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import Slider from "@mui/material/Slider";
-import MuiInput from "@mui/material/Input";
+import Input from "@mui/material/Input";
 
 interface LocalProps {
   provider: string;
@@ -18,7 +17,7 @@ interface LocalProps {
   tier: number;
 }
 
-const Input = styled(MuiInput)`
+const StyledInput = styled(Input)`
   width: 42px;
 `;
 
@@ -55,7 +54,6 @@ const Network: React.FC<NetworkProps> = ({
   });
 
   const onSubmit = (data: LocalProps) => {
-    // Here you would send the data to the backend
     console.log(data);
   };
 
@@ -284,7 +282,7 @@ const Network: React.FC<NetworkProps> = ({
   ]);
 
   return (
-    <div className="flex flex-col space-y-3 p-4">
+    <div className="flex flex-col space-y-3 p-4 relative">
       <div className="flex flex-wrap items-center w-full">
         <select
           {...register("provider")}
@@ -315,27 +313,30 @@ const Network: React.FC<NetworkProps> = ({
             <option value="4">4</option>
           </select>
         </div>
-        <div className="flex flex-col space-y-1 w-full sm:w-[200px] mb-2 sm:mr-[50px]">
-          <div className="flex flex-row items-center justify-center relative">
+        <div className="flex flex-col space-y-1 w-full sm:w-[200px] mb-2 sm:mr-[50px] group">
+          <div className="flex flex-row items-center justify-center w-full">
             <label className="block text-sm" htmlFor="topology">
               Topology
             </label>
-            <div className="flex hoverable-button justify-center items-center w-[13px] h-[13px] ml-[6px] mt-[2px] rounded-full bg-gray-200 text-xs leading-none cursor-pointer">
-              i
+            <div className="info-button-container">
+              <div className="z-10 flex justify-center items-center w-[13px] h-[13px] ml-[6px] mt-[2px] rounded-full bg-gray-200 text-xs leading-none cursor-pointer">
+                i
+              </div>
+              <span
+                className="info-box z-20 absolute top-[90px] sm:top-[10px] md:top-[-10px] lg:top-[10px] left-0 right-0 mx-auto p-2 text-white bg-gray-400 text-xs sm:text-sm rounded-lg shadow hidden"
+                style={{
+                  width: "calc(80%)", // Full width minus 20px margin on each side
+                  maxWidth: "1200px", // Maximum width to match the original design
+                }}
+              >
+                <span className="font-bold">Network Topology</span> dictates the
+                arrangement and communication flow between switches, routers,
+                servers, and other devices in the data center. Changing the
+                topology will result in a different number of components and
+                thus cost.
+              </span>
             </div>
           </div>
-          <span
-            className="z-10 display-on-hover absolute top-[-90px] xs:top-[-95px] sm:top-[-105px] md:top-[-63px] lg:top-[222px] left-0 right-0 mx-auto p-2 text-white bg-gray-400 text-xs sm:text-sm rounded-lg shadow"
-            style={{
-              width: "1200px", // Maximum width to match the original design
-            }}
-          >
-            <span className="font-bold">Networking Costs</span> cover the cost
-            for all the components of both internal and external network
-            connections of the Data center. So it includes Clusters
-            Interconnects, cabling, NICs, switches, routers, load balancers,
-            firewalls and others.
-          </span>
           <select
             {...register("topology")}
             className="flex-grow p-2 rounded border-2"
@@ -390,7 +391,7 @@ const Network: React.FC<NetworkProps> = ({
                 />
               </Grid>
               <Grid item>
-                <Input
+                <StyledInput
                   className="mb-7"
                   value={sliderValue}
                   size="small"

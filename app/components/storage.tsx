@@ -1,5 +1,4 @@
 "use client";
-import "@/app/globals.css";
 import React from "react";
 import { useForm, useWatch } from "react-hook-form";
 import { useEffect, useMemo, useState } from "react";

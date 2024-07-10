@@ -1,0 +1,15 @@
+/* comp.css */
+.info-button-container {
+  opacity: 1;
+}
+
+.info-box {
+  opacity: 0;
+  transition: opacity 1s ease-in-out;
+}
+
+.info-button-container:hover .info-box {
+  opacity: 1;
+  display: block; /* Ensuring it's visible on hover */
+  transition: opacity 1s ease-in-out;
+}
