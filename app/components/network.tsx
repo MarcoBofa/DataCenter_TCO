@@ -362,7 +362,7 @@ const Network: React.FC<NetworkProps> = ({
             <option value="400">400</option>
           </select>
         </div>
-        <div className="flex flex-col space-y-1 w-full sm:w-[690px] mb-2 mt-4 xl:mr-[300px] ml-4 items-center">
+        <div className="flex flex-col space-y-1 w-full sm:w-[691px] mb-2 mt-4 xl:mr-[300px] ml-4 items-center">
           <Box sx={{ width: "100%" }}>
             <Typography id="input-slider" gutterBottom>
               Adjust Cost ({sliderValue}%)
