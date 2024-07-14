@@ -374,7 +374,7 @@ export default function Home() {
               i
             </div>
             <span
-              className="z-10 display-on-hover absolute top-[-130px] xs:top-[-120px] sm:top-[-103px] md:top-[-150px] lg:top-[-63px] left-0 right-0 mx-auto p-2 text-white bg-gray-400 text-xs sm:text-sm rounded-lg shadow"
+              className="z-10 display-on-hover absolute top-[-130px] xs:top-[-120px] sm:top-[-103px] md:top-[-100px] lg:top-[-63px] xl:top-[-70px] left-0 right-0 mx-auto p-2 text-white bg-gray-400 text-xs sm:text-sm rounded-lg shadow"
               style={{
                 width: "calc(100% - 40px)", // Full width minus 20px margin on each side
                 maxWidth: "1200px", // Maximum width to match the original design
