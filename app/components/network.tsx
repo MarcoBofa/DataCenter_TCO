@@ -323,7 +323,7 @@ const Network: React.FC<NetworkProps> = ({
                 i
               </div>
               <span
-                className="info-box z-20 absolute top-[90px] sm:top-[10px] md:top-[-10px] lg:top-[10px] left-0 right-0 mx-auto p-2 text-white bg-gray-400 text-xs sm:text-sm rounded-lg shadow hidden"
+                className="info-box z-20 absolute top-[80px] sm:top-[10px] md:top-[-10px] lg:top-[10px] left-0 right-0 mx-auto p-2 text-white bg-gray-400 text-xs sm:text-sm rounded-lg shadow hidden"
                 style={{
                   width: "calc(80%)", // Full width minus 20px margin on each side
                   maxWidth: "1200px", // Maximum width to match the original design
