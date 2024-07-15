@@ -152,17 +152,32 @@ const PowerCost: React.FC<powerProps> = ({
           Energy Cost (Year): $
           {costOfPower.toLocaleString("en-US", { maximumFractionDigits: 0 })}
         </div>
-        <div className="w-full sm:w-[520px] border-fuchsia-500 bg-fuchsia-100 border-2 font-bold py-1 px-4 rounded-lg mt-4 shadow md:mr-5">
-          Server Average & Peak Consumption:{" "}
-          {(avgCons * spue).toLocaleString("en-US", {
-            maximumFractionDigits: 0,
-          })}{" "}
-          W - {"  "}
-          {(serverConsumption * spue).toLocaleString("en-US", {
-            maximumFractionDigits: 0,
-          })}{" "}
-          W
+        <div className="flex flex-row w-full sm:w-[520px] border-fuchsia-500 bg-fuchsia-100 border-2 font-bold py-1 px-4 rounded-lg mt-4 shadow md:mr-5 justify-center items-center relative">
+          <div>
+            Server Average & Peak Consumption:{" "}
+            {(avgCons * spue).toLocaleString("en-US", {
+              maximumFractionDigits: 0,
+            })}{" "}
+            W - {"  "}
+            {(serverConsumption * spue).toLocaleString("en-US", {
+              maximumFractionDigits: 0,
+            })}{" "}
+            W
+          </div>
+          <div className="flex hoverable-button justify-center items-center w-[13px] h-[13px] ml-3 rounded-full bg-gray-200 text-xs leading-none cursor-pointer">
+            i
+          </div>
+          <span
+            className="z-10 display-on-hover absolute top-[-130px] xs:top-[-110px] sm:top-[-117px] md:top-[-50px] lg:top-[-50px] xl:top-[-50px] left-0 right-0 mx-auto p-2 text-white bg-gray-400 text-xs sm:text-sm rounded-lg shadow"
+            style={{
+              width: "calc(90%)", // Full width minus 20px margin on each side
+              maxWidth: "1200px", // Maximum width to match the original design
+            }}
+          >
+            To be modified
+          </span>
         </div>
+
         <div className="w-full sm:w-[400px] border-teal-500 bg-teal-100 border-2 font-bold py-1 px-4 rounded-lg mt-4 shadow">
           Total Average Consumption:{" "}
           {((spue * avgCons + netConsumption) * pue).toLocaleString("en-US", {
