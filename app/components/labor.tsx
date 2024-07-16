@@ -168,8 +168,8 @@ const Labor: React.FC<laborProps> = ({
             <option value="custom">Custom</option>
           </select>
         </div>
-        <div className="flex flex-col space-y-1 w-full sm:w-[250px] min-w-[100px] sm:mr-[15px] rounded">
-          <label className="block text-sm h-[40px] border-gray-00 border-2 pt-2 mt-[23px]">
+        <div className="flex flex-col space-y-1 w-full sm:w-[250px] min-w-[100px] sm:mr-[15px]">
+          <label className="block text-sm h-[37px] border-gray-00 border-2 pt-2 mt-[23px] rounded">
             Total Employees: {totalEmployees}
           </label>
         </div>

@@ -71,3 +71,12 @@
 .customs {
   background-color: #fc0000;
 }
+
+.infobox-title {
+  font: bold;
+  color: #e364f4;
+}
+
+.infobox {
+  font-weight: normal;
+}

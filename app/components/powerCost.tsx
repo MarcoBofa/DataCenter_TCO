@@ -168,13 +168,29 @@ const PowerCost: React.FC<powerProps> = ({
             i
           </div>
           <span
-            className="z-10 display-on-hover absolute top-[-130px] xs:top-[-110px] sm:top-[-117px] md:top-[-50px] lg:top-[-50px] xl:top-[-50px] left-0 right-0 mx-auto p-2 text-white bg-gray-400 text-xs sm:text-sm rounded-lg shadow"
+            className="z-10 infobox display-on-hover absolute top-[-285px] xxs:top-[-230px] xs:top-[-175px] sm:top-[-210px] md:top-[-210px] lg:top-[-210px] xl:top-[-210px] left-0 right-0 mx-auto p-2 text-white bg-gray-400 text-xs sm:text-sm rounded-lg shadow"
             style={{
               width: "calc(90%)", // Full width minus 20px margin on each side
               maxWidth: "1200px", // Maximum width to match the original design
             }}
           >
-            To be modified
+            <span className="font-bold" style={{ color: "#ccff33" }}>
+              Peak Server consumption{" "}
+            </span>{" "}
+            represents the peak power consumption with all servers running at
+            full utilization.
+            <br />
+            <span className="font-bold" style={{ color: "#ccff33" }}>
+              Average Server consumption
+            </span>{" "}
+            is a more realistic estimation of power consumption, considering
+            that in a data center, servers are usually running at lower
+            utilization.
+            <br />
+            <br />
+            It is important to have both so the power infrastructure can be
+            provisioned to support peak server consumption while also having a
+            realistic estimation of the energy spending.
           </span>
         </div>
 
