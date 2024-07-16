@@ -35,7 +35,8 @@ module.exports = {
         "9/10": "90%",
       },
       screens: {
-        xxs: "320px",
+        xxxs: "320px",
+        xxs: "400px",
         xs: "480px", // Example of an extra small breakpoint
         sm: "640px",
         md: "768px",
