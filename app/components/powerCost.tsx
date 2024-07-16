@@ -148,9 +148,27 @@ const PowerCost: React.FC<powerProps> = ({
         </div>
       )}
       <div className="flex w-full flex-wrap text-center justify-center ">
-        <div className="w-full sm:w-[400px] border-lime-500 bg-lime-100 border-2 font-bold py-1 px-4 rounded-lg mt-4 shadow md:mr-5">
-          Energy Cost (Year): $
-          {costOfPower.toLocaleString("en-US", { maximumFractionDigits: 0 })}
+        <div className="flex flex-row justify-center items-center w-full sm:w-[400px] border-lime-500 bg-lime-100 border-2 font-bold py-1 px-4 rounded-lg mt-4 shadow md:mr-5 relative">
+          <div>
+            Energy Cost (Year): $
+            {costOfPower.toLocaleString("en-US", { maximumFractionDigits: 0 })}
+          </div>
+          <div className="flex hoverable-button justify-center items-center w-[13px] h-[13px] ml-3 rounded-full bg-gray-200 text-xs leading-none cursor-pointer">
+            i
+          </div>
+          <span
+            className="z-10 infobox display-on-hover absolute top-[-110px] xxxs:top-[-90px] xxs:top-[-82px] xs:top-[-75px] sm:top-[-110px] md:top-[-110px] xl:top-[-110px] xxl:top-[-120px] left-0 right-0 mx-auto p-2 text-white bg-gray-400 text-xs sm:text-sm rounded-lg shadow"
+            style={{
+              width: "calc(95%)", // Full width minus 20px margin on each side
+              maxWidth: "1200px", // Maximum width to match the original design
+            }}
+          >
+            <span className="font-bold" style={{ color: "#ccff33" }}>
+              Energy Cost
+            </span>{" "}
+            represents the spending for a whole year of operation based on the
+            Total Average Consumption.
+          </span>
         </div>
         <div className="flex flex-row w-full sm:w-[520px] border-fuchsia-500 bg-fuchsia-100 border-2 font-bold py-1 px-4 rounded-lg mt-4 shadow md:mr-5 justify-center items-center relative">
           <div>
@@ -215,7 +233,7 @@ const PowerCost: React.FC<powerProps> = ({
             <span className="font-bold" style={{ color: "#ccff33" }}>
               Total Average Consumption
             </span>{" "}
-            represents the consumption of the entire data center. It's
+            represents the average consumption of the entire data center. It's
             influenced by the PUE set in the Power Distribution and Cooling
             Infrastructure section.
           </span>
