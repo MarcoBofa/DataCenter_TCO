@@ -49,13 +49,19 @@
 .hoverable-button:hover + .display-on-hover {
   opacity: 1;
   transition: opacity 0.2s ease-in-out;
+  z-index: 10;
 }
 
 .display-on-hover {
   opacity: 0;
   transition: opacity 0.2s ease-in-out;
+  position: absolute; /* Ensure it's positioned absolutely */
+  pointer-events: none; /* Ensure it doesn't block interactions when hidden */
 }
 
+.hoverable-button:hover + .display-on-hover {
+  pointer-events: auto; /* Allow interactions when visible */
+}
 .important-style {
   position: absolute;
   left: 10;
