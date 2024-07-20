@@ -157,7 +157,7 @@ const PowerCost: React.FC<powerProps> = ({
             i
           </div>
           <span
-            className="z-10 infobox display-on-hover absolute top-[-110px] xxxs:top-[-90px] xxs:top-[-82px] xs:top-[-75px] sm:top-[-110px] md:top-[-110px] xl:top-[-110px] xxl:top-[-120px] left-0 right-0 mx-auto p-2 text-white bg-gray-400 text-xs sm:text-sm rounded-lg shadow"
+            className="z-10 infobox display-on-hover absolute top-[-90px] xxxs:top-[-80px] xxs:top-[-62px] xs:top-[-65px] sm:top-[-90px] md:top-[-90px] xl:top-[-90px] 2xl:top-[-90px] left-0 right-0 mx-auto p-2 text-white bg-gray-400 text-xs sm:text-sm rounded-lg shadow"
             style={{
               width: "calc(95%)", // Full width minus 20px margin on each side
               maxWidth: "1200px", // Maximum width to match the original design
