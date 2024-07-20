@@ -99,8 +99,6 @@ const Labor: React.FC<laborProps> = ({
       }
     }
 
-    console.log("LABOOOR", include);
-
     setLaborChoice(include);
     setTotalBaseLaborCost(baseCost);
     setTotalLaborCost(totalCost);

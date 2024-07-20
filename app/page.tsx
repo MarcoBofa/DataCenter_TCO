@@ -431,8 +431,26 @@ export default function Home() {
         />
       </div>
 
-      <div className="w-7/8 bg-white pb-10 rounded-2xl">
-        <div className="p-4 font-bold w-full text-left">WORKFORCE</div>
+      <div className="w-7/8 bg-white pb-10 rounded-2xl relative">
+        <div className="flex flex-row">
+          <div className="flex flex-row items-center">
+            <div className="p-4 font-bold w-full text-left">WORKFORCE</div>
+            <div className="flex hoverable-button justify-center items-center w-[13px] h-[13px] mr-[5px] xs:ml-[-6px] rounded-full bg-gray-200 text-xs leading-none cursor-pointer">
+              i
+            </div>
+            <span
+              className="z-10 display-on-hover absolute top-[-106px] xxxs:top-[-88px] xxs:top-[-70px] xs:top-[-60px] sm:top-[-65px] md:top-[-62px] lg:top-[-63px] xl:top-[-45px] left-0 right-0 mx-auto p-2 text-white bg-gray-400 text-xs sm:text-sm rounded-lg shadow"
+              style={{
+                width: "calc(100% - 40px)", // Full width minus 20px margin on each side
+                maxWidth: "1200px", // Maximum width to match the original design
+              }}
+            >
+              <span className="font-bold">Workforce Cost</span> represents the
+              total annual cost of the data center employees, which includes not
+              only base salary but also taxes, benefits, and bonuses.
+            </span>
+          </div>
+        </div>
         <Labor
           nodeCount={totalNodeCount}
           laborCost={costOfPower}
