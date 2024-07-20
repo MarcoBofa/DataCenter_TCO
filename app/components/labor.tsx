@@ -99,6 +99,8 @@ const Labor: React.FC<laborProps> = ({
       }
     }
 
+    console.log("LABOOOR", include);
+
     setLaborChoice(include);
     setTotalBaseLaborCost(baseCost);
     setTotalLaborCost(totalCost);
@@ -147,7 +149,9 @@ const Labor: React.FC<laborProps> = ({
             Include in Total Cost?
           </label>
           <select
-            {...register("include")}
+            {...register("include", {
+              setValueAs: (value) => value === "true",
+            })}
             className="w-full sm:w-[250px] p-2 rounded border-gray border-2 mb-2"
             id="include"
           >
