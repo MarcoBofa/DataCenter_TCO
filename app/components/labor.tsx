@@ -157,10 +157,35 @@ const Labor: React.FC<laborProps> = ({
             <option value="false">No</option>
           </select>
         </div>
-        <div className="flex flex-col space-y-1 w-full sm:w-[250px] sm:mr-[15px]">
-          <label className="block text-sm" htmlFor="choice">
-            Estimation
-          </label>
+        <div className="flex flex-col space-y-1 w-full sm:w-[250px] sm:mr-[15px] items-center justify-center ">
+          <div className="flex flex-row">
+            <label className="block text-sm" htmlFor="choice">
+              Estimation
+            </label>
+            <div className="flex hoverable-button justify-center items-center w-[13px] h-[13px] mt-[3px] ml-2 rounded-full bg-gray-200 text-xs leading-none cursor-pointer">
+              i
+            </div>
+            <span
+              className="z-10 infobox display-on-hove2 absolute top-[-50px] xxxs:top-[-10px] xxs:top-[3px] xs:top-[29px] sm:top-[-65px] md:top-[-70px] lg:top-[-45px] xl:top-[-20px] 2xl:top-[-20px] left-0 right-0 mx-auto p-2 text-white bg-gray-400 text-xs sm:text-sm rounded-lg shadow"
+              style={{
+                width: "calc(80%)", // Full width minus 20px margin on each side
+                maxWidth: "1000px", // Maximum width to match the original design
+              }}
+            >
+              <span className="font-bold" style={{ color: "#75e5f6" }}>
+                Guided
+              </span>{" "}
+              estimation calculates number of employees and related cost
+              automatically based on the size of the overall system.
+              <br></br>
+              <br></br>
+              <span className="font-bold" style={{ color: "#75e5f6" }}>
+                Custom
+              </span>{" "}
+              estimation allows the user to select the specific roles and number
+              of employee of the datacenter.
+            </span>
+          </div>
           <select
             {...register("choice")}
             className="w-full sm:w-[250px] p-2 rounded border-gray border-2 mb-2"
