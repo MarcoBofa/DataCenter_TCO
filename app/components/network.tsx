@@ -349,7 +349,7 @@ const Network: React.FC<NetworkProps> = ({
         </div>
         <div className="flex flex-col space-y-1 w-full sm:w-[200px] mb-2 sm:mr-[50px]">
           <label className="block text-sm" htmlFor="bandwidth">
-            Bandwidth
+            Bandwidth (GbE)
           </label>
           <select
             {...register("bandwidth", { valueAsNumber: true })}
