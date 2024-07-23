@@ -229,7 +229,7 @@ export default function Home() {
             <div className="flex hoverable-button justify-center items-center w-[13px] h-[13px] mr-[5px] xs:ml-[-6px] rounded-full bg-gray-200 text-xs leading-none cursor-pointer">
               i
             </div>
-            <span className="z-10 display-on-hove absolute w-[90%] md:w-[75%] top-[50px] left-[0px] md:top-[06px] md:left-[160px] lg:left-[120px] xl:left-[75px] right-0 mx-auto p-2 text-white bg-gray-400 text-xs sm:text-sm rounded-lg shadow">
+            <span className="z-10 display-on-hover absolute w-[90%] md:w-[75%] top-[50px] left-[0px] md:top-[06px] md:left-[160px] lg:left-[120px] xl:left-[75px] right-0 mx-auto p-2 text-white bg-gray-400 text-xs sm:text-sm rounded-lg shadow">
               <span className="font-bold">Land and Building </span>cost refers
               to the expenses associated with acquiring the land and
               constructing the infrastructure necessary to house all the
