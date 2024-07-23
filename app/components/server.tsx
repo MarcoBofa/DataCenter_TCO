@@ -338,7 +338,7 @@ const Server: React.FC<ServerProps> = ({
       <div className="flex flex-wrap items-center w-full">
         <select
           {...register("mode")}
-          className="w-full sm:w-[180px] p-2 rounded border-gray border-2 mb-2 sm:mr-[50px]"
+          className="w-full sm:w-[180px] p-2 rounded border-gray border-2 mb-3 sm:mb-5 sm:mr-[50px]"
           id="mode"
         >
           <option value="Guided">Guided</option>
@@ -346,7 +346,7 @@ const Server: React.FC<ServerProps> = ({
         </select>
         <select
           {...register("cpu")}
-          className="w-full sm:w-[190px] p-2 rounded border-gray border-2 mb-2 sm:mr-[50px]"
+          className="w-full sm:w-[190px] p-2 rounded border-gray border-2 mb-3 sm:mb-5 sm:mr-[50px]"
         >
           <option value="intel_max">Intel Xeon Max Series</option>
           <option value="intel_plat">Intel Xeon Platinum</option>
@@ -358,13 +358,13 @@ const Server: React.FC<ServerProps> = ({
           <option value="amd_bergamo">AMD EPYC Bergamo</option>
         </select>
         <div className="flex flex-wrap justify-center items-center w-full xs:w-auto">
-          <div className="w-[285px] border-green-500 bg-green-100 border-2 font-bold py-1 px-3 rounded-lg shadow mb-2 sm:mr-[50px]">
+          <div className="w-full sm:w-[285px] border-green-500 bg-green-100 border-2 font-bold py-1 px-3 rounded-lg shadow mb-2 sm:mr-[50px]">
             Total Cores: {totalCores}
           </div>
-          <div className="w-[285px] border-sky-500 bg-sky-100 border-2 font-bold py-1 px-3 rounded-lg shadow mb-2 sm:mr-[50px]">
+          <div className="w-full sm:w-[285px] border-sky-500 bg-sky-100 border-2 font-bold py-1 px-3 rounded-lg shadow mb-2 sm:mr-[50px]">
             Total Mem: {totalRam} GB
           </div>
-          <div className="w-[285px] border-red-500 border-2 bg-red-100 font-bold py-1 px-3 rounded-lg shadow mb-2 sm:mr-[50px]">
+          <div className="w-full sm:w-[285px] border-red-500 border-2 bg-red-100 font-bold py-1 px-3 rounded-lg shadow mb-2 sm:mr-[50px]">
             Total Storage: {totalStorage} GB
           </div>
         </div>
