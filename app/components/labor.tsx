@@ -166,7 +166,7 @@ const Labor: React.FC<laborProps> = ({
               i
             </div>
             <span
-              className="z-10 infobox display-on-hove2 absolute top-[-50px] xxxs:top-[-10px] xxs:top-[3px] xs:top-[29px] sm:top-[-65px] md:top-[-70px] lg:top-[-45px] xl:top-[-20px] 2xl:top-[-20px] left-0 right-0 mx-auto p-2 text-white bg-gray-400 text-xs sm:text-sm rounded-lg shadow"
+              className="z-10 infobox display-on-hover absolute top-[-50px] xxxs:top-[-10px] xxs:top-[3px] xs:top-[29px] sm:top-[-65px] md:top-[-70px] lg:top-[-45px] xl:top-[-20px] 2xl:top-[-20px] left-0 right-0 mx-auto p-2 text-white bg-gray-400 text-xs sm:text-sm rounded-lg shadow"
               style={{
                 width: "calc(80%)", // Full width minus 20px margin on each side
                 maxWidth: "1000px", // Maximum width to match the original design
