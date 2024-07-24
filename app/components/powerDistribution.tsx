@@ -168,7 +168,7 @@ const PowerDistribution: React.FC<powerProps> = ({
 
   return (
     <div className="flex flex-wrap items-center w-full">
-      <div className="flex flex-col space-y-1 w-full sm:w-[320px] mb-2 p-4 sm:mr-[40px]">
+      <div className="flex flex-col space-y-1 w-full md:w-[320px] md:mb-2 p-4 md:mr-[40px]">
         <label className="block text-sm text-center ml-5" htmlFor="pue">
           Desired Power Usage Effectives (PUE)
         </label>
@@ -178,7 +178,9 @@ const PowerDistribution: React.FC<powerProps> = ({
             validate: (value) =>
               value > 0.99 || "PUE should not be lower than 1",
           })}
-          className="sm:w-[320px] w-full p-2 rounded border-gray border-2 mb-2"
+          className={`md:w-[320px] w-full p-2 rounded ${
+            errors.pue ? "border-red-500" : "border-gray-200"
+          } border-2 mb-2`}
           type="number"
           step="0.01"
           placeholder="1.35"
@@ -193,24 +195,24 @@ const PowerDistribution: React.FC<powerProps> = ({
           </span>
         )}
       </div>
-      <div className="flex flex-col space-y-1 w-full sm:w-[250px] p-4 mb-2 sm:mr-[40px]">
+      <div className="flex flex-col space-y-1 w-full md:w-[250px] p-4 mb-2 md:mr-[40px]">
         <label className="block text-sm" htmlFor="cooling">
           Cooling
         </label>
         <select
           {...register("cooling")}
-          className="w-full sm:w-[250px] p-2 rounded border-gray border-2 mb-2 sm:mr-[40px]"
+          className="w-full md:w-[250px] p-2 rounded border-gray border-2 mb-2 md:mr-[40px]"
           id="cooling"
         >
           <option value="liquid">Liquid</option>
           <option value="Air">Air</option>
         </select>
       </div>
-      <div className="w-[450px] border-cyan-500 bg-cyan-100 border-2 font-bold py-1 px-3 rounded-lg mt-4 shadow ml-4 mr-4 sm:mr-[50px]">
+      <div className="w-full md:w-[610px] xl:w-[450px] border-cyan-500 bg-cyan-100 border-2 font-bold py-1 px-3 rounded-lg mt-4 shadow ml-4 mr-4 md:mr-[10px]">
         Power Distribution & Cooling cost: $
         {pdCost.toLocaleString("en-US", { maximumFractionDigits: 0 })}
       </div>
-      <div className="flex flex-col space-y-1 w-full sm:w-[700px] mb-2 mt-4 sm:mr-[50px] ml-4 items-center mr-4">
+      <div className="flex flex-col space-y-1 w-full sm:w-[700px] mb-2 mt-7 sm:mr-[50px] ml-4 items-center mr-4">
         <Box sx={{ width: "100%" }}>
           <Typography id="input-slider" gutterBottom>
             Adjust Cost ({sliderValue}%)

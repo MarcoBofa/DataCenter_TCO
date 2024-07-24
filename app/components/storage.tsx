@@ -25,10 +25,17 @@ const Storage: React.FC<StorageProps> = ({
   updateStorageAmount,
   updateStorageNodeConsumption,
 }) => {
-  const { control, register, watch } = useForm<localProps>({
+  const {
+    control,
+    register,
+    handleSubmit,
+    watch,
+    setValue,
+    formState: { errors },
+  } = useForm<localProps>({
     defaultValues: {
       choice: "guided",
-      price: 0,
+      price: 1,
       type: "hdd_high",
     },
   });
@@ -50,6 +57,15 @@ const Storage: React.FC<StorageProps> = ({
   const high_hdd = 28;
   const storageConsumption = 5;
   const psu_800w = 800;
+
+  const inputCheck = (
+    event: React.ChangeEvent<HTMLInputElement>,
+    field: keyof localProps,
+    min: number
+  ) => {
+    const value = Number(event.target.value);
+    setValue(field, value < min ? min : value, { shouldValidate: true });
+  };
 
   useEffect(() => {
     let cost = 0;
@@ -97,7 +113,7 @@ const Storage: React.FC<StorageProps> = ({
           id="choice"
         >
           <option value="guided">Guided</option>
-          <option value="custom">Custom</option>
+          <option value="custom">Customizable</option>
         </select>
       </div>
       {choice == "custom" && (
@@ -136,13 +152,24 @@ const Storage: React.FC<StorageProps> = ({
           Storage amount (TB)
         </label>
         <input
-          {...register("amount", { valueAsNumber: true })}
+          {...register("amount", {
+            valueAsNumber: true,
+            validate: (value) => value > 0 || "Storage must be more than 0",
+          })}
           className="w-full sm:w-[250px] p-2 rounded border-gray border-2 mb-2"
           type="number"
           step="1"
           placeholder="10TB"
           id="amount"
-        />{" "}
+          min="1"
+          onChange={(event) => inputCheck(event, "amount", 1)}
+        />
+        {errors.amount && (
+          <span className="font-bold text-red-500">
+            {" "}
+            {errors.amount.message}
+          </span>
+        )}
       </div>
       <div className="sm:w-[400px] w-full border-cyan-500 bg-cyan-100 border-2 font-bold py-1 px-3 rounded-lg mt-4 shadow ml-4 mr-4 sm:mr-[50px]">
         Storage Cost: $

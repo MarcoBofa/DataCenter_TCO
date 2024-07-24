@@ -15,8 +15,9 @@ module.exports = {
         "gray-85": "#242424",
         "gray-95": "#141414",
         "gray-96": "#131313",
+        yellowish: "#c9ff64",
         ciao: "#ccff33",
-        greenish: "#AFFE01",
+        greenish: "#8fdc00",
         nav: "#21253a",
         settings: "#f2f3f8",
         textSettings: "#636c9b",
@@ -40,6 +41,7 @@ module.exports = {
         xs: "480px", // Example of an extra small breakpoint
         sm: "640px",
         md: "768px",
+        mdd: "895px",
         lg: "1024px",
         xl: "1280px",
         "2xl": "1536px",

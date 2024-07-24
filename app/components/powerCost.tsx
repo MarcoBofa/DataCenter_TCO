@@ -128,7 +128,7 @@ const PowerCost: React.FC<powerProps> = ({
 
   return (
     <div className="flex flex-wrap items-center w-full">
-      <div className="flex flex-col space-y-1 w-full sm:w-[250px] mb-2 p-4 sm:mr-[40px]">
+      <div className="flex flex-col space-y-1 w-full md:w-[250px] mb-2 p-4 md:mr-[40px]">
         <label className="block text-sm text-center ml-5" htmlFor="eCost">
           Electricity cost ($/kWh)
         </label>
@@ -138,7 +138,7 @@ const PowerCost: React.FC<powerProps> = ({
             validate: (value) =>
               value > 0 || "Electricity cost must be higher than 0",
           })}
-          className={`w-full sm:w-[250px] p-2 rounded ${
+          className={`w-full md:w-[250px] p-2 rounded ${
             errors.eCost ? "border-red-500" : "border-gray-200"
           } border-2 mb-2`}
           type="number"
@@ -154,13 +154,13 @@ const PowerCost: React.FC<powerProps> = ({
           </span>
         )}{" "}
       </div>
-      <div className="flex flex-col space-y-1 w-full sm:w-[350px] mb-2 p-4 sm:mr-[40px]">
+      <div className="flex flex-col space-y-1 w-full md:w-[350px] mb-2 p-4 md:mr-[40px]">
         <label className="block text-sm" htmlFor="choice">
           Do you know expected Server Peak utilization?
         </label>
         <select
           {...register("choice")}
-          className="w-full sm:w-[350px] p-2 rounded border-gray border-2 mb-2"
+          className="w-full md:w-[350px] p-2 rounded border-gray border-2 mb-2"
           id="choice"
         >
           <option value="no">No</option>
@@ -169,7 +169,7 @@ const PowerCost: React.FC<powerProps> = ({
       </div>
       {choice === "yes" && (
         <div
-          className={`flex flex-col space-y-1 w-full sm:w-[300px] mb-2 p-4 sm:mr-[40px]`}
+          className={`flex flex-col space-y-1 w-full md:w-[300px] mb-2 p-4 md:mr-[40px]`}
         >
           <label className="block text-sm text-center ml-5" htmlFor="usage">
             Expected Peak Server Utilization (%)
@@ -179,7 +179,7 @@ const PowerCost: React.FC<powerProps> = ({
               valueAsNumber: true,
               validate: (value) => value > 0 || "Usage must be higher that 0",
             })}
-            className={`w-full sm:w-[300px] p-2 rounded ${
+            className={`w-full md:w-[300px] p-2 rounded ${
               errors.usage ? "border-red-500" : "border-gray-200"
             } border-2 mb-2`}
             type="number"
@@ -196,8 +196,8 @@ const PowerCost: React.FC<powerProps> = ({
           )}
         </div>
       )}
-      <div className="flex w-full flex-wrap text-center justify-center ">
-        <div className="flex flex-row justify-center items-center w-full sm:w-[400px] border-lime-500 bg-lime-100 border-2 font-bold py-1 px-4 rounded-lg mt-4 shadow md:mr-5 relative">
+      <div className="flex w-full flex-wrap text-center justify-center px-4">
+        <div className="flex flex-row justify-center items-center w-full md:w-[400px] border-lime-500 bg-lime-100 border-2 font-bold py-1 px-4 rounded-lg mt-4 shadow md:mr-5 relative">
           <div>
             Energy Cost (Year): $
             {costOfPower.toLocaleString("en-US", { maximumFractionDigits: 0 })}
@@ -219,7 +219,7 @@ const PowerCost: React.FC<powerProps> = ({
             Total Average Consumption.
           </span>
         </div>
-        <div className="flex flex-row w-full sm:w-[520px] border-fuchsia-500 bg-fuchsia-100 border-2 font-bold py-1 px-4 rounded-lg mt-4 shadow md:mr-5 justify-center items-center relative">
+        <div className="flex flex-row w-full md:w-[520px] border-fuchsia-500 bg-fuchsia-100 border-2 font-bold py-1 px-4 rounded-lg mt-4 shadow md:mr-5 justify-center items-center relative">
           <div>
             Server Average & Peak Consumption:{" "}
             {(avgCons * spue).toLocaleString("en-US", {
@@ -261,7 +261,7 @@ const PowerCost: React.FC<powerProps> = ({
           </span>
         </div>
 
-        <div className="flex flex-row justify-center items-center w-full sm:w-[400px] border-teal-500 bg-teal-100 border-2 font-bold py-1 px-4 rounded-lg mt-4 shadow relative">
+        <div className="flex flex-row justify-center items-center w-full md:w-[400px] border-teal-500 bg-teal-100 border-2 font-bold py-1 px-4 rounded-lg mt-4 shadow relative">
           <div>
             Total Average Consumption:{" "}
             {((spue * avgCons + netConsumption) * pue).toLocaleString("en-US", {

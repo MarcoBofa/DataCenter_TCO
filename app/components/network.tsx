@@ -291,7 +291,7 @@ const Network: React.FC<NetworkProps> = ({
           <option value="infiniband">Nvidia Mellanox Infiniband</option>
           <option value="slingshot">HPE Cray Slingshot</option>
         </select>
-        <div className="w-[450px] border-orange-500 bg-orange-100 border-2 font-bold py-1 px-3 rounded-lg shadow mb-2 sm:mr-[50px]">
+        <div className="w-full md:w-[450px] border-orange-500 bg-orange-100 border-2 font-bold py-1 px-3 rounded-lg shadow mb-2 md:mr-[50px] mt-2 mdd:mt-[-5px]">
           Network Cost: $
           {totalNetCost.toLocaleString("en-US", { maximumFractionDigits: 0 })}
         </div>
