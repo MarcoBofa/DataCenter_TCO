@@ -604,7 +604,10 @@ const Server: React.FC<ServerProps> = ({
               <div
                 className={`w-full sm:w-[550px] border-greenish bg-yellowish bg-opacity-40 border-2 font-bold py-1 px-3 rounded-lg shadow mt-3 md:mr-[180px]`}
               >
-                Total Cluster Cost: ${totalClusterCost}
+                Total Cluster Cost: $
+                {totalClusterCost.toLocaleString("en-US", {
+                  maximumFractionDigits: 0,
+                })}
               </div>
             </div>
           </div>
@@ -777,7 +780,10 @@ const Server: React.FC<ServerProps> = ({
               <div
                 className={`w-full lg:w-[550px] border-greenish bg-yellowish bg-opacity-40 border-2 font-bold py-1 px-3 rounded-lg mt-3 mb-2 shadow md:mr-[30px] 2xl:ml-[100px] 2xl:mr-[100px]`}
               >
-                Total Cluster Cost: ${totalClusterCost}
+                Total Cluster Cost: $
+                {totalClusterCost.toLocaleString("en-US", {
+                  maximumFractionDigits: 0,
+                })}
               </div>
             </div>
           </div>
