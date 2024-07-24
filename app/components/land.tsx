@@ -102,7 +102,9 @@ const Land: React.FC<LandProps> = ({
               validate: (value) =>
                 value > 0 || "Square footage must be higher than 0",
             })}
-            className="flex-grow p-2 rounded border-2"
+            className={`flex-grow p-2 rounded border-2 ${
+              errors.ft ? "border-red-500" : "border-gray-200"
+            }`}
             type="number"
             placeholder="1"
             id="ft"
@@ -125,7 +127,9 @@ const Land: React.FC<LandProps> = ({
               validate: (value) =>
                 value > 0 || "Occupancy must be higher than 0",
             })}
-            className="flex-grow p-2 rounded border-2"
+            className={`flex-grow p-2 rounded border-2 ${
+              errors.occupancy ? "border-red-500" : "border-gray-200"
+            }`}
             type="number"
             placeholder="60"
             id="occupancy"
@@ -134,7 +138,7 @@ const Land: React.FC<LandProps> = ({
           />
           {errors.occupancy && (
             <span className="text-red-500 font-bold">
-              &#x26A0; {errors.occupancy.message}
+              &#x274C; {errors.occupancy.message}
             </span>
           )}
         </div>
@@ -148,7 +152,9 @@ const Land: React.FC<LandProps> = ({
               validate: (value) =>
                 value > 0 || "Power Rating must be higher than 0",
             })}
-            className="flex-grow p-2 rounded border-2"
+            className={`flex-grow p-2 rounded border-2 ${
+              errors.powerRating ? "border-red-500" : "border-gray-200"
+            }`}
             type="number"
             step="0.1"
             placeholder="2.5"
@@ -158,7 +164,7 @@ const Land: React.FC<LandProps> = ({
           />
           {errors.powerRating && (
             <span className="text-red-500 font-bold">
-              &#x26A0; {errors.powerRating.message}
+              &#x274C; {errors.powerRating.message}
             </span>
           )}
         </div>
@@ -168,7 +174,9 @@ const Land: React.FC<LandProps> = ({
           </label>
           <input
             {...register("rentalRate", { valueAsNumber: true })}
-            className="flex-grow p-2 rounded border-2"
+            className={`flex-grow p-2 rounded border-2 ${
+              errors.rentalRate ? "border-red-500" : "border-gray-200"
+            }`}
             type="number"
             placeholder="1"
             id="rentalRate"
@@ -185,7 +193,9 @@ const Land: React.FC<LandProps> = ({
               valueAsNumber: true,
               validate: (value) => value > 0 || "Cap must be higher than 0",
             })}
-            className="flex-grow p-2 rounded border-2"
+            className={`flex-grow p-2 rounded border-2 ${
+              errors.cap ? "border-red-500" : "border-gray-200"
+            }`}
             type="number"
             placeholder="8"
             id="cap"
@@ -194,7 +204,7 @@ const Land: React.FC<LandProps> = ({
           />
           {errors.cap && (
             <span className="text-red-500 font-bold">
-              &#x26A0; {errors.cap.message}
+              &#x274C; {errors.cap.message}
             </span>
           )}
         </div>

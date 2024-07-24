@@ -84,6 +84,22 @@ const PowerCost: React.FC<powerProps> = ({
   const electricityCost = 0.11;
   const spue = 1.1;
 
+  const inputCheck = (
+    event: React.ChangeEvent<HTMLInputElement>,
+    field: keyof LocalProps
+  ) => {
+    let value = Number(event.target.value);
+
+    // Ensure value is between 1 and 100
+    if (value < 0) {
+      value = 0;
+    } else if (value > 100) {
+      value = 100;
+    }
+
+    setValue(field, value, { shouldValidate: true });
+  };
+
   useEffect(() => {
     let cost = 0;
 
@@ -117,13 +133,26 @@ const PowerCost: React.FC<powerProps> = ({
           Electricity cost ($/kWh)
         </label>
         <input
-          {...register("eCost", { valueAsNumber: true })}
-          className="w-full sm:w-[250px] p-2 rounded border-gray border-2 mb-2"
+          {...register("eCost", {
+            valueAsNumber: true,
+            validate: (value) =>
+              value > 0 || "Electricity cost must be higher than 0",
+          })}
+          className={`w-full sm:w-[250px] p-2 rounded ${
+            errors.eCost ? "border-red-500" : "border-gray-200"
+          } border-2 mb-2`}
           type="number"
           step="0.01"
           placeholder="0.11"
           id="eCost"
-        />{" "}
+          min="0"
+          onChange={(event) => inputCheck(event, "eCost")}
+        />
+        {errors.eCost && (
+          <span className="text-red-500 font-bold">
+            &#x274C; {errors.eCost.message}
+          </span>
+        )}{" "}
       </div>
       <div className="flex flex-col space-y-1 w-full sm:w-[350px] mb-2 p-4 sm:mr-[40px]">
         <label className="block text-sm" htmlFor="choice">
@@ -139,18 +168,32 @@ const PowerCost: React.FC<powerProps> = ({
         </select>
       </div>
       {choice === "yes" && (
-        <div className="flex flex-col space-y-1 w-full sm:w-[300px] mb-2 p-4 sm:mr-[40px]">
+        <div
+          className={`flex flex-col space-y-1 w-full sm:w-[300px] mb-2 p-4 sm:mr-[40px]`}
+        >
           <label className="block text-sm text-center ml-5" htmlFor="usage">
             Expected Peak Server Utilization (%)
           </label>
           <input
-            {...register("usage", { valueAsNumber: true })}
-            className="w-full sm:w-[300px] p-2 rounded border-gray border-2 mb-2"
+            {...register("usage", {
+              valueAsNumber: true,
+              validate: (value) => value > 0 || "Usage must be higher that 0",
+            })}
+            className={`w-full sm:w-[300px] p-2 rounded ${
+              errors.usage ? "border-red-500" : "border-gray-200"
+            } border-2 mb-2`}
             type="number"
             step="1"
             placeholder="60%"
             id="pue"
-          />{" "}
+            min="0"
+            onChange={(event) => inputCheck(event, "usage")}
+          />
+          {errors.usage && (
+            <span className="text-red-500 font-bold">
+              &#x274C; {errors.usage.message}
+            </span>
+          )}
         </div>
       )}
       <div className="flex w-full flex-wrap text-center justify-center ">
