@@ -39,7 +39,13 @@ const PowerCost: React.FC<powerProps> = ({
   pue,
   setCostOfPower,
 }) => {
-  const { register, handleSubmit, watch } = useForm<LocalProps>({
+  const {
+    register,
+    handleSubmit,
+    watch,
+    setValue,
+    formState: { errors },
+  } = useForm<LocalProps>({
     defaultValues: {
       usage: 60,
       choice: "no",

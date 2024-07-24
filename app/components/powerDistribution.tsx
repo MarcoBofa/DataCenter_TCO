@@ -36,7 +36,13 @@ const PowerDistribution: React.FC<powerProps> = ({
   setPDcost,
   setPueValue,
 }) => {
-  const { register, handleSubmit, watch } = useForm<LocalProps>({
+  const {
+    register,
+    handleSubmit,
+    watch,
+    setValue,
+    formState: { errors },
+  } = useForm<LocalProps>({
     defaultValues: {
       pue: 1.35,
       cooling: "liquid",
@@ -79,6 +85,14 @@ const PowerDistribution: React.FC<powerProps> = ({
     } else if (sliderValue > 99) {
       setSliderValue(99);
     }
+  };
+
+  const inputCheck = (
+    event: React.ChangeEvent<HTMLInputElement>,
+    field: keyof LocalProps
+  ) => {
+    const value = Number(event.target.value);
+    setValue(field, value < 1 ? 1 : value, { shouldValidate: true });
   };
 
   useEffect(() => {
@@ -159,13 +173,25 @@ const PowerDistribution: React.FC<powerProps> = ({
           Desired Power Usage Effectives (PUE)
         </label>
         <input
-          {...register("pue", { valueAsNumber: true })}
+          {...register("pue", {
+            valueAsNumber: true,
+            validate: (value) =>
+              value > 0.99 || "PUE should not be lower than 1",
+          })}
           className="sm:w-[320px] w-full p-2 rounded border-gray border-2 mb-2"
           type="number"
           step="0.01"
           placeholder="1.35"
           id="pue"
+          min="1"
+          onChange={(event) => inputCheck(event, "pue")}
         />
+        {errors.pue && (
+          <span className="font-bold text-red-500">
+            {" "}
+            &#x274C; {errors.pue.message}
+          </span>
+        )}
       </div>
       <div className="flex flex-col space-y-1 w-full sm:w-[250px] p-4 mb-2 sm:mr-[40px]">
         <label className="block text-sm" htmlFor="cooling">
