@@ -26,7 +26,13 @@ const Land: React.FC<LandProps> = ({
   homePropertyValue: number;
   setPropertyValue: (value: number) => void;
 }) => {
-  const { register, handleSubmit, watch } = useForm<LocalProps>({
+  const {
+    register,
+    handleSubmit,
+    watch,
+    setValue,
+    formState: { errors },
+  } = useForm<LocalProps>({
     defaultValues: {
       mode: "Guided",
       ft: 10,
@@ -53,6 +59,14 @@ const Land: React.FC<LandProps> = ({
   const GOI = (rentalRate * powerRating * 1000) / (ft * 1000);
 
   const propertyValue = (GOI * ft * 1000 * (occupancy / 100)) / (cap / 100);
+
+  const handleInputChange = (
+    event: React.ChangeEvent<HTMLInputElement>,
+    field: keyof LocalProps
+  ) => {
+    const value = Number(event.target.value);
+    setValue(field, value < 0 ? 0 : value, { shouldValidate: true });
+  };
 
   useEffect(() => {
     setPropertyValue(propertyValue);
@@ -85,38 +99,68 @@ const Land: React.FC<LandProps> = ({
           <input
             {...register("ft", {
               valueAsNumber: true,
-              validate: (value) => value > 0 || "Please enter a valid number",
+              validate: (value) =>
+                value > 0 || "Square footage must be higher than 0",
             })}
             className="flex-grow p-2 rounded border-2"
             type="number"
             placeholder="1"
             id="ft"
+            min="0"
+            onChange={(event) => handleInputChange(event, "ft")}
           />
+          {errors.ft && (
+            <span className="text-red-500 font-bold">
+              &#x274C; {errors.ft.message}
+            </span>
+          )}
         </div>
         <div className="flex flex-col space-y-1 w-full sm:w-[200px] mb-2 sm:mr-[50px]">
           <label className="block text-sm" htmlFor="occupancy">
             Occupancy (%)
           </label>
           <input
-            {...register("occupancy", { valueAsNumber: true })}
+            {...register("occupancy", {
+              valueAsNumber: true,
+              validate: (value) =>
+                value > 0 || "Occupancy must be higher than 0",
+            })}
             className="flex-grow p-2 rounded border-2"
             type="number"
             placeholder="60"
             id="occupancy"
+            min="0"
+            onChange={(event) => handleInputChange(event, "occupancy")}
           />
+          {errors.occupancy && (
+            <span className="text-red-500 font-bold">
+              &#x26A0; {errors.occupancy.message}
+            </span>
+          )}
         </div>
         <div className="flex flex-col space-y-1 w-full sm:w-[200px] mb-2 sm:mr-[50px]">
           <label className="block text-sm" htmlFor="powerRating">
             Power Rating Facility (MW)
           </label>
           <input
-            {...register("powerRating", { valueAsNumber: true })}
+            {...register("powerRating", {
+              valueAsNumber: true,
+              validate: (value) =>
+                value > 0 || "Power Rating must be higher than 0",
+            })}
             className="flex-grow p-2 rounded border-2"
             type="number"
             step="0.1"
             placeholder="2.5"
             id="powerRating"
+            min="0"
+            onChange={(event) => handleInputChange(event, "powerRating")}
           />
+          {errors.powerRating && (
+            <span className="text-red-500 font-bold">
+              &#x26A0; {errors.powerRating.message}
+            </span>
+          )}
         </div>
         <div className="flex flex-col space-y-1 w-full sm:w-[200px] mb-2 sm:mr-[50px]">
           <label className="block text-sm" htmlFor="rentalRate">
@@ -128,6 +172,8 @@ const Land: React.FC<LandProps> = ({
             type="number"
             placeholder="1"
             id="rentalRate"
+            min="0"
+            onChange={(event) => handleInputChange(event, "rentalRate")}
           />
         </div>
         <div className="flex flex-col space-y-1 w-full sm:w-[200px] mb-2 sm:mr-[50px]">
@@ -135,12 +181,22 @@ const Land: React.FC<LandProps> = ({
             Cap Rate
           </label>
           <input
-            {...register("cap", { valueAsNumber: true })}
+            {...register("cap", {
+              valueAsNumber: true,
+              validate: (value) => value > 0 || "Cap must be higher than 0",
+            })}
             className="flex-grow p-2 rounded border-2"
             type="number"
             placeholder="8"
             id="cap"
+            min="0"
+            onChange={(event) => handleInputChange(event, "cap")}
           />
+          {errors.cap && (
+            <span className="text-red-500 font-bold">
+              &#x26A0; {errors.cap.message}
+            </span>
+          )}
         </div>
       </div>
     </div>
