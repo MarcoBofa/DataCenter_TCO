@@ -502,7 +502,16 @@ export default function Home() {
       <div className="flex flex-wrap justify-center items-center w-full">
         <div className="flex flex-col items-center lg:mr-[100px] mb-3">
           <h1 className="mb-3 font-bold text-lg">
-            Total Cost Without Amortization
+            Total Cost Without Amortization ($
+            {(
+              totalServerCost +
+              totalNetCost +
+              propertyValue +
+              totalPCost +
+              costOfPower +
+              softwareLicenseCost
+            ).toLocaleString("en-US", { maximumFractionDigits: 0 })}
+            )
           </h1>
           <PieChart
             serverCost={totalServerCost}
@@ -515,7 +524,16 @@ export default function Home() {
         </div>
         <div className="flex flex-col items-center mb-3">
           <h1 className="mb-3 font-bold text-lg">
-            Yearly Cost Considering Amortization
+            Yearly Cost Considering Amortization ($
+            {(
+              totalServerCost / 5 +
+              totalNetCost / 5 +
+              propertyValue / 20 +
+              totalPCost / 7 +
+              costOfPower +
+              softwareLicenseCost / 5
+            ).toLocaleString("en-US", { maximumFractionDigits: 0 })}
+            )
           </h1>
           <PieChart
             serverCost={totalServerCost / 5}
@@ -528,7 +546,17 @@ export default function Home() {
         </div>
         <div className="flex flex-col items-center mb-3">
           <h1 className="mb-3 font-bold text-lg">
-            Yearly Cost (w/ Salary) Considering Amortization
+            Yearly Cost (w/ Salary) Considering Amortization ($
+            {(
+              totalServerCost / 5 +
+              totalNetCost / 5 +
+              propertyValue / 20 +
+              totalPCost / 7 +
+              costOfPower +
+              softwareLicenseCost / 5 +
+              laborCost
+            ).toLocaleString("en-US", { maximumFractionDigits: 0 })}
+            )
           </h1>
           <PieChart
             serverCost={totalServerCost / 5}
