@@ -54,66 +54,6 @@ export default function Home() {
 
   const [pue, setPueValue] = useState(1.35);
 
-  useEffect(() => {
-    const totalServerCosttemp = serverClusters.reduce(
-      (sum, cluster) => sum + cluster.totalCost,
-      0
-    );
-    const totalNode = serverClusters.reduce(
-      (sum, cluster) => sum + cluster.nodeCount,
-      0
-    );
-    const totalServerP = serverClusters.reduce(
-      (sum, cluster) => sum + cluster.serverConsumption,
-      0
-    );
-
-    const totalCoreNumber = serverClusters.reduce(
-      (sum, cluster) => sum + cluster.coreNumber,
-      0
-    );
-
-    const tmp_storage = storageCluster.reduce(
-      (sum, cluster) => sum + cluster.storage,
-      0
-    );
-
-    const tmp_storage_consumption = storageCluster.reduce(
-      (sum, cluster) => sum + cluster.consumption,
-      0
-    );
-
-    const tmp_storage_cost = storageCluster.reduce(
-      (sum, cluster) => sum + cluster.totalCost,
-      0
-    );
-    setTotalStorageCost(tmp_storage_cost);
-    setTotalStorage(tmp_storage);
-
-    setCoreNumber(totalCoreNumber);
-    setTotalServerConsumption(totalServerP + tmp_storage_consumption);
-    setTotalNodeCount(totalNode);
-    setTotalCost(
-      totalServerCosttemp +
-        totalNetCost +
-        propertyValue +
-        totalPCost +
-        tmp_storage_cost +
-        (laborChoice ? laborCost : 0)
-    );
-    setTotalServerCost(totalServerCosttemp);
-  }, [
-    serverClusters,
-    totalNetCost,
-    propertyValue,
-    totalServerConsumption,
-    totalPCost,
-    coresNumber,
-    storageCluster,
-    laborChoice,
-    laborCost,
-  ]);
-
   const addServerCluster = () => {
     setServerClusters([
       ...serverClusters,
@@ -214,6 +154,67 @@ export default function Home() {
     },
     []
   );
+
+  useEffect(() => {
+    const totalServerCosttemp = serverClusters.reduce(
+      (sum, cluster) => sum + cluster.totalCost,
+      0
+    );
+    const totalNode = serverClusters.reduce(
+      (sum, cluster) => sum + cluster.nodeCount,
+      0
+    );
+    const totalServerP = serverClusters.reduce(
+      (sum, cluster) => sum + cluster.serverConsumption,
+      0
+    );
+
+    const totalCoreNumber = serverClusters.reduce(
+      (sum, cluster) => sum + cluster.coreNumber,
+      0
+    );
+
+    const tmp_storage = storageCluster.reduce(
+      (sum, cluster) => sum + cluster.storage,
+      0
+    );
+
+    const tmp_storage_consumption = storageCluster.reduce(
+      (sum, cluster) => sum + cluster.consumption,
+      0
+    );
+
+    const tmp_storage_cost = storageCluster.reduce(
+      (sum, cluster) => sum + cluster.totalCost,
+      0
+    );
+    setTotalStorageCost(tmp_storage_cost);
+    setTotalStorage(tmp_storage);
+
+    setCoreNumber(totalCoreNumber);
+    setTotalServerConsumption(totalServerP + tmp_storage_consumption);
+    setTotalNodeCount(totalNode);
+    setTotalCost(
+      totalServerCosttemp +
+        totalNetCost +
+        propertyValue +
+        totalPCost +
+        tmp_storage_cost +
+        softwareLicenseCost +
+        (laborChoice ? laborCost : 0)
+    );
+    setTotalServerCost(totalServerCosttemp);
+  }, [
+    serverClusters,
+    totalNetCost,
+    propertyValue,
+    totalServerConsumption,
+    totalPCost,
+    coresNumber,
+    storageCluster,
+    laborChoice,
+    laborCost,
+  ]);
 
   return (
     <main className="flex flex-col text-center justify-center space-y-[50px] text-sm items-center bg-grey-100 h-full bg-gray-100 pb-[50px]">
@@ -526,7 +527,7 @@ export default function Home() {
           <h1 className="mb-3 font-bold text-lg">
             Yearly Cost Considering Amortization ($
             {(
-              totalServerCost / 5 +
+              totalServerCost / 4 +
               totalNetCost / 5 +
               propertyValue / 20 +
               totalPCost / 7 +
@@ -536,7 +537,7 @@ export default function Home() {
             )
           </h1>
           <PieChart
-            serverCost={totalServerCost / 5}
+            serverCost={totalServerCost / 4}
             networkCost={totalNetCost / 5}
             buildingCost={propertyValue / 20}
             powerAndCoolingCost={totalPCost / 7}
