@@ -512,7 +512,7 @@ export default function Home() {
         </div>
       </div>
       <div className="flex flex-wrap justify-center items-center w-full">
-        <div className="flex flex-col items-center lg:mr-[100px] mb-3">
+        <div className="flex flex-col items-center xl:mr-[100px] 2xl:mr-0 mb-3">
           <h1 className="mb-3 font-bold text-lg">
             Total Cost Without Amortization ($
             {(
