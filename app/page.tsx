@@ -194,6 +194,15 @@ export default function Home() {
     setCoreNumber(totalCoreNumber);
     setTotalServerConsumption(totalServerP + tmp_storage_consumption);
     setTotalNodeCount(totalNode);
+    // console.log(
+    //   "costss: ",
+    //   propertyValue,
+    //   totalServerCosttemp,
+    //   totalNetCost,
+    //   totalPCost,
+    //   tmp_storage_cost,
+    //   softwareLicenseCost
+    // );
     setTotalCost(
       totalServerCosttemp +
         totalNetCost +

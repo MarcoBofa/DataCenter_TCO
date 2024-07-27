@@ -330,15 +330,15 @@ const Server: React.FC<ServerProps> = ({
         totalCost += costChassis * homeNodeCount;
       }
 
-      if (nodeCount >= 50 && nodeCount <= 100) {
+      if (homeNodeCount >= 50 && homeNodeCount <= 100) {
         totalCost = totalCost * 0.9;
-      } else if (nodeCount > 100 && nodeCount <= 300) {
+      } else if (homeNodeCount > 100 && homeNodeCount <= 300) {
         totalCost = totalCost * 0.85;
-      } else if (nodeCount > 300 && nodeCount <= 500) {
+      } else if (homeNodeCount > 300 && homeNodeCount <= 500) {
         totalCost = totalCost * 0.8;
-      } else if (nodeCount > 500) {
+      } else if (homeNodeCount > 500) {
         totalCost = totalCost * 0.75;
-      } else if (nodeCount > 5000) {
+      } else if (homeNodeCount > 5000) {
         totalCost = totalCost * 0.6;
       }
     } else {
@@ -425,7 +425,8 @@ const Server: React.FC<ServerProps> = ({
               <input
                 {...register("homeNodeCount", {
                   valueAsNumber: true,
-                  validate: (value) => value > 0 || "Nodes must be more than 0",
+                  validate: (value) =>
+                    value >= 0 || "Nodes must be more than 0",
                 })}
                 className={`flex-grow p-2 rounded border-2  ${
                   errors.homeNodeCount ? "border-red-500" : "border-gray-200"
@@ -434,7 +435,7 @@ const Server: React.FC<ServerProps> = ({
                 type="number"
                 placeholder="1"
                 min="1"
-                onChange={(event) => inputCheck(event, "homeNodeCount", 1)}
+                onChange={(event) => inputCheck(event, "homeNodeCount", 0)}
               />
               {errors.homeNodeCount && (
                 <span className="font-bold text-red-500">
