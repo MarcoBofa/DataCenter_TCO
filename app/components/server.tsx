@@ -528,7 +528,7 @@ const Server: React.FC<ServerProps> = ({
                 {...register("storagePerNode", {
                   valueAsNumber: true,
                   validate: (value) =>
-                    value >= 1 || "storage cannot be less than 1",
+                    value >= 0 || "storage cannot be less than 0",
                 })}
                 className={`flex-grow p-2 rounded border-2 ${
                   errors.storagePerNode ? "border-red-500" : "border-gray-200"
@@ -537,7 +537,7 @@ const Server: React.FC<ServerProps> = ({
                 placeholder="64"
                 id="storagePerNode"
                 min="1"
-                onChange={(event) => inputCheck(event, "storagePerNode", 1)}
+                onChange={(event) => inputCheck(event, "storagePerNode", 0)}
               />
               {errors.storagePerNode && (
                 <span className="font-bold text-red-500">
