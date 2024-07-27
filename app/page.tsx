@@ -208,6 +208,7 @@ export default function Home() {
         totalNetCost +
         propertyValue +
         totalPCost +
+        costOfPower +
         tmp_storage_cost +
         softwareLicenseCost +
         (laborChoice ? laborCost : 0)
