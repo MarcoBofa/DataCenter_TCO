@@ -14,6 +14,7 @@ import Labor from "./components/labor";
 interface serverClusterProps {
   id: string;
   nodeCount: number;
+  GpuPerNode: number;
   totalCost: number;
   serverConsumption: number;
   coreNumber: number;
@@ -36,6 +37,7 @@ export default function Home() {
   );
   const [totalCost, setTotalCost] = useState(0);
   const [totalNodeCount, setTotalNodeCount] = useState(0);
+  const [totalGPUCount, setTotalGPUCount] = useState(0);
   const [propertyValue, setPropertyValue] = useState(0);
   const [bandwidth, setBandwidth] = useState(50);
   const [totalNetCost, setTotalNetCost] = useState(0);
@@ -60,6 +62,7 @@ export default function Home() {
       {
         id: uuidv4(),
         nodeCount: 1,
+        GpuPerNode: 0,
         totalCost: 0,
         serverConsumption: 0,
         coreNumber: 0,
@@ -108,6 +111,14 @@ export default function Home() {
     setServerClusters((prevClusters) =>
       prevClusters.map((cluster) =>
         cluster.id === id ? { ...cluster, coreNumber: newNode } : cluster
+      )
+    );
+  }, []);
+
+  const updateServerGpuNumber = useCallback((id: string, GpuNode: number) => {
+    setServerClusters((prevClusters) =>
+      prevClusters.map((cluster) =>
+        cluster.id === id ? { ...cluster, GpuPerNode: GpuNode } : cluster
       )
     );
   }, []);
@@ -188,21 +199,21 @@ export default function Home() {
       (sum, cluster) => sum + cluster.totalCost,
       0
     );
+
+    let totalGPU = 0;
+    serverClusters.forEach((cluster) => {
+      if (cluster.GpuPerNode >= 2) {
+        totalGPU += cluster.GpuPerNode * cluster.nodeCount;
+      }
+    });
+    setTotalGPUCount(totalGPU);
     setTotalStorageCost(tmp_storage_cost);
     setTotalStorage(tmp_storage);
 
     setCoreNumber(totalCoreNumber);
     setTotalServerConsumption(totalServerP + tmp_storage_consumption);
     setTotalNodeCount(totalNode);
-    // console.log(
-    //   "costss: ",
-    //   propertyValue,
-    //   totalServerCosttemp,
-    //   totalNetCost,
-    //   totalPCost,
-    //   tmp_storage_cost,
-    //   softwareLicenseCost
-    // );
+
     setTotalCost(
       totalServerCosttemp +
         totalNetCost +
@@ -218,9 +229,7 @@ export default function Home() {
     serverClusters,
     totalNetCost,
     propertyValue,
-    totalServerConsumption,
     totalPCost,
-    coresNumber,
     storageCluster,
     laborChoice,
     laborCost,
@@ -258,7 +267,6 @@ export default function Home() {
           setPropertyValue={setPropertyValue}
         />
       </div>
-
       {serverClusters.map((cluster) => (
         <div
           className="w-7/8 bg-white pb-10 rounded-2xl mb-4 relative"
@@ -273,6 +281,7 @@ export default function Home() {
               updateServerNodeCluster={updateServerNodeCluster}
               updateServerNodeConsumption={updateServerNodeConsumption}
               updateServerCoreNumber={updateServerCoreNumber}
+              updateServerGpuNumber={updateServerGpuNumber}
             />
             <button
               onClick={() => removeServerCluster(cluster.id)}
@@ -320,7 +329,6 @@ export default function Home() {
           Add Storage Node
         </button>
       </div>
-
       <div className="w-7/8 bg-white pb-10 rounded-2xl relative">
         <div className="flex flex-row">
           <div className="flex flex-row items-center">
@@ -351,12 +359,12 @@ export default function Home() {
           tier={tier}
           setTier={setTier}
           totalNetCost={totalNetCost}
+          totalGpuNum={totalGPUCount}
           setTotalNetCost={setTotalNetCost}
           totalNetworkConsumption={totalNetworkConsumption}
           setTotalNetworkConsumption={setTotalNetworkConsumption}
         />
       </div>
-
       <div className="w-7/8 bg-white pb-10 rounded-2xl relative">
         <div className="flex flex-row">
           <div className="flex flex-row items-center">
@@ -394,7 +402,6 @@ export default function Home() {
           setPueValue={setPueValue}
         />
       </div>
-
       <div className="w-7/8 bg-white pb-10 rounded-2xl relative">
         <div className="flex flex-row">
           <div className="flex flex-row items-center">
@@ -427,7 +434,6 @@ export default function Home() {
           setSoftwareCost={setSoftwareLicenseCost}
         />
       </div>
-
       <div className="w-7/8 bg-white pb-10 rounded-2xl relative">
         <div className="flex flex-row">
           <div className="flex flex-row items-center">
@@ -461,7 +467,6 @@ export default function Home() {
           setCostOfPower={setCostOfPower}
         />
       </div>
-
       <div className="w-7/8 bg-white pb-10 rounded-2xl relative">
         <div className="flex flex-row">
           <div className="flex flex-row items-center">

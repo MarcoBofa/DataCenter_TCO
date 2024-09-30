@@ -21,12 +21,47 @@ const StyledInput = styled(Input)`
   width: 42px;
 `;
 
+interface BandwidthConfig {
+  [key: string]: {
+    hca: number;
+    hca_multiplier: number;
+    cable: number;
+    cable_multiplier: number;
+    num_ports: number;
+    switch_cost: number;
+  };
+}
+
+interface GpuConfig {
+  [key: string]: {
+    [key: string]: {
+      hca_multiplier: number;
+      cable_multiplier: number;
+    };
+  };
+}
+
+interface TopologyConfig {
+  [key: string]: {
+    uplinkPortFactors?: { [key: string]: number };
+    defaultUplinkFactor?: number;
+    portDistributions?: {
+      [key: string]: {
+        nodes: number;
+        intraGroup: number;
+        interGroup: number;
+      };
+    };
+  };
+}
+
 interface NetworkProps {
   homeBandwidth: number;
   totalNetCost: number;
   nodes: number;
   tier: number;
   totalNetworkConsumption: number;
+  totalGpuNum: number;
   setTotalNetworkConsumption: (value: number) => void;
   setTier: (value: number) => void;
   setBandwidth: (value: number) => void;
@@ -39,12 +74,13 @@ const Network: React.FC<NetworkProps> = ({
   nodes,
   tier,
   totalNetworkConsumption,
+  totalGpuNum,
   setTier,
   setBandwidth,
   setTotalNetCost,
   setTotalNetworkConsumption,
 }) => {
-  const { register, handleSubmit, watch } = useForm<LocalProps>({
+  const { register, watch } = useForm<LocalProps>({
     defaultValues: {
       provider: "infiniband",
       topology: "Leaf-Spine",
@@ -53,11 +89,12 @@ const Network: React.FC<NetworkProps> = ({
     },
   });
 
-  const onSubmit = (data: LocalProps) => {
-    console.log(data);
-  };
+  const [sliderValue, setSliderValue] = useState<number>(0);
 
-  const handleSliderChange = (event: Event, newValue: number | number[]) => {
+  const handleSliderChange = (
+    event: React.SyntheticEvent | Event,
+    newValue: number | number[]
+  ) => {
     setSliderValue(newValue as number);
   };
 
@@ -72,8 +109,6 @@ const Network: React.FC<NetworkProps> = ({
       setSliderValue(99);
     }
   };
-
-  const [sliderValue, setSliderValue] = useState(0);
 
   const provider = watch("provider");
   const topology = watch("topology");
@@ -99,154 +134,179 @@ const Network: React.FC<NetworkProps> = ({
   const hca_consumption = 5;
   const switch_consumption = 784;
 
-  let netConsumption = 0;
+  // Bandwidth configurations with string keys
+  const bandwidthConfig: BandwidthConfig = {
+    "50": {
+      hca: HCA_100gb,
+      hca_multiplier: 0.65,
+      cable: EDR_100gb_cable,
+      cable_multiplier: 0.65,
+      num_ports: 30,
+      switch_cost: HDR_50gb_switch,
+    },
+    "100": {
+      hca: HCA_100gb,
+      hca_multiplier: 1,
+      cable: EDR_100gb_cable,
+      cable_multiplier: 1,
+      num_ports: 35,
+      switch_cost: HDR_100gb_switch,
+    },
+    "200": {
+      hca: HCA_200gb,
+      hca_multiplier: 1,
+      cable: EDR_200gb_cable,
+      cable_multiplier: 1,
+      num_ports: 40,
+      switch_cost: HDR_200gb_switch,
+    },
+    "400": {
+      hca: HCA_400gb,
+      hca_multiplier: 1,
+      cable: EDR_200gb_cable,
+      cable_multiplier: 1.5,
+      num_ports: 64,
+      switch_cost: HDR_400gb_switch,
+    },
+  };
+
+  // GPU configurations with string keys
+  const gpuConfig: GpuConfig = {
+    "2": {
+      "50": { hca_multiplier: 0.15, cable_multiplier: 0.15 },
+      "100": { hca_multiplier: 0.2, cable_multiplier: 0.2 },
+      "200": { hca_multiplier: 0.25, cable_multiplier: 0.25 },
+      "400": { hca_multiplier: 0.3, cable_multiplier: 1.8 },
+    },
+    "4": {
+      "50": { hca_multiplier: 0.2, cable_multiplier: 0.2 },
+      "100": { hca_multiplier: 0.25, cable_multiplier: 0.25 },
+      "200": { hca_multiplier: 0.3, cable_multiplier: 0.3 },
+      "400": { hca_multiplier: 0.35, cable_multiplier: 1.85 },
+    },
+    "6": {
+      "50": { hca_multiplier: 0.25, cable_multiplier: 0.25 },
+      "100": { hca_multiplier: 0.3, cable_multiplier: 0.3 },
+      "200": { hca_multiplier: 0.37, cable_multiplier: 0.37 },
+      "400": { hca_multiplier: 0.45, cable_multiplier: 1.95 },
+    },
+  };
+
+  // Topology configurations with string keys
+  const topologyConfig: TopologyConfig = {
+    "Leaf-Spine": {
+      uplinkPortFactors: { "2": 0.22, "3": 0.3, "4": 0.35 },
+      defaultUplinkFactor: 0.15,
+    },
+    Dragonfly: {
+      portDistributions: {
+        "1": { nodes: 0.6, intraGroup: 0.2, interGroup: 0.2 },
+        "2": { nodes: 0.5, intraGroup: 0.25, interGroup: 0.25 },
+        "3": { nodes: 0.45, intraGroup: 0.275, interGroup: 0.275 },
+        "4": { nodes: 0.4, intraGroup: 0.3, interGroup: 0.3 },
+      },
+    },
+    "Fat-Tree": {},
+  };
 
   useEffect(() => {
     let cost = 0;
     let numSwitches = 0;
-    let num_ports = 40;
+    let num_ports = 40; // Default value
+    let netConsumption = 0;
 
-    if (bandwidth === 50) {
-      cost = nodes * HCA_100gb * 0.65;
-      cost += nodes * EDR_100gb_cable * 0.65;
-      num_ports = 30;
-    } else if (bandwidth === 100) {
-      cost = nodes * HCA_100gb;
-      cost += nodes * EDR_100gb_cable;
-      num_ports = 35;
-    } else if (bandwidth === 200) {
-      cost = nodes * HCA_200gb;
-      cost += nodes * EDR_200gb_cable;
-      num_ports = 40;
-    } else if (bandwidth === 400) {
-      cost = nodes * HCA_400gb;
-      cost += nodes * EDR_200gb_cable * 1.5;
-      num_ports = 64;
+    // Convert bandwidth to string
+    const bandwidthKey = bandwidth.toString();
+
+    // Get bandwidth configuration
+    const bwConfig = bandwidthConfig[bandwidthKey];
+    if (bwConfig) {
+      num_ports = bwConfig.num_ports;
+
+      // Initial cost calculations
+      cost += nodes * bwConfig.hca * bwConfig.hca_multiplier;
+      cost += nodes * bwConfig.cable * bwConfig.cable_multiplier;
     }
 
-    if (topology === "Leaf-Spine") {
-      let num_uplink_ports = num_ports * 0.15;
+    // Calculate GPUs per node
+    const gpu_per_node = Math.floor(totalGpuNum / nodes);
 
-      switch (tierLevel) {
-        case 2: {
-          num_uplink_ports = num_ports * 0.22;
-          break;
-        }
-        case 3: {
-          num_uplink_ports = num_ports * 0.3;
-          break;
-        }
-        case 4: {
-          num_uplink_ports = num_ports * 0.35;
-          break;
-        }
+    // Determine GPU configuration threshold
+    let gpuThreshold = 0;
+    if (gpu_per_node >= 6) gpuThreshold = 6;
+    else if (gpu_per_node >= 4) gpuThreshold = 4;
+    else if (gpu_per_node >= 2) gpuThreshold = 2;
+
+    const gpuThresholdKey = gpuThreshold.toString();
+
+    // GPU-related calculations
+    if (
+      gpuThreshold > 0 &&
+      gpuConfig[gpuThresholdKey] &&
+      gpuConfig[gpuThresholdKey][bandwidthKey]
+    ) {
+      const gpuBwConfig = gpuConfig[gpuThresholdKey][bandwidthKey];
+      if (bwConfig && gpuBwConfig) {
+        cost += totalGpuNum * bwConfig.hca * gpuBwConfig.hca_multiplier;
+        cost += totalGpuNum * bwConfig.cable * gpuBwConfig.cable_multiplier;
       }
+    }
+
+    // Topology-based calculations
+    if (topology === "Leaf-Spine") {
+      const tierLevelKey = tierLevel.toString();
+      const uplinkFactor =
+        topologyConfig["Leaf-Spine"].uplinkPortFactors?.[tierLevelKey] ||
+        topologyConfig["Leaf-Spine"].defaultUplinkFactor!;
+      const num_uplink_ports = num_ports * uplinkFactor;
 
       numSwitches = Math.ceil(nodes / (num_ports - num_uplink_ports)) + 1;
-      Math.ceil((numSwitches * 2) / (num_ports - 1)) < 2
-        ? (numSwitches += 2)
-        : (numSwitches += Math.ceil((numSwitches * 2) / (num_ports - 1)));
+      const additionalSwitches = Math.ceil((numSwitches * 2) / (num_ports - 1));
+      numSwitches += additionalSwitches < 2 ? 2 : additionalSwitches;
 
       if (bandwidth === 400) {
         numSwitches = Math.ceil(numSwitches * 1.2);
       }
     } else if (topology === "Dragonfly") {
-      let num_ports_intraGroup = 0;
-      let num_ports_interGroup = 0;
-      let num_ports_nodes = 0;
+      const tierLevelKey = tierLevel.toString();
+      const portDist =
+        topologyConfig["Dragonfly"].portDistributions?.[tierLevelKey] ||
+        topologyConfig["Dragonfly"].portDistributions?.["1"]!;
+      const num_ports_nodes = num_ports * portDist.nodes;
 
-      switch (tierLevel) {
-        case 1: {
-          num_ports_nodes = num_ports * 0.6;
-          num_ports_intraGroup = num_ports * 0.2;
-          num_ports_interGroup = num_ports * 0.2;
-          break;
-        }
-        case 2: {
-          num_ports_nodes = num_ports * 0.5;
-          num_ports_intraGroup = num_ports * 0.25;
-          num_ports_interGroup = num_ports * 0.25;
-          break;
-        }
-        case 3: {
-          num_ports_nodes = num_ports * 0.45;
-          num_ports_intraGroup = num_ports * 0.275;
-          num_ports_interGroup = num_ports * 0.275;
-          break;
-        }
-        case 4: {
-          num_ports_nodes = num_ports * 0.4;
-          num_ports_intraGroup = num_ports * 0.3;
-          num_ports_interGroup = num_ports * 0.3;
-          break;
-        }
-      }
       numSwitches = Math.ceil(nodes / num_ports_nodes);
 
       if (bandwidth === 400) {
         numSwitches = Math.ceil(numSwitches * 1.2);
       }
     } else if (topology === "Fat-Tree") {
-      let k = num_ports; // Number of ports per switch
-      let num_nodes_per_edge_switch = k / 2; // Each edge switch connects to k/2 nodes
+      const k = num_ports; // Number of ports per switch
+      const num_nodes_per_edge_switch = k / 2; // Each edge switch connects to k/2 nodes
 
-      // Calculate the number of edge switches
       let num_edge_switches = Math.ceil(nodes / num_nodes_per_edge_switch);
+      let num_agg_switches = num_edge_switches;
+      let num_core_switches = Math.pow(k / 2, 2) / (k / 2);
 
-      // Calculate the number of aggregation switches
-      let num_agg_switches = num_edge_switches; // Each edge switch pairs with an aggregation switch
+      // Adjust for redundancy based on tier level
+      const redundancyFactor = 1 + (tierLevel - 1) * 0.1;
+      num_edge_switches = Math.ceil(num_edge_switches * redundancyFactor);
+      num_agg_switches = Math.ceil(num_agg_switches * redundancyFactor);
+      num_core_switches = Math.ceil(num_core_switches * redundancyFactor);
 
-      // Calculate the number of core switches
-      let num_core_switches = Math.pow(k / 2, 2) / (k / 2); // The core layer interconnects aggregation switches
-
-      // Adjusting for redundancy based on tier level
-      switch (tierLevel) {
-        case 2:
-          num_edge_switches = Math.ceil(num_edge_switches * 1.1);
-          num_agg_switches = Math.ceil(num_agg_switches * 1.1);
-          num_core_switches = Math.ceil(num_core_switches * 1.1);
-          break;
-        case 3:
-          num_edge_switches = Math.ceil(num_edge_switches * 1.2);
-          num_agg_switches = Math.ceil(num_agg_switches * 1.2);
-          num_core_switches = Math.ceil(num_core_switches * 1.2);
-          break;
-        case 4:
-          num_edge_switches = Math.ceil(num_edge_switches * 1.3);
-          num_agg_switches = Math.ceil(num_agg_switches * 1.3);
-          num_core_switches = Math.ceil(num_core_switches * 1.3);
-          break;
-      }
-
-      // Sum up all switches
       numSwitches = num_edge_switches + num_agg_switches + num_core_switches;
 
-      // Adjust for bandwidth if needed
       if (bandwidth === 400) {
         numSwitches = Math.ceil(numSwitches * 1.2);
       }
     }
 
-    switch (bandwidth) {
-      case 50: {
-        cost += numSwitches * HDR_50gb_switch;
-        break;
-      }
-      case 100: {
-        cost += numSwitches * HDR_100gb_switch;
-        break;
-      }
-      case 200: {
-        cost += numSwitches * HDR_200gb_switch;
-        break;
-      }
-      case 400: {
-        cost += numSwitches * HDR_400gb_switch;
-        break;
-      }
+    // Switch cost based on bandwidth
+    if (bwConfig) {
+      cost += numSwitches * bwConfig.switch_cost;
     }
 
-    let branchNum = Math.floor(nodes / 70);
+    // Additional cost calculations
+    const branchNum = Math.floor(nodes / 70);
     cost += branchNum * paloAlto_branch_FW;
 
     netConsumption =
@@ -255,30 +315,38 @@ const Network: React.FC<NetworkProps> = ({
       180 * branchNum +
       45 * nodes;
 
-    branchNum = Math.ceil(nodes / 60);
-    cost += branchNum * cisco_branch_router;
+    const branchRouterNum = Math.ceil(nodes / 60);
+    cost += branchRouterNum * cisco_branch_router;
 
-    netConsumption += branchNum * 150;
+    netConsumption += branchRouterNum * 150;
 
     cost += 480 * nodes + 350 * nodes;
 
+    // Provider discount
     if (provider === "slingshot") {
-      cost = cost * 0.9;
+      cost *= 0.9;
     }
 
-    cost = cost * (1 + sliderValue / 100);
+    // Apply slider value adjustment
+    cost *= 1 + sliderValue / 100;
 
+    // Update states
     setTotalNetworkConsumption(netConsumption);
     setTotalNetCost(cost);
     setTier(tierLevel);
+    setBandwidth(bandwidth);
   }, [
     provider,
     bandwidth,
     nodes,
     tierLevel,
     topology,
-    totalNetworkConsumption,
+    totalGpuNum,
     sliderValue,
+    setTotalNetworkConsumption,
+    setTotalNetCost,
+    setTier,
+    setBandwidth,
   ]);
 
   return (
@@ -371,7 +439,7 @@ const Network: React.FC<NetworkProps> = ({
               <Grid item></Grid>
               <Grid item xs>
                 <Slider
-                  value={typeof sliderValue === "number" ? sliderValue : 0}
+                  value={sliderValue}
                   onChange={handleSliderChange}
                   aria-labelledby="input-slider"
                   min={-99}

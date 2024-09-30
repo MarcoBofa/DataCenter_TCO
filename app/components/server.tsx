@@ -29,6 +29,7 @@ interface ServerProps {
     serverConsumption: number
   ) => void;
   updateServerCoreNumber: (index: string, coreNumber: number) => void;
+  updateServerGpuNumber: (index: string, GpuNode: number) => void;
 }
 
 const Server: React.FC<ServerProps> = ({
@@ -38,6 +39,7 @@ const Server: React.FC<ServerProps> = ({
   updateServerNodeCluster,
   updateServerNodeConsumption,
   updateServerCoreNumber,
+  updateServerGpuNumber,
 }) => {
   const {
     control,
@@ -349,6 +351,11 @@ const Server: React.FC<ServerProps> = ({
 
     //console.log("server consumption: ", serverConsumption);
 
+    if (gpu === "Yes") {
+      updateServerGpuNumber(index, gpu_perNode);
+    } else {
+      updateServerGpuNumber(index, 0);
+    }
     updateServerNodeConsumption(index, serverConsumption);
     setTotalClusterCost(totalCost);
     updateServerCluster(index, totalCost);
@@ -373,6 +380,7 @@ const Server: React.FC<ServerProps> = ({
     updateServerNodeConsumption,
     index,
     updateServerCoreNumber,
+    updateServerGpuNumber,
     mode,
     custom_cost_per_node,
     custom_core_per_node,
