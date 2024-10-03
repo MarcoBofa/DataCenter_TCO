@@ -1,4 +1,5 @@
 // src/constants/salaries.ts
+
 export const SALARIES = {
   MANAGEMENT: {
     DATA_CENTER_MANAGER: "180,720 US$",
@@ -131,4 +132,104 @@ export const ADDITIONAL_COST_PERCENTAGES: { [key in Role]: number } = {
   DISASTER_RECOVERY_SPECIALIST: 0.21,
   CYBERSECURITY_ANALYST: 0.25,
   PROJECT_MANAGER: 0.27,
+};
+
+// Constants needed for your component
+
+// Cost constants
+export const COSTS = {
+  COST_CORE: 120,
+  COST_GB_MEM: 10,
+  COST_RACK: 1700,
+  COST_CHASSIS_U: 400,
+  COST_CHASSIS_U_LIQUID: 400,
+  COST_CHASSIS_2U: 1000,
+  COST_CHASSIS_2U_LIQUID: 1500,
+  COST_MOTHERBOARD_SINGLE: 600,
+  COST_MOTHERBOARD_DUAL: 950,
+  ETHERNET_NICS: 110,
+  LOW_SSD: 0.1,
+  MID_SSD: 0.3,
+  HIGH_SSD: 0.55,
+  LOW_HDD: 0.015,
+  HIGH_HDD: 0.25,
+  EXTRA_COST_PER_NODE: 50,
+};
+
+// Power consumption constants
+export const POWER_CONSUMPTION = {
+  MOTHERBOARD_CONSUMPTION: 60,
+  RAM_CONSUMPTION: 24,
+  STORAGE_CONSUMPTION: 5,
+  PSU_800W: 800,
+};
+
+// GPU costs
+export const GPU_COSTS = {
+  H100: 30000,
+  A100_40: 8000,
+  A100_80: 13000,
+  A40: 6000,
+  A30: 5000,
+  T4: 1000,
+  V100: 3000,
+  NVLINK_SWITCH: 1.3,
+};
+
+// CPU power consumption
+export const CPU_POWER_CONSUMPTION = {
+  INTEL_MAX: 350,
+  INTEL_PLAT: 331,
+  INTEL_GOLD: 234,
+  INTEL_SIL: 145,
+  AMD_BERGAMO: 335,
+  AMD_SIENA: 150,
+  AMD_GENOAX: 340,
+  AMD_GENOA: 300,
+};
+
+// CPU cost per core based on CPU type
+export const CPU_COST_PER_CORE = {
+  INTEL_MAX: 226,
+  INTEL_PLAT: 151,
+  INTEL_GOLD: 115,
+  INTEL_SILVER: 54,
+  AMD_BERGAMO: 131,
+  AMD_SIENA: 57,
+  AMD_GENOAX: 175,
+  AMD_GENOA: 118,
+};
+
+// Discount tiers based on node count
+export const DISCOUNTS = [
+  { minNodes: 50, maxNodes: 100, discountRate: 0.9 },
+  { minNodes: 101, maxNodes: 300, discountRate: 0.85 },
+  { minNodes: 301, maxNodes: 500, discountRate: 0.8 },
+  { minNodes: 501, maxNodes: 5000, discountRate: 0.75 },
+  { minNodes: 5001, maxNodes: Infinity, discountRate: 0.6 },
+];
+
+export const MTTF_VALUES = {
+  // MTTF values in hours for CPUs
+  INTEL_MAX: 200000,
+  INTEL_PLAT: 220000,
+  INTEL_GOLD: 250000,
+  INTEL_SILVER: 260000,
+  AMD_BERGAMO: 240000,
+  AMD_SIENA: 250000,
+  AMD_GENOAX: 230000,
+  AMD_GENOA: 240000,
+
+  // MTTF values in hours for GPUs
+  H100: 300000,
+  A100_40: 300000,
+  A100_80: 300000,
+  A40: 240000,
+  A30: 230000,
+  T4: 250000,
+  V100: 200000,
+
+  // Default values
+  DEFAULT_CPU: 200000,
+  DEFAULT_GPU: 150000,
 };

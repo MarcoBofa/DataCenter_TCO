@@ -1,7 +1,17 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { useForm, useWatch } from "react-hook-form";
-import { useEffect, useMemo } from "react";
+
+// Importing constants
+import {
+  COSTS,
+  POWER_CONSUMPTION,
+  GPU_COSTS,
+  CPU_POWER_CONSUMPTION,
+  CPU_COST_PER_CORE,
+  DISCOUNTS,
+  MTTF_VALUES, // New import for MTTF values
+} from "../constants/costants"; // Adjust the path as necessary
 
 interface localProps {
   mode: string;
@@ -44,8 +54,6 @@ const Server: React.FC<ServerProps> = ({
   const {
     control,
     register,
-    handleSubmit,
-    watch,
     setValue,
     formState: { errors },
   } = useForm<localProps>({
@@ -102,116 +110,157 @@ const Server: React.FC<ServerProps> = ({
     [homeNodeCount, storagePerNode]
   );
 
-  let cost_core = 120;
-  const cost_gb_mem = 10;
-  const cost_rack = 1700;
-  const cost_chassis_U = 400;
-  //const cost_chassis_U_liquid = 400;
-  const cost_chassis_2U = 1000;
-  const cost_chassis_2U_liquid = 1500;
-  const cost_motherboard_single = 600;
-  const cost_motherboard_dual = 950;
-  const ethernet_nics = 110;
-  const low_SSD = 0.1;
-  const mid_SSD = 0.3;
-  const high_SSD = 0.55;
-  const low_hdd = 0.015;
-  const high_hdd = 0.25;
-  const extra_cost_per_node = 50;
-  const motherBoardConsumption = 60;
-  const ramConsumption = 24;
-  const storageConsumption = 5;
-  const psu_800w = 800;
+  // Mappings
+  const cpuCostPerCoreMapping: { [key: string]: number } = {
+    intel_max: CPU_COST_PER_CORE.INTEL_MAX,
+    intel_plat: CPU_COST_PER_CORE.INTEL_PLAT,
+    intel_gold: CPU_COST_PER_CORE.INTEL_GOLD,
+    intel_sil: CPU_COST_PER_CORE.INTEL_SILVER,
+    amd_bergamo: CPU_COST_PER_CORE.AMD_BERGAMO,
+    amd_siena: CPU_COST_PER_CORE.AMD_SIENA,
+    amd_genoax: CPU_COST_PER_CORE.AMD_GENOAX,
+    amd_genoa: CPU_COST_PER_CORE.AMD_GENOA,
+  };
 
-  const H100 = 30000;
-  const A100_40 = 8000;
-  const A100_80 = 13000;
-  const A40 = 6000;
-  const A30 = 5000;
-  const T4 = 1000;
-  const V100 = 3000;
-  const NVlinkSwitch = 1.3;
+  const cpuPowerConsumptionMapping: { [key: string]: number } = {
+    intel_max: CPU_POWER_CONSUMPTION.INTEL_MAX,
+    intel_plat: CPU_POWER_CONSUMPTION.INTEL_PLAT,
+    intel_gold: CPU_POWER_CONSUMPTION.INTEL_GOLD,
+    intel_sil: CPU_POWER_CONSUMPTION.INTEL_SIL,
+    amd_bergamo: CPU_POWER_CONSUMPTION.AMD_BERGAMO,
+    amd_siena: CPU_POWER_CONSUMPTION.AMD_SIENA,
+    amd_genoax: CPU_POWER_CONSUMPTION.AMD_GENOAX,
+    amd_genoa: CPU_POWER_CONSUMPTION.AMD_GENOA,
+  };
+
+  const gpuCostMapping: { [key: string]: number } = {
+    H100: GPU_COSTS.H100,
+    A100_40: GPU_COSTS.A100_40,
+    A100_80: GPU_COSTS.A100_80,
+    A40: GPU_COSTS.A40,
+    A30: GPU_COSTS.A30,
+    T4: GPU_COSTS.T4,
+    V100: GPU_COSTS.V100,
+  };
+
+  const gpuPowerConsumptionMapping: { [key: string]: number } = {
+    H100: 700 * GPU_COSTS.NVLINK_SWITCH,
+    A100_40: 350 * GPU_COSTS.NVLINK_SWITCH,
+    A100_80: 400 * GPU_COSTS.NVLINK_SWITCH,
+    A40: 185 * GPU_COSTS.NVLINK_SWITCH,
+    A30: 165 * GPU_COSTS.NVLINK_SWITCH,
+    T4: 100,
+    V100: 250 * GPU_COSTS.NVLINK_SWITCH,
+  };
+
+  // MTTF mappings (in hours)
+  const cpuMttfMapping: { [key: string]: number } = {
+    intel_max: MTTF_VALUES.INTEL_MAX,
+    intel_plat: MTTF_VALUES.INTEL_PLAT,
+    intel_gold: MTTF_VALUES.INTEL_GOLD,
+    intel_sil: MTTF_VALUES.INTEL_SILVER,
+    amd_bergamo: MTTF_VALUES.AMD_BERGAMO,
+    amd_siena: MTTF_VALUES.AMD_SIENA,
+    amd_genoax: MTTF_VALUES.AMD_GENOAX,
+    amd_genoa: MTTF_VALUES.AMD_GENOA,
+  };
+
+  const gpuMttfMapping: { [key: string]: number } = {
+    H100: MTTF_VALUES.H100,
+    A100_40: MTTF_VALUES.A100_40,
+    A100_80: MTTF_VALUES.A100_80,
+    A40: MTTF_VALUES.A40,
+    A30: MTTF_VALUES.A30,
+    T4: MTTF_VALUES.T4,
+    V100: MTTF_VALUES.V100,
+  };
 
   const calcPowerRating = () => {
     let p = 0;
 
     p +=
-      motherBoardConsumption * homeNodeCount +
-      Math.ceil(totalRam / 256) * ramConsumption +
-      Math.ceil(totalStorage / 1000) * storageConsumption +
-      psu_800w * 0.04 * homeNodeCount * 2;
+      POWER_CONSUMPTION.MOTHERBOARD_CONSUMPTION * homeNodeCount +
+      Math.ceil(totalRam / 256) * POWER_CONSUMPTION.RAM_CONSUMPTION +
+      Math.ceil(totalStorage / 1000) * POWER_CONSUMPTION.STORAGE_CONSUMPTION +
+      POWER_CONSUMPTION.PSU_800W * 0.04 * homeNodeCount * 2;
 
-    switch (cpu) {
-      case "intel_max":
-        p += 350 * homeNodeCount * processorsPerNode;
-        break;
-      case "intel_plat":
-        p += 331 * homeNodeCount * processorsPerNode;
-        break;
-      case "intel_gold":
-        p += 234 * homeNodeCount * processorsPerNode;
-        break;
-      case "intel_sil":
-        p += 145 * homeNodeCount * processorsPerNode;
-        break;
-      case "amd_bergamo":
-        p += 335 * homeNodeCount * processorsPerNode;
-        break;
-      case "amd_siena":
-        p += 150 * homeNodeCount * processorsPerNode;
-        break;
-      case "amd_genoax":
-        p += 340 * homeNodeCount * processorsPerNode;
-        break;
-      case "amd_genoa":
-        p += 300 * homeNodeCount * processorsPerNode;
-        break;
-    }
+    const cpuPower = cpuPowerConsumptionMapping[cpu] || 0;
+    p += cpuPower * homeNodeCount * processorsPerNode;
 
-    if (gpu == "Yes") {
-      switch (gpu_model) {
-        case "H100": {
-          p += NVlinkSwitch * 700 * homeNodeCount * gpu_perNode;
-          break;
-        }
-        case "A100_40": {
-          p += NVlinkSwitch * 350 * homeNodeCount * gpu_perNode;
-          break;
-        }
-        case "A100_80": {
-          p += NVlinkSwitch * 400 * homeNodeCount * gpu_perNode;
-          break;
-        }
-        case "A40": {
-          p += NVlinkSwitch * 185 * homeNodeCount * gpu_perNode;
-          break;
-        }
-        case "A30": {
-          p += NVlinkSwitch * 165 * homeNodeCount * gpu_perNode;
-          break;
-        }
-        case "T4": {
-          p += 100 * homeNodeCount * gpu_perNode;
-          break;
-        }
-        case "V100": {
-          p += NVlinkSwitch * 250 * homeNodeCount * gpu_perNode;
-          break;
-        }
-      }
+    if (gpu === "Yes") {
+      const gpuPower = gpuPowerConsumptionMapping[gpu_model] || 0;
+      p += gpuPower * homeNodeCount * gpu_perNode;
 
       if (gpu_perNode > 6) {
-        p += psu_800w * 0.04 * homeNodeCount * 4;
+        p += POWER_CONSUMPTION.PSU_800W * 0.04 * homeNodeCount * 4;
       } else if (gpu_perNode > 4) {
-        p += psu_800w * 0.04 * homeNodeCount * 3;
+        p += POWER_CONSUMPTION.PSU_800W * 0.04 * homeNodeCount * 3;
       } else if (gpu_perNode > 2) {
-        p += psu_800w * 0.04 * homeNodeCount * 2;
+        p += POWER_CONSUMPTION.PSU_800W * 0.04 * homeNodeCount * 2;
       } else {
-        p += psu_800w * 0.04 * homeNodeCount;
+        p += POWER_CONSUMPTION.PSU_800W * 0.04 * homeNodeCount;
       }
     }
 
     return p;
+  };
+
+  // Dt function calculates the reliability at time t
+  const Dt = (mttf: number, t: number): number => {
+    return Math.exp(-t / mttf);
+  };
+
+  // Cs function calculates the number of spares required at time tau
+  const Cs = (nc: number, tau: number, mttf: number): number => {
+    return nc * (1 / Dt(mttf, tau) - 1);
+  };
+
+  // cumulative_Cs function calculates the cumulative number of spares over k intervals
+  const cumulative_Cs = (
+    nc: number,
+    mttf: number,
+    k: number,
+    tau: number
+  ): number => {
+    let c_sum = 0;
+    for (let i = 1; i <= k - 1; i++) {
+      const dt = Dt(mttf, i * tau);
+      c_sum +=
+        (Cs(nc, (k - i) * tau, mttf) - Cs(nc, (k - i - 1) * tau, mttf)) / dt;
+    }
+    return (
+      c_sum +
+      Cs(nc, tau, mttf) / Dt(mttf, (k - 1) * tau) +
+      (nc - Cs(nc, (k - 1) * tau, mttf)) / Dt(mttf, k * tau) -
+      nc
+    );
+  };
+
+  // calc_spare_comp function calculates the total number of spares needed
+  const calc_spare_comp = (type: string): number => {
+    const tau = 0.5; // Base time interval in years
+    const k = 4; // Number of intervals (e.g., 5 years)
+    const hours_per_year = 24 * 365; // 8760 hours in a year
+    let gpuSpares = 0;
+    let cpuSpares = 0;
+
+    if (type === "cpu") {
+      // Calculate CPU spares
+      const totalCpuCount = homeNodeCount * processorsPerNode;
+      const cpuMttfHours = cpuMttfMapping[cpu] || MTTF_VALUES.DEFAULT_CPU;
+      const cpuMttfYears = cpuMttfHours / hours_per_year;
+      cpuSpares = cumulative_Cs(totalCpuCount, cpuMttfYears, k, tau);
+      return cpuSpares;
+    } else if (type === "gpu") {
+      // Calculate GPU spares
+      const totalGpuCount = homeNodeCount * gpu_perNode;
+      const gpuMttfHours = gpuMttfMapping[gpu_model] || MTTF_VALUES.DEFAULT_GPU;
+      const gpuMttfYears = gpuMttfHours / hours_per_year;
+      gpuSpares = cumulative_Cs(totalGpuCount, gpuMttfYears, k, tau);
+      return gpuSpares;
+    }
+
+    return 0;
   };
 
   const inputCheck = (
@@ -228,128 +277,88 @@ const Server: React.FC<ServerProps> = ({
     let serverConsumption = 0;
 
     if (mode === "Guided") {
-      switch (cpu) {
-        case "intel_max":
-          cost_core = 226;
-          break;
-        case "intel_plat":
-          cost_core = 151;
-          break;
-        case "intel_gold":
-          cost_core = 115;
-          break;
-        case "intel_sil":
-          cost_core = 54;
-          break;
-        case "amd_bergamo":
-          cost_core = 131;
-          break;
-        case "amd_siena":
-          cost_core = 57;
-          break;
-        case "amd_genoax":
-          cost_core = 175;
-          break;
-        case "amd_genoa":
-          cost_core = 118;
-          break;
-      }
+      const cost_core = cpuCostPerCoreMapping[cpu] || COSTS.COST_CORE;
 
       const costCores = totalCores * cost_core;
-      const costRam = totalRam * cost_gb_mem;
-      let costStorage = totalStorage * high_SSD;
-      let costGpu = H100;
-      let costMotherBoard = cost_motherboard_single;
-      let costChassis = cost_chassis_U;
+      const costRam = totalRam * COSTS.COST_GB_MEM;
 
-      switch (typeOfSSD) {
-        case "mid_ssd": {
-          costStorage = totalStorage * mid_SSD;
-          break;
-        }
-
-        case "low_ssd": {
-          costStorage = totalStorage * low_SSD;
-          break;
-        }
+      let costStoragePerGB = COSTS.HIGH_SSD;
+      if (typeOfSSD === "mid_ssd") {
+        costStoragePerGB = COSTS.MID_SSD;
+      } else if (typeOfSSD === "low_ssd") {
+        costStoragePerGB = COSTS.LOW_SSD;
       }
 
-      if (gpu == "Yes") {
-        switch (gpu_model) {
-          case "A100_40": {
-            costGpu = A100_40;
-            break;
-          }
-          case "A100_80": {
-            costGpu = A100_80;
-            break;
-          }
-          case "A40": {
-            costGpu = A40;
-            break;
-          }
-          case "A30": {
-            costGpu = A30;
-            break;
-          }
-          case "T4": {
-            costGpu = T4;
-            break;
-          }
-          case "V100": {
-            costGpu = V100;
-            break;
-          }
-        }
-      } else {
-        costGpu = 0;
+      const costStorage = totalStorage * costStoragePerGB;
+
+      let costGpu = 0;
+      if (gpu === "Yes") {
+        costGpu = gpuCostMapping[gpu_model] || 0;
       }
+
+      let costMotherBoard = COSTS.COST_MOTHERBOARD_SINGLE;
+      let costChassis = COSTS.COST_CHASSIS_U;
 
       if (processorsPerNode == 2) {
-        costMotherBoard = cost_motherboard_dual;
-        costChassis = cost_chassis_2U;
+        costMotherBoard = COSTS.COST_MOTHERBOARD_DUAL;
+        costChassis = COSTS.COST_CHASSIS_2U;
       }
 
       serverConsumption = calcPowerRating();
 
       const rackNum = Math.ceil(((homeNodeCount * 2) / 42) * 0.85);
-      const rackCost = rackNum * cost_rack;
+      const rackCost = rackNum * COSTS.COST_RACK;
+
+      // Calculate spare component cost
+      let spare_component_cost = 0;
+
+      const CPUsparesNeeded = calc_spare_comp("cpu");
+      spare_component_cost = CPUsparesNeeded * cost_core * coresPerProcessor;
+
+      const GPUsparesNeeded = gpu === "Yes" ? calc_spare_comp("gpu") : 0;
+      spare_component_cost +=
+        GPUsparesNeeded * (gpuCostMapping[gpu_model] || 0);
+
+      console.log(
+        "SPARE COMP CPU NUM: ",
+        CPUsparesNeeded,
+        "SPARE COMP GPU NUM: ",
+        GPUsparesNeeded
+      );
 
       totalCost =
-        extra_cost_per_node * homeNodeCount +
-        ethernet_nics * homeNodeCount +
+        COSTS.EXTRA_COST_PER_NODE * homeNodeCount +
+        COSTS.ETHERNET_NICS * homeNodeCount +
         costMotherBoard * homeNodeCount +
         costChassis * homeNodeCount +
         rackCost +
         costCores +
         costRam +
         costGpu * homeNodeCount * gpu_perNode +
-        costStorage;
+        costStorage +
+        spare_component_cost;
 
-      if (gpu == "Yes" && gpu_perNode > 4) {
+      if (gpu === "Yes" && gpu_perNode > 4) {
         totalCost += costChassis * homeNodeCount * 2;
       } else {
         totalCost += costChassis * homeNodeCount;
       }
 
-      if (homeNodeCount >= 50 && homeNodeCount <= 100) {
-        totalCost = totalCost * 0.9;
-      } else if (homeNodeCount > 100 && homeNodeCount <= 300) {
-        totalCost = totalCost * 0.85;
-      } else if (homeNodeCount > 300 && homeNodeCount <= 500) {
-        totalCost = totalCost * 0.8;
-      } else if (homeNodeCount > 500) {
-        totalCost = totalCost * 0.75;
-      } else if (homeNodeCount > 5000) {
-        totalCost = totalCost * 0.6;
+      // Apply discounts
+      for (const discount of DISCOUNTS) {
+        if (
+          homeNodeCount >= discount.minNodes &&
+          homeNodeCount <= discount.maxNodes
+        ) {
+          totalCost *= discount.discountRate;
+          break;
+        }
       }
     } else {
       totalCost = custom_cost_per_node * homeNodeCount;
       serverConsumption = 500 * homeNodeCount;
       setTotalClusterCore(custom_core_per_node * homeNodeCount);
     }
-
-    //console.log("server consumption: ", serverConsumption);
 
     if (gpu === "Yes") {
       updateServerGpuNumber(index, gpu_perNode);
