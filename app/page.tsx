@@ -565,7 +565,7 @@ export default function Home() {
           <h1 className="mb-3 font-bold text-lg">
             Yearly Cost (w/ Salary) Considering Amortization ($
             {(
-              totalServerCost / 5 +
+              totalServerCost / 4 +
               totalNetCost / 5 +
               propertyValue / 20 +
               totalPCost / 7 +
@@ -576,7 +576,7 @@ export default function Home() {
             )
           </h1>
           <PieChart
-            serverCost={totalServerCost / 5}
+            serverCost={totalServerCost / 4}
             networkCost={totalNetCost / 5}
             buildingCost={propertyValue / 20}
             powerAndCoolingCost={totalPCost / 7}
