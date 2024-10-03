@@ -319,12 +319,12 @@ const Server: React.FC<ServerProps> = ({
       spare_component_cost +=
         GPUsparesNeeded * (gpuCostMapping[gpu_model] || 0);
 
-      console.log(
-        "SPARE COMP CPU NUM: ",
-        CPUsparesNeeded,
-        "SPARE COMP GPU NUM: ",
-        GPUsparesNeeded
-      );
+      // console.log(
+      //   "SPARE COMP CPU NUM: ",
+      //   CPUsparesNeeded,
+      //   "SPARE COMP GPU NUM: ",
+      //   GPUsparesNeeded
+      // );
 
       totalCost =
         COSTS.EXTRA_COST_PER_NODE * homeNodeCount +
