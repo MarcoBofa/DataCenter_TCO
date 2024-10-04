@@ -599,6 +599,7 @@ export default function Home() {
             Total Cost Without Amortization ($
             {(
               totalServerCost +
+              totalStorageCost +
               totalNetCost +
               propertyValue +
               totalPCost +
@@ -608,7 +609,7 @@ export default function Home() {
             )
           </h1>
           <PieChart
-            serverCost={totalServerCost}
+            serverCost={totalServerCost + totalStorageCost}
             networkCost={totalNetCost}
             buildingCost={propertyValue}
             powerAndCoolingCost={totalPCost}
@@ -620,7 +621,7 @@ export default function Home() {
           <h1 className="mb-3 font-bold text-lg">
             Yearly Cost Considering Amortization ($
             {(
-              totalServerCost / 4 +
+              (totalServerCost + totalStorageCost) / 4 +
               totalNetCost / 5 +
               propertyValue / 20 +
               totalPCost / 7 +
@@ -630,7 +631,7 @@ export default function Home() {
             )
           </h1>
           <PieChart
-            serverCost={totalServerCost / 4}
+            serverCost={(totalServerCost + totalStorageCost) / 4}
             networkCost={totalNetCost / 5}
             buildingCost={propertyValue / 20}
             powerAndCoolingCost={totalPCost / 7}
@@ -642,7 +643,7 @@ export default function Home() {
           <h1 className="mb-3 font-bold text-lg">
             Yearly Cost (w/ Salary) Considering Amortization ($
             {(
-              totalServerCost / 4 +
+              (totalServerCost + totalStorageCost) / 4 +
               totalNetCost / 5 +
               propertyValue / 20 +
               totalPCost / 7 +
@@ -653,7 +654,7 @@ export default function Home() {
             )
           </h1>
           <PieChart
-            serverCost={totalServerCost / 4}
+            serverCost={(totalServerCost + totalStorageCost) / 4}
             networkCost={totalNetCost / 5}
             buildingCost={propertyValue / 20}
             powerAndCoolingCost={totalPCost / 7}
