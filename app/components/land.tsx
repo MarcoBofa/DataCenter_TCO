@@ -80,7 +80,7 @@ const Land: React.FC<LandProps> = ({
           className="w-full sm:w-[200px] p-2 rounded border-gray border-2 mb-3 sm:mr-[50px]"
         >
           <option value="Guided">Guided</option>
-          <option value="Customizable">Customizable</option>
+          {/* <option value="Customizable">Customizable</option> */}
         </select>
         <div className="w-full sm:w-[285px] border-sky-500 bg-sky-100 text-center border-2 font-bold py-1 px-3 rounded-lg shadow mb-2 md:mr-[50px]">
           GOI: {GOI.toFixed(1)} $/ft^2

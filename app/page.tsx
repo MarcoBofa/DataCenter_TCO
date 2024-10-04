@@ -1,5 +1,6 @@
 "use client";
 import React, { useState, useEffect, useCallback } from "react";
+import { TypeAnimation } from "react-type-animation";
 import Land from "./components/land";
 import Server from "./components/server";
 import Network from "./components/network";
@@ -10,6 +11,13 @@ import PowerCost from "./components/powerCost";
 import SoftwareLicense from "./components/softwareLicense";
 import Storage from "./components/storage";
 import Labor from "./components/labor";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { AnimatePresence, motion } from "framer-motion";
+import {
+  faChevronUp,
+  faChevronDown,
+  faCheck,
+} from "@fortawesome/free-solid-svg-icons";
 
 interface serverClusterProps {
   id: string;
@@ -35,6 +43,7 @@ export default function Home() {
   const [storageCluster, setStorageClusters] = useState<storageClusterProps[]>(
     []
   );
+  const [description, setDescription] = useState(false);
   const [totalCost, setTotalCost] = useState(0);
   const [totalNodeCount, setTotalNodeCount] = useState(0);
   const [totalGPUCount, setTotalGPUCount] = useState(0);
@@ -166,7 +175,26 @@ export default function Home() {
     []
   );
 
+  const descriptionTexts = [
+    "This website provides a practical and easy-to-use tool to estimate the Total Cost of Ownership (TCO) of a Data Center.",
+    "The tool is still under construction as it does not yet include all costs associated with a data center, and the models to estimate costs must still be fine-tuned. However, it already serves as a good starting point.",
+    "If you have some suggestions or find some errors, please send an email to mbonaf3@uic.edu. Thanks! 😊",
+  ];
+
+  // New State Variables for Typewriter Effect
+  const [typedLines, setTypedLines] = useState<string[]>([]);
+  const [currentLineIndex, setCurrentLineIndex] = useState<number>(0);
+
+  // Reset typed lines and start typing when description is toggled open
   useEffect(() => {
+    if (description) {
+      setTypedLines([]);
+      setCurrentLineIndex(0);
+    }
+  }, [description]);
+
+  useEffect(() => {
+    // Calculate total costs whenever dependencies change
     const totalServerCosttemp = serverClusters.reduce(
       (sum, cluster) => sum + cluster.totalCost,
       0
@@ -237,9 +265,57 @@ export default function Home() {
   ]);
 
   return (
-    <main className="flex flex-col text-center justify-center space-y-[50px] text-sm items-center bg-grey-100 h-full bg-gray-100 pb-[50px]">
-      <div className="text-2xl font-bold mt-[20px]">
-        DATA CENTER TCO CALCULATOR
+    <main className="flex flex-col text-center justify-center space-y-12 text-sm items-center bg-gray-100 h-full pb-12">
+      <div className="w-full max-w-4xl px-4">
+        <div className="flex flex-row items-center justify-center mt-5">
+          <div className="text-2xl font-bold">DATA CENTER TCO CALCULATOR</div>
+          <FontAwesomeIcon
+            onClick={() => setDescription(!description)}
+            className="text-gray-600 text-lg ml-2 cursor-pointer"
+            icon={description ? faChevronUp : faChevronDown}
+          />
+        </div>
+        <AnimatePresence>
+          {description && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: "auto" }}
+              exit={{ opacity: 0, height: 0 }}
+              transition={{ duration: 0.5, ease: "easeInOut" }}
+              className="overflow-hidden mt-4 bg-white p-6 rounded-lg shadow-lg"
+            >
+              {/* Typewriter Animation */}
+              <div>
+                {typedLines.map((line, index) => (
+                  <p key={index} className="block text-md font-semibold mb-2">
+                    {line}
+                  </p>
+                ))}
+                {currentLineIndex < descriptionTexts.length && (
+                  <TypeAnimation
+                    key={currentLineIndex} // Ensures TypeAnimation resets for each new line
+                    sequence={[
+                      descriptionTexts[currentLineIndex],
+                      200, // Wait for 1 second after typing
+                      () => {
+                        setTypedLines((prev) => [
+                          ...prev,
+                          descriptionTexts[currentLineIndex],
+                        ]);
+                        setCurrentLineIndex((prev) => prev + 1);
+                      },
+                    ]}
+                    speed={80} // Adjust typing speed as needed
+                    wrapper="p"
+                    cursor={true}
+                    repeat={0} // Do not loop the animation
+                    style={{ whiteSpace: "pre-line", fontWeight: "600" }}
+                  />
+                )}
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
       <div className="w-7/8 bg-white text-left pb-10 rounded-2xl relative">
         <div className="flex flex-row">
@@ -247,6 +323,7 @@ export default function Home() {
             <div className="p-4 font-bold w-full text-left">
               LAND & BUILDING
             </div>
+
             <div className="flex hoverable-button justify-center items-center w-[13px] h-[13px] mr-[5px] xs:ml-[-6px] rounded-full bg-gray-200 text-xs leading-none cursor-pointer">
               i
             </div>
