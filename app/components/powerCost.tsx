@@ -156,7 +156,7 @@ const PowerCost: React.FC<powerProps> = ({
       </div>
       <div className="flex flex-col space-y-1 w-full md:w-[350px] mb-2 p-4 md:mr-[40px]">
         <label className="block text-sm" htmlFor="choice">
-          Do you know expected Server Peak utilization?
+          Do you know expected Server utilization?
         </label>
         <select
           {...register("choice")}
@@ -172,7 +172,7 @@ const PowerCost: React.FC<powerProps> = ({
           className={`flex flex-col space-y-1 w-full md:w-[300px] mb-2 p-4 md:mr-[40px]`}
         >
           <label className="block text-sm text-center ml-5" htmlFor="usage">
-            Expected Peak Server Utilization (%)
+            Expected Server Utilization (%)
           </label>
           <input
             {...register("usage", {
