@@ -144,7 +144,7 @@ const SoftwareLicense: React.FC<softwareProps> = ({
             className="block text-sm text-center ml-5"
             htmlFor="priceLicense"
           >
-            Price Per OS License $
+            Price Per Node $
           </label>
           <input
             {...register("priceLicense", { valueAsNumber: true })}
