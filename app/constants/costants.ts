@@ -172,7 +172,7 @@ export const GPU_COSTS = {
   A30: 5000,
   L4: 2500,
   T4: 1000,
-  V100: 3000,
+  V100: 5000,
   NVLINK_SWITCH: 1.3,
 };
 
