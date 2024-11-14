@@ -170,6 +170,7 @@ export const GPU_COSTS = {
   A100_80: 13000,
   A40: 6000,
   A30: 5000,
+  L4: 2500,
   T4: 1000,
   V100: 3000,
   NVLINK_SWITCH: 1.3,
@@ -226,6 +227,7 @@ export const MTTF_VALUES = {
   A40: 240000,
   A30: 230000,
   T4: 250000,
+  L4: 250000,
   V100: 200000,
 
   // Default values

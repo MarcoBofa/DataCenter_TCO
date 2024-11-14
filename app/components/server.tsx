@@ -139,6 +139,7 @@ const Server: React.FC<ServerProps> = ({
     A100_80: GPU_COSTS.A100_80,
     A40: GPU_COSTS.A40,
     A30: GPU_COSTS.A30,
+    L4: GPU_COSTS.L4,
     T4: GPU_COSTS.T4,
     V100: GPU_COSTS.V100,
   };
@@ -149,7 +150,8 @@ const Server: React.FC<ServerProps> = ({
     A100_80: 400 * GPU_COSTS.NVLINK_SWITCH,
     A40: 185 * GPU_COSTS.NVLINK_SWITCH,
     A30: 165 * GPU_COSTS.NVLINK_SWITCH,
-    T4: 100,
+    L4: 75 * GPU_COSTS.NVLINK_SWITCH,
+    T4: 70 * GPU_COSTS.NVLINK_SWITCH,
     V100: 250 * GPU_COSTS.NVLINK_SWITCH,
   };
 
@@ -614,6 +616,7 @@ const Server: React.FC<ServerProps> = ({
                     <option value="A100_80">Nvidia A100 80GB</option>
                     <option value="A40">Nvidia A40</option>
                     <option value="A30">Nvidia A30</option>
+                    <option value="L4">Nvidia L4</option>
                     <option value="T4">Nvidia T4</option>
                     <option value="V100">Nvidia V100</option>
                   </select>
