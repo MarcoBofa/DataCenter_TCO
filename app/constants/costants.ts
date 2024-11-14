@@ -166,8 +166,8 @@ export const POWER_CONSUMPTION = {
 // GPU costs
 export const GPU_COSTS = {
   H100: 30000,
-  A100_40: 8000,
-  A100_80: 13000,
+  A100_40: 9000,
+  A100_80: 14000,
   A40: 6000,
   A30: 5000,
   L4: 2500,
