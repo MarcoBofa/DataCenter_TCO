@@ -53,7 +53,7 @@ export const TCOProvider: React.FC<TCOProviderProps> = ({ children }) => {
   const loadSchema = (data: Partial<DataCenter>): LoadSchemaResult => {
     const valid = validate({ datacenter: data });
 
-    console.log("DATA : ", data);
+    console.log("Configuration Uploaded: ", data);
     if (!valid) {
       console.error(validate.errors);
       return { success: false, errors: validate.errors ?? undefined };

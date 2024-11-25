@@ -16,7 +16,6 @@ const JsonUploader: React.FC = () => {
 
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
-    console.log("File selected:", file);
     if (
       file &&
       (file.type === "application/json" || file.name.endsWith(".json"))

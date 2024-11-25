@@ -323,7 +323,6 @@ export default function Home() {
   // };
 
   useEffect(() => {
-    console.log("SERVER : ", serverClusterJson);
     if (serverClusterJson && Array.isArray(serverClusterJson)) {
       const newClusters = serverClusterJson.map((node) => ({
         index: uuidv4(),
