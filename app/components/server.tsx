@@ -31,7 +31,19 @@ interface localProps {
 
 interface ServerProps {
   index: string;
-  nodeCount: number;
+  modeProp: string;
+  cpuProp: string;
+  homeNodeCountProp: number;
+  processorsPerNodeProp: number;
+  coresPerProcessorProp: number;
+  ramPerNodeProp: number;
+  storagePerNodeProp: number;
+  typeOfSSDProp: string;
+  gpuProp: string;
+  gpu_perNodeProp: number;
+  gpu_modelProp: string;
+  custom_cost_per_nodeProp: number;
+  custom_core_per_nodeProp: number;
   updateServerCluster: (index: string, totalCost: number) => void;
   updateServerNodeCluster: (index: string, nodeCount: number) => void;
   updateServerNodeConsumption: (
@@ -44,7 +56,19 @@ interface ServerProps {
 
 const Server: React.FC<ServerProps> = ({
   index,
-  nodeCount,
+  modeProp,
+  cpuProp,
+  homeNodeCountProp,
+  processorsPerNodeProp,
+  coresPerProcessorProp,
+  ramPerNodeProp,
+  storagePerNodeProp,
+  typeOfSSDProp,
+  gpuProp,
+  gpu_perNodeProp,
+  gpu_modelProp,
+  custom_cost_per_nodeProp,
+  custom_core_per_nodeProp,
   updateServerCluster,
   updateServerNodeCluster,
   updateServerNodeConsumption,
@@ -58,19 +82,19 @@ const Server: React.FC<ServerProps> = ({
     formState: { errors },
   } = useForm<localProps>({
     defaultValues: {
-      mode: "Guided",
-      cpu: "intel_gold",
-      homeNodeCount: nodeCount,
-      processorsPerNode: 1,
-      coresPerProcessor: 8,
-      ramPerNode: 4,
-      storagePerNode: 64,
-      typeOfSSD: "high_ssd",
-      gpu: "No",
-      gpu_perNode: 1,
-      gpu_model: "H100",
-      custom_cost_per_node: 1,
-      custom_core_per_node: 1,
+      mode: modeProp || "guided",
+      cpu: cpuProp || "intel_gold",
+      homeNodeCount: homeNodeCountProp || 1,
+      processorsPerNode: processorsPerNodeProp || 1,
+      coresPerProcessor: coresPerProcessorProp || 8,
+      ramPerNode: ramPerNodeProp || 4,
+      storagePerNode: storagePerNodeProp || 64,
+      typeOfSSD: typeOfSSDProp || "high_ssd",
+      gpu: gpuProp || "no",
+      gpu_perNode: gpu_perNodeProp || 1,
+      gpu_model: gpu_modelProp || "H100",
+      custom_cost_per_node: custom_cost_per_nodeProp || 1,
+      custom_core_per_node: custom_core_per_nodeProp || 1,
     },
   });
 
@@ -189,7 +213,7 @@ const Server: React.FC<ServerProps> = ({
     const cpuPower = cpuPowerConsumptionMapping[cpu] || 0;
     p += cpuPower * homeNodeCount * processorsPerNode;
 
-    if (gpu === "Yes") {
+    if (gpu === "yes") {
       const gpuPower = gpuPowerConsumptionMapping[gpu_model] || 0;
       p += gpuPower * homeNodeCount * gpu_perNode;
 
@@ -278,7 +302,7 @@ const Server: React.FC<ServerProps> = ({
     let totalCost = 0;
     let serverConsumption = 0;
 
-    if (mode === "Guided") {
+    if (mode === "guided") {
       const cost_core = cpuCostPerCoreMapping[cpu] || COSTS.COST_CORE;
 
       const costCores = totalCores * cost_core;
@@ -294,7 +318,7 @@ const Server: React.FC<ServerProps> = ({
       const costStorage = totalStorage * costStoragePerGB;
 
       let costGpu = 0;
-      if (gpu === "Yes") {
+      if (gpu === "yes") {
         costGpu = gpuCostMapping[gpu_model] || 0;
       }
 
@@ -317,7 +341,7 @@ const Server: React.FC<ServerProps> = ({
       const CPUsparesNeeded = calc_spare_comp("cpu");
       spare_component_cost = CPUsparesNeeded * cost_core * coresPerProcessor;
 
-      const GPUsparesNeeded = gpu === "Yes" ? calc_spare_comp("gpu") : 0;
+      const GPUsparesNeeded = gpu === "yes" ? calc_spare_comp("gpu") : 0;
       spare_component_cost +=
         GPUsparesNeeded * (gpuCostMapping[gpu_model] || 0);
 
@@ -340,7 +364,7 @@ const Server: React.FC<ServerProps> = ({
         costStorage +
         spare_component_cost;
 
-      if (gpu === "Yes" && gpu_perNode > 4) {
+      if (gpu === "yes" && gpu_perNode > 4) {
         totalCost += costChassis * homeNodeCount * 2;
       } else {
         totalCost += costChassis * homeNodeCount;
@@ -362,7 +386,7 @@ const Server: React.FC<ServerProps> = ({
       setTotalClusterCore(custom_core_per_node * homeNodeCount);
     }
 
-    if (gpu === "Yes") {
+    if (gpu === "yes") {
       updateServerGpuNumber(index, gpu_perNode);
     } else {
       updateServerGpuNumber(index, 0);
@@ -399,7 +423,7 @@ const Server: React.FC<ServerProps> = ({
 
   return (
     <>
-      {mode === "Guided" && (
+      {mode === "guided" && (
         <div className="flex flex-col space-y-3">
           <div className="flex flex-wrap items-center w-full">
             <select
@@ -407,8 +431,8 @@ const Server: React.FC<ServerProps> = ({
               className="w-full sm:w-[200px] p-2 rounded border-gray border-2 mb-3 sm:mb-5 2xl:mb-2 sm:mr-[45px]"
               id="mode"
             >
-              <option value="Guided">Guided</option>
-              <option value="Customizable">Customizable</option>
+              <option value="guided">Guided</option>
+              <option value="custom">Customizable</option>
             </select>
             <select
               {...register("cpu")}
@@ -579,12 +603,12 @@ const Server: React.FC<ServerProps> = ({
                 className="flex-grow p-2 rounded border-2"
                 id="gpu"
               >
-                <option value="No">No</option>
-                <option value="Yes">Yes</option>
+                <option value="no">No</option>
+                <option value="yes">Yes</option>
               </select>
             </div>
 
-            {gpu === "Yes" && (
+            {gpu === "yes" && (
               <>
                 <div className="flex flex-col space-y-1 w-full sm:w-[200px] mb-2 sm:mr-[50px]">
                   <label className="block text-sm" htmlFor="gpu_perNode">
@@ -636,7 +660,7 @@ const Server: React.FC<ServerProps> = ({
           </div>
         </div>
       )}
-      {mode === "Customizable" && (
+      {mode === "custom" && (
         <div className="flex flex-col space-y-3">
           <div
             className={`flex flex-wrap ${
@@ -651,8 +675,8 @@ const Server: React.FC<ServerProps> = ({
               className="w-full sm:w-[200px] p-[9px] rounded border-gray border-2 mb-3 sm:mr-[46px]"
               id="mode"
             >
-              <option value="Guided">Guided</option>
-              <option value="Customizable">Customizable</option>
+              <option value="guided">Guided</option>
+              <option value="custom">Customizable</option>
             </select>
             <div className="flex flex-col space-y-1 w-full sm:w-[200px] mb-3 sm:mr-[46px]">
               <label className="block text-sm" htmlFor="homeNodeCount">

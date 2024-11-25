@@ -17,12 +17,27 @@ import {
   faChevronUp,
   faChevronDown,
   faCheck,
+  faUpload,
 } from "@fortawesome/free-solid-svg-icons";
+import JsonUploader from "./components/jsonUploader";
+import { useTCO } from "./context/useContext";
+import Link from "next/link";
 
 interface serverClusterProps {
-  id: string;
-  nodeCount: number;
-  GpuPerNode: number;
+  index: string;
+  modeProp: string;
+  cpuProp: string;
+  homeNodeCountProp: number;
+  processorsPerNodeProp: number;
+  coresPerProcessorProp: number;
+  ramPerNodeProp: number;
+  storagePerNodeProp: number;
+  typeOfSSDProp: string;
+  gpuProp: string;
+  gpu_perNodeProp?: number;
+  gpu_modelProp?: string;
+  custom_cost_per_nodeProp?: number;
+  custom_core_per_nodeProp?: number;
   totalCost: number;
   serverConsumption: number;
   coreNumber: number;
@@ -30,10 +45,12 @@ interface serverClusterProps {
 
 interface storageClusterProps {
   id: string;
-  nodeCount: number;
+  storage: number;
   totalCost: number;
   consumption: number;
-  storage: number;
+  mode?: "custom" | "guided";
+  type?: "sata" | "nvme" | "hdd" | "tape";
+  price?: number;
 }
 
 export default function Home() {
@@ -63,15 +80,30 @@ export default function Home() {
   const [laborCost, setLaborCost] = useState(0);
   const [laborChoice, setLaborChoice] = useState(false);
 
+  const {
+    setServerClusterJson,
+    storageNode,
+    serverClusterJson,
+    setStorageNode,
+  } = useTCO();
+
   const [pue, setPueValue] = useState(1.35);
 
   const addServerCluster = () => {
     setServerClusters([
       ...serverClusters,
       {
-        id: uuidv4(),
-        nodeCount: 1,
-        GpuPerNode: 0,
+        index: uuidv4(),
+        homeNodeCountProp: 1,
+        gpuProp: "no",
+        modeProp: "guided",
+        cpuProp: "intel_gold",
+        processorsPerNodeProp: 1,
+        coresPerProcessorProp: 8,
+        ramPerNodeProp: 4,
+        storagePerNodeProp: 64,
+        typeOfSSDProp: "high_ssd",
+        gpu_modelProp: "A100_40",
         totalCost: 0,
         serverConsumption: 0,
         coreNumber: 0,
@@ -84,59 +116,73 @@ export default function Home() {
       ...storageCluster,
       {
         id: uuidv4(),
-        nodeCount: 1,
+        storage: 10,
         totalCost: 0,
         consumption: 0,
-        storage: 0,
       },
     ]);
   };
 
-  const removeServerCluster = (id: string) => {
-    setServerClusters(serverClusters.filter((cluster) => cluster.id !== id));
+  const removeServerCluster = (index: string) => {
+    setServerClusters(
+      serverClusters.filter((cluster) => cluster.index !== index)
+    );
   };
 
   const removeStorageCluster = (id: string) => {
     setStorageClusters(storageCluster.filter((cluster) => cluster.id !== id));
   };
 
-  const updateServerCluster = useCallback((id: string, newCost: number) => {
+  const updateServerCluster = useCallback((index: string, newCost: number) => {
     setServerClusters((prevClusters) =>
       prevClusters.map((cluster) =>
-        cluster.id === id ? { ...cluster, totalCost: newCost } : cluster
+        cluster.index === index ? { ...cluster, totalCost: newCost } : cluster
       )
     );
   }, []);
 
-  const updateServerNodeCluster = useCallback((id: string, newNode: number) => {
-    setServerClusters((prevClusters) =>
-      prevClusters.map((cluster) =>
-        cluster.id === id ? { ...cluster, nodeCount: newNode } : cluster
-      )
-    );
-  }, []);
-
-  const updateServerCoreNumber = useCallback((id: string, newNode: number) => {
-    setServerClusters((prevClusters) =>
-      prevClusters.map((cluster) =>
-        cluster.id === id ? { ...cluster, coreNumber: newNode } : cluster
-      )
-    );
-  }, []);
-
-  const updateServerGpuNumber = useCallback((id: string, GpuNode: number) => {
-    setServerClusters((prevClusters) =>
-      prevClusters.map((cluster) =>
-        cluster.id === id ? { ...cluster, GpuPerNode: GpuNode } : cluster
-      )
-    );
-  }, []);
-
-  const updateServerNodeConsumption = useCallback(
-    (id: string, newCons: number) => {
+  const updateServerNodeCluster = useCallback(
+    (index: string, newNode: number) => {
       setServerClusters((prevClusters) =>
         prevClusters.map((cluster) =>
-          cluster.id === id
+          cluster.index === index ? { ...cluster, nodeCount: newNode } : cluster
+        )
+      );
+    },
+    []
+  );
+
+  const updateServerCoreNumber = useCallback(
+    (index: string, newNode: number) => {
+      setServerClusters((prevClusters) =>
+        prevClusters.map((cluster) =>
+          cluster.index === index
+            ? { ...cluster, coreNumber: newNode }
+            : cluster
+        )
+      );
+    },
+    []
+  );
+
+  const updateServerGpuNumber = useCallback(
+    (index: string, GpuNode: number) => {
+      setServerClusters((prevClusters) =>
+        prevClusters.map((cluster) =>
+          cluster.index === index
+            ? { ...cluster, GpuPerNode: GpuNode }
+            : cluster
+        )
+      );
+    },
+    []
+  );
+
+  const updateServerNodeConsumption = useCallback(
+    (index: string, newCons: number) => {
+      setServerClusters((prevClusters) =>
+        prevClusters.map((cluster) =>
+          cluster.index === index
             ? { ...cluster, serverConsumption: newCons }
             : cluster
         )
@@ -200,7 +246,7 @@ export default function Home() {
       0
     );
     const totalNode = serverClusters.reduce(
-      (sum, cluster) => sum + cluster.nodeCount,
+      (sum, cluster) => sum + cluster.homeNodeCountProp,
       0
     );
     const totalServerP = serverClusters.reduce(
@@ -230,8 +276,8 @@ export default function Home() {
 
     let totalGPU = 0;
     serverClusters.forEach((cluster) => {
-      if (cluster.GpuPerNode >= 2) {
-        totalGPU += cluster.GpuPerNode * cluster.nodeCount;
+      if (cluster.gpu_perNodeProp && cluster.gpu_perNodeProp >= 2) {
+        totalGPU += cluster.gpu_perNodeProp * cluster.gpu_perNodeProp;
       }
     });
     setTotalGPUCount(totalGPU);
@@ -264,8 +310,74 @@ export default function Home() {
     softwareLicenseCost,
   ]);
 
+  // const addStorageCluster = () => {
+  //   setStorageClusters([
+  //     ...storageCluster,
+  //     {
+  //       id: uuidv4(),
+  //       storage: 10,
+  //       totalCost: 0,
+  //       consumption: 0,
+  //     },
+  //   ]);
+  // };
+
+  useEffect(() => {
+    console.log("SERVER : ", serverClusterJson);
+    if (serverClusterJson && Array.isArray(serverClusterJson)) {
+      const newClusters = serverClusterJson.map((node) => ({
+        index: uuidv4(),
+        homeNodeCountProp: node.homeNodeCount || 1,
+        gpuProp: node.gpu || "no",
+        modeProp: node.mode || "guided",
+        cpuProp: node.cpu || "intel_gold",
+        processorsPerNodeProp: node.processorsPerNode || 1,
+        coresPerProcessorProp: node.coresPerProcessor || 8,
+        ramPerNodeProp: node.ramPerNode || 4,
+        storagePerNodeProp: node.storagePerNode || 64,
+        typeOfSSDProp: node.typeOfSSD || "high_ssd",
+        gpu_modelProp: node.gpu_model || "A100_40",
+        gpu_perNodeProp: node.gpu_perNode || 1,
+        totalCost: 0,
+        serverConsumption: 0,
+        coreNumber: 0,
+      }));
+      setServerClusters(newClusters);
+    }
+  }, [serverClusterJson]);
+
+  useEffect(() => {
+    if (storageNode && Array.isArray(storageNode)) {
+      const newClusters = storageNode.map((node) => ({
+        id: uuidv4(),
+        storage: node.amount ?? 10,
+        totalCost: 0,
+        consumption: 0,
+        mode: node.mode,
+        price: node.price,
+        type: node.type,
+      }));
+      setStorageClusters(newClusters);
+    }
+  }, [storageNode]);
+
   return (
-    <main className="flex flex-col text-center justify-center space-y-12 text-sm items-center bg-gray-100 h-full pb-12">
+    <main className="flex flex-col text-center justify-center space-y-12 text-sm items-center bg-gray-100 h-full pb-12 relative">
+      <div
+        title="Upload Json Configuration"
+        className="fixed z-10 bottom-2 right-1 md:bottom-4 md:right-3 lg:bottom-6 lg:right-6"
+      >
+        <JsonUploader></JsonUploader>
+        <Link href="/infoUpload">
+          <div
+            className="absolute top-0 right-[2px] mt-[-8px] mr-[2px] w-[13px] h-[13px] bg-gray-700 text-white rounded-full hover:bg-gray-600 hover:scale-125 transform transition-all duration-200 flex items-center justify-center"
+            aria-label="Instructions for Uploading JSON Configuration"
+            title="View Instructions"
+          >
+            <span className="text-xs">i</span>
+          </div>
+        </Link>
+      </div>
       <div className="w-full max-w-4xl px-4">
         <div className="flex flex-row items-center justify-center mt-5">
           <div className="text-2xl font-bold">DATA CENTER TCO CALCULATOR</div>
@@ -347,13 +459,25 @@ export default function Home() {
       {serverClusters.map((cluster) => (
         <div
           className="w-7/8 bg-white pb-10 rounded-2xl mb-4 relative"
-          key={cluster.id}
+          key={cluster.index}
         >
           <div className="p-4 font-bold w-full lg:text-left">SERVER</div>
           <div className="flex justify-between items-center p-4">
             <Server
-              index={cluster.id}
-              nodeCount={cluster.nodeCount}
+              index={cluster.index}
+              homeNodeCountProp={cluster.homeNodeCountProp}
+              modeProp={cluster.modeProp}
+              cpuProp={cluster.cpuProp}
+              processorsPerNodeProp={cluster.processorsPerNodeProp}
+              coresPerProcessorProp={cluster.coresPerProcessorProp}
+              ramPerNodeProp={cluster.ramPerNodeProp}
+              storagePerNodeProp={cluster.storagePerNodeProp}
+              typeOfSSDProp={cluster.typeOfSSDProp}
+              gpuProp={cluster.gpuProp}
+              gpu_perNodeProp={cluster.gpu_perNodeProp || 0}
+              gpu_modelProp={cluster.gpu_modelProp || "H100"}
+              custom_core_per_nodeProp={cluster.custom_core_per_nodeProp || 1}
+              custom_cost_per_nodeProp={cluster.custom_cost_per_nodeProp || 1}
               updateServerCluster={updateServerCluster}
               updateServerNodeCluster={updateServerNodeCluster}
               updateServerNodeConsumption={updateServerNodeConsumption}
@@ -361,7 +485,7 @@ export default function Home() {
               updateServerGpuNumber={updateServerGpuNumber}
             />
             <button
-              onClick={() => removeServerCluster(cluster.id)}
+              onClick={() => removeServerCluster(cluster.index)}
               className="ml-2 p-1 bg-red-500 text-white rounded hover:bg-red-700 absolute right-4 bottom-4"
             >
               Remove Server Node
@@ -378,7 +502,10 @@ export default function Home() {
           <div className="flex justify-between items-center p-4">
             <Storage
               index={cluster.id}
-              nodeCount={cluster.nodeCount}
+              storage={cluster.storage || 10}
+              modeProp={cluster.mode || "guided"}
+              priceProp={cluster.price || 0}
+              typeProp={cluster.type || "hdd"}
               updateStorageClusterCost={updateStorageClusterCost}
               updateStorageAmount={updateStorageAmount}
               updateStorageNodeConsumption={updateStorageNodeConsumption}
@@ -666,6 +793,18 @@ export default function Home() {
           />
         </div>
       </div>
+
+      <footer className="mt-12 text-center text-md text-slate-600 dark:text-slate-300">
+        <p>
+          For more info about the JSON upload feature{" "}
+          <Link
+            href="/infoUpload"
+            className="text-blue-600 dark:text-blue-400 hover:underline"
+          >
+            click here
+          </Link>
+        </p>
+      </footer>
     </main>
   );
 }

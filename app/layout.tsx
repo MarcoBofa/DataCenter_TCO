@@ -2,6 +2,7 @@ import "./globals.css";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import ToasterProvider from "@/providers/ToasterProvider";
+import { TCOProvider } from "./context/useContext";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -20,7 +21,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         <ToasterProvider />
-        {children}
+        <TCOProvider>{children}</TCOProvider>
       </body>
     </html>
   );

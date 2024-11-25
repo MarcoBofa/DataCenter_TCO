@@ -26,7 +26,8 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts",
-    "app/components/chart.js"
+    "app/components/chart.js",
+    "app/components/codeBlock.jsx"
   ],
   "exclude": ["node_modules"]
 }

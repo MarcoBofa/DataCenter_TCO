@@ -133,6 +133,13 @@ export const ADDITIONAL_COST_PERCENTAGES: { [key in Role]: number } = {
   PROJECT_MANAGER: 0.27,
 };
 
+// roles.ts
+export const allRolesSet = new Set<Role>(
+  Object.values(SALARIES)
+    .flatMap((category) => Object.keys(category))
+    .map((role) => role as Role)
+);
+
 // Constants needed for your component
 
 // Cost constants

@@ -1,7 +1,9 @@
 "use client";
-import React from "react";
+import React, { useCallback } from "react";
 import { useForm } from "react-hook-form";
 import { useEffect } from "react";
+import { useTCO } from "../context/useContext";
+import debounce from "lodash/debounce";
 
 interface LocalProps {
   mode: string;
@@ -30,6 +32,7 @@ const Land: React.FC<LandProps> = ({
     register,
     handleSubmit,
     watch,
+    reset,
     setValue,
     formState: { errors },
   } = useForm<LocalProps>({
@@ -45,8 +48,9 @@ const Land: React.FC<LandProps> = ({
     },
   });
 
+  const { land, setLand } = useTCO();
+
   const onSubmit = (data: LocalProps) => {
-    // Here you would send the data to the backend
     console.log(data);
   };
 
@@ -68,9 +72,36 @@ const Land: React.FC<LandProps> = ({
     setValue(field, value < 0 ? 0 : value, { shouldValidate: true });
   };
 
+  const debounceLand = useCallback(
+    debounce((newValues: any) => {
+      setLand(newValues);
+    }, 300), // 300ms delay; adjust as needed
+    [setLand]
+  );
+
   useEffect(() => {
+    // setLand({
+    //   ft,
+    //   occupancy,
+    //   powerRating,
+    //   rentalRate,
+    //   cap,
+    // });
+
     setPropertyValue(propertyValue);
-  }, [propertyValue]);
+  }, [propertyValue, setPropertyValue]);
+
+  // Reset form fields when context's land data changes (e.g., after JSON upload)
+  useEffect(() => {
+    reset({
+      mode: "Guided",
+      ft: land.ft || 10,
+      cap: land.cap || 9,
+      powerRating: land.powerRating || 2.5,
+      rentalRate: land.rentalRate || 150,
+      occupancy: land.occupancy || 60,
+    });
+  }, [land, reset]);
 
   return (
     <div className="flex flex-col space-y-3 p-4">

@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useEffect } from "react";
 
@@ -9,10 +9,12 @@ import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import Slider from "@mui/material/Slider";
 import MuiInput from "@mui/material/Input";
+import { useTCO } from "../context/useContext";
+import debounce from "lodash/debounce";
 
 interface LocalProps {
   pue: number;
-  cooling: string;
+  cooling: "liquid" | "air";
 }
 
 const Input = styled(MuiInput)`
@@ -41,6 +43,7 @@ const PowerDistribution: React.FC<powerProps> = ({
     handleSubmit,
     watch,
     setValue,
+    reset,
     formState: { errors },
   } = useForm<LocalProps>({
     defaultValues: {
@@ -50,6 +53,8 @@ const PowerDistribution: React.FC<powerProps> = ({
   });
 
   const [sliderValue, setSliderValue] = useState(0);
+  const { powerDistributionAndCooling, setPowerDistributionAndCooling } =
+    useTCO();
 
   const onSubmit = (data: LocalProps) => {
     // Here you would send the data to the backend
@@ -94,6 +99,13 @@ const PowerDistribution: React.FC<powerProps> = ({
     const value = Number(event.target.value);
     setValue(field, value < 1 ? 1 : value, { shouldValidate: true });
   };
+
+  const debouncedSetPowerDistributionAndCooling = useCallback(
+    debounce((newValues: any) => {
+      setPowerDistributionAndCooling(newValues);
+    }, 300), // 300ms delay; adjust as needed
+    [setPowerDistributionAndCooling]
+  );
 
   useEffect(() => {
     let cost = 0;
@@ -162,9 +174,23 @@ const PowerDistribution: React.FC<powerProps> = ({
 
     cost = cost * (1 + sliderValue / 100);
 
+    //debouncedSetPowerDistributionAndCooling({ pue, cooling });
+
     setPDcost(cost);
     setPueValue(pue);
   }, [pue, cooling, pdCost, tier, totalConsumption, sliderValue]);
+
+  useEffect(() => {
+    if (
+      powerDistributionAndCooling.pue !== pue ||
+      powerDistributionAndCooling.cooling !== cooling
+    ) {
+      reset({
+        pue: powerDistributionAndCooling.pue || 1.35,
+        cooling: powerDistributionAndCooling.cooling || "liquid",
+      });
+    }
+  }, [powerDistributionAndCooling, reset]);
 
   return (
     <div className="flex flex-wrap items-center w-full">
@@ -205,7 +231,7 @@ const PowerDistribution: React.FC<powerProps> = ({
           id="cooling"
         >
           <option value="liquid">Liquid</option>
-          <option value="Air">Air</option>
+          <option value="air">Air</option>
         </select>
       </div>
       <div className="w-full md:w-[610px] xl:w-[450px] border-cyan-500 bg-cyan-100 border-2 font-bold py-1 px-3 rounded-lg mt-4 shadow ml-4 mr-4 md:mr-[10px]">

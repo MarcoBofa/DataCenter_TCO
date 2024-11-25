@@ -9,10 +9,11 @@ import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import Slider from "@mui/material/Slider";
 import MuiInput from "@mui/material/Input";
+import { useTCO } from "../context/useContext";
 
 interface LocalProps {
   priceLicense: number;
-  os: string;
+  os: "suse" | "rh_vm" | "rh_physical" | "custom";
 }
 
 interface softwareProps {
@@ -32,7 +33,7 @@ const SoftwareLicense: React.FC<softwareProps> = ({
   setSoftwareCost,
   cores,
 }) => {
-  const { register, handleSubmit, watch } = useForm<LocalProps>({
+  const { register, handleSubmit, watch, reset } = useForm<LocalProps>({
     defaultValues: {
       priceLicense: 0,
       os: "suse",
@@ -45,6 +46,8 @@ const SoftwareLicense: React.FC<softwareProps> = ({
   };
 
   const [sliderValue, setSliderValue] = useState(0);
+
+  const { software, setSoftware } = useTCO();
 
   const priceLicense = watch("priceLicense");
   const os = watch("os");
@@ -111,15 +114,20 @@ const SoftwareLicense: React.FC<softwareProps> = ({
     cost = cost * (1 + sliderValue / 100);
 
     setSoftwareCost(cost);
-  }, [
-    os,
-    priceLicense,
-    nodeCount,
-    softwareCost,
-    setSoftwareCost,
-    cores,
-    sliderValue,
-  ]);
+    setSoftware({ os, priceLicense });
+  }, [os, priceLicense, nodeCount, cores, sliderValue]);
+
+  useEffect(() => {
+    // let price = 0;
+    // if (software.os === "custom" && software.priceLicense) {
+    //   price = software.priceLicense;
+    // }
+
+    reset({
+      os: software.os || "suse",
+      priceLicense: software.priceLicense || 0,
+    });
+  }, [software, reset]);
 
   return (
     <div className="flex flex-wrap items-center w-full">

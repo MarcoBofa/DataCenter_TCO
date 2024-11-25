@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { use, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useEffect } from "react";
 
@@ -9,6 +9,7 @@ import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import Slider from "@mui/material/Slider";
 import MuiInput from "@mui/material/Input";
+import { useTCO } from "../context/useContext";
 
 interface LocalProps {
   usage: number;
@@ -41,7 +42,7 @@ const PowerCost: React.FC<powerProps> = ({
 }) => {
   const {
     register,
-    handleSubmit,
+    reset,
     watch,
     setValue,
     formState: { errors },
@@ -52,6 +53,8 @@ const PowerCost: React.FC<powerProps> = ({
       eCost: 0.11,
     },
   });
+
+  const { energyCost, setEnergyCost } = useTCO();
 
   const [sliderValue, setSliderValue] = useState(0);
   const [avgCons, setAvgCons] = useState(0);
@@ -125,6 +128,14 @@ const PowerCost: React.FC<powerProps> = ({
     eCost,
     sliderValue,
   ]);
+
+  useEffect(() => {
+    reset({
+      eCost: energyCost.eCost || 0.11,
+      choice: energyCost.choice || "no",
+      usage: energyCost.usage || 60,
+    });
+  }, [energyCost, reset]);
 
   return (
     <div className="flex flex-wrap items-center w-full">

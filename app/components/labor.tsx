@@ -5,8 +5,10 @@ import {
   SALARIES,
   Role,
   ADDITIONAL_COST_PERCENTAGES,
+  allRolesSet,
 } from "../constants/costants";
 import toast from "react-hot-toast";
+import { useTCO } from "../context/useContext";
 
 interface localProps {
   choice: string;
@@ -30,12 +32,14 @@ const Labor: React.FC<laborProps> = ({
   setLaborCost,
   setLaborChoice,
 }) => {
-  const { register, watch } = useForm<localProps>({
+  const { register, watch, reset } = useForm<localProps>({
     defaultValues: {
       include: false,
       choice: "guided",
     },
   });
+
+  const { labor, setLabor } = useTCO();
 
   const [totalBaseLaborCost, setTotalBaseLaborCost] = useState(0);
   const [totalLaborCost, setTotalLaborCost] = useState(0);
@@ -113,6 +117,38 @@ const Labor: React.FC<laborProps> = ({
     tcoCost,
     choice,
   ]);
+
+  useEffect(() => {
+    if (labor) {
+      // Reset form values
+      reset({
+        include: false,
+        choice: labor.mode || "guided",
+      });
+
+      if (labor.mode === "custom" && labor.workers) {
+        const roles: { [key in Role]?: number } = {};
+        const invalidRoles: string[] = [];
+
+        labor.workers.forEach((worker) => {
+          if (allRolesSet.has(worker.role as Role)) {
+            roles[worker.role as Role] = worker.count;
+          } else {
+            invalidRoles.push(worker.role || "undefined");
+          }
+        });
+
+        if (invalidRoles.length > 0) {
+          toast.error(`Invalid roles ignored: ${invalidRoles.join(", ")}`);
+        }
+
+        // Set the valid roles
+        setSelectedRoles(roles);
+      } else {
+        setSelectedRoles({});
+      }
+    }
+  }, [labor, reset]);
 
   const handleRoleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const role = event.target.value as Role;

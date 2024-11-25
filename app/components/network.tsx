@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import "./comp.css";
+import { useTCO } from "../context/useContext";
 
 import { styled } from "@mui/material/styles";
 import Box from "@mui/material/Box";
@@ -11,8 +12,8 @@ import Slider from "@mui/material/Slider";
 import Input from "@mui/material/Input";
 
 interface LocalProps {
-  provider: string;
-  topology: string;
+  provider: "infiniband" | "slingshot";
+  topology: "dragonfly" | "fat-tree" | "leaf-spine";
   bandwidth: number;
   tier: number;
 }
@@ -80,14 +81,16 @@ const Network: React.FC<NetworkProps> = ({
   setTotalNetCost,
   setTotalNetworkConsumption,
 }) => {
-  const { register, watch } = useForm<LocalProps>({
+  const { register, watch, reset } = useForm<LocalProps>({
     defaultValues: {
       provider: "infiniband",
-      topology: "Leaf-Spine",
+      topology: "leaf-spine",
       bandwidth: 100,
       tier: 2,
     },
   });
+
+  const { network, setNetwork } = useTCO();
 
   const [sliderValue, setSliderValue] = useState<number>(0);
 
@@ -194,11 +197,11 @@ const Network: React.FC<NetworkProps> = ({
 
   // Topology configurations with string keys
   const topologyConfig: TopologyConfig = {
-    "Leaf-Spine": {
+    "leaf-spine": {
       uplinkPortFactors: { "2": 0.22, "3": 0.3, "4": 0.35 },
       defaultUplinkFactor: 0.15,
     },
-    Dragonfly: {
+    dragonfly: {
       portDistributions: {
         "1": { nodes: 0.6, intraGroup: 0.2, interGroup: 0.2 },
         "2": { nodes: 0.5, intraGroup: 0.25, interGroup: 0.25 },
@@ -206,7 +209,7 @@ const Network: React.FC<NetworkProps> = ({
         "4": { nodes: 0.4, intraGroup: 0.3, interGroup: 0.3 },
       },
     },
-    "Fat-Tree": {},
+    "fat-tree": {},
   };
 
   useEffect(() => {
@@ -253,11 +256,11 @@ const Network: React.FC<NetworkProps> = ({
     }
 
     // Topology-based calculations
-    if (topology === "Leaf-Spine") {
+    if (topology === "leaf-spine") {
       const tierLevelKey = tierLevel.toString();
       const uplinkFactor =
-        topologyConfig["Leaf-Spine"].uplinkPortFactors?.[tierLevelKey] ||
-        topologyConfig["Leaf-Spine"].defaultUplinkFactor!;
+        topologyConfig["leaf-spine"].uplinkPortFactors?.[tierLevelKey] ||
+        topologyConfig["leaf-spine"].defaultUplinkFactor!;
       const num_uplink_ports = num_ports * uplinkFactor;
 
       numSwitches = Math.ceil(nodes / (num_ports - num_uplink_ports)) + 1;
@@ -267,11 +270,11 @@ const Network: React.FC<NetworkProps> = ({
       if (bandwidth === 400) {
         numSwitches = Math.ceil(numSwitches * 1.2);
       }
-    } else if (topology === "Dragonfly") {
+    } else if (topology === "dragonfly") {
       const tierLevelKey = tierLevel.toString();
       const portDist =
-        topologyConfig["Dragonfly"].portDistributions?.[tierLevelKey] ||
-        topologyConfig["Dragonfly"].portDistributions?.["1"]!;
+        topologyConfig["dragonfly"].portDistributions?.[tierLevelKey] ||
+        topologyConfig["dragonfly"].portDistributions?.["1"]!;
       const num_ports_nodes = num_ports * portDist.nodes;
 
       numSwitches = Math.ceil(nodes / num_ports_nodes);
@@ -279,7 +282,7 @@ const Network: React.FC<NetworkProps> = ({
       if (bandwidth === 400) {
         numSwitches = Math.ceil(numSwitches * 1.2);
       }
-    } else if (topology === "Fat-Tree") {
+    } else if (topology === "fat-tree") {
       const k = num_ports; // Number of ports per switch
       const num_nodes_per_edge_switch = k / 2; // Each edge switch connects to k/2 nodes
 
@@ -330,6 +333,8 @@ const Network: React.FC<NetworkProps> = ({
     // Apply slider value adjustment
     cost *= 1 + sliderValue / 100;
 
+    setNetwork({ provider, tier: tierLevel, bandwidth, topology });
+
     // Update states
     setTotalNetworkConsumption(netConsumption);
     setTotalNetCost(cost);
@@ -348,6 +353,15 @@ const Network: React.FC<NetworkProps> = ({
     setTier,
     setBandwidth,
   ]);
+
+  useEffect(() => {
+    reset({
+      provider: network.provider || "infiniband",
+      tier: network.tier || 2,
+      topology: network.topology || "leaf-spine",
+      bandwidth: network.bandwidth || 100,
+    });
+  }, [network, reset]);
 
   return (
     <div className="flex flex-col space-y-3 p-4 relative">
@@ -410,9 +424,9 @@ const Network: React.FC<NetworkProps> = ({
             className="flex-grow p-2 rounded border-2"
             id="topology"
           >
-            <option value="Leaf-Spine">Leaf-Spine</option>
-            <option value="Fat-Tree">Fat-Tree</option>
-            <option value="Dragonfly">Dragonfly</option>
+            <option value="leaf-spine">Leaf-Spine</option>
+            <option value="fat-tree">Fat-Tree</option>
+            <option value="dragonfly">Dragonfly</option>
           </select>
         </div>
         <div className="flex flex-col space-y-1 w-full sm:w-[200px] mb-2 sm:mr-[50px]">
@@ -424,10 +438,10 @@ const Network: React.FC<NetworkProps> = ({
             className="flex-grow p-2 rounded border-2"
             id="bandwidth"
           >
-            <option value="50">50</option>
-            <option value="100">100</option>
-            <option value="200">200</option>
-            <option value="400">400</option>
+            <option value={50}>50</option>
+            <option value={100}>100</option>
+            <option value={200}>200</option>
+            <option value={400}>400</option>
           </select>
         </div>
         <div className="flex flex-col space-y-1 w-full sm:w-[691px] mb-2 mt-4 xl:mr-[300px] ml-4 items-center">
