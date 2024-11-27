@@ -145,7 +145,9 @@ export default function Home() {
     (index: string, newNode: number) => {
       setServerClusters((prevClusters) =>
         prevClusters.map((cluster) =>
-          cluster.index === index ? { ...cluster, nodeCount: newNode } : cluster
+          cluster.index === index
+            ? { ...cluster, homeNodeCountProp: newNode }
+            : cluster
         )
       );
     },
@@ -170,7 +172,7 @@ export default function Home() {
       setServerClusters((prevClusters) =>
         prevClusters.map((cluster) =>
           cluster.index === index
-            ? { ...cluster, GpuPerNode: GpuNode }
+            ? { ...cluster, gpu_perNodeProp: GpuNode }
             : cluster
         )
       );
@@ -245,6 +247,7 @@ export default function Home() {
       (sum, cluster) => sum + cluster.totalCost,
       0
     );
+
     const totalNode = serverClusters.reduce(
       (sum, cluster) => sum + cluster.homeNodeCountProp,
       0
@@ -287,6 +290,7 @@ export default function Home() {
     setCoreNumber(totalCoreNumber);
     setTotalServerConsumption(totalServerP + tmp_storage_consumption);
     setTotalNodeCount(totalNode);
+    console.log(totalNodeCount);
 
     setTotalCost(
       totalServerCosttemp +

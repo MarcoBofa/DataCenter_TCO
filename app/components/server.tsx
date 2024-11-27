@@ -391,6 +391,7 @@ const Server: React.FC<ServerProps> = ({
     } else {
       updateServerGpuNumber(index, 0);
     }
+
     updateServerNodeConsumption(index, serverConsumption);
     setTotalClusterCost(totalCost);
     updateServerCluster(index, totalCost);
