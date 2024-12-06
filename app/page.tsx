@@ -278,9 +278,10 @@ export default function Home() {
     );
 
     let totalGPU = 0;
+
     serverClusters.forEach((cluster) => {
       if (cluster.gpu_perNodeProp && cluster.gpu_perNodeProp >= 2) {
-        totalGPU += cluster.gpu_perNodeProp * cluster.gpu_perNodeProp;
+        totalGPU += cluster.gpu_perNodeProp * cluster.homeNodeCountProp;
       }
     });
     setTotalGPUCount(totalGPU);

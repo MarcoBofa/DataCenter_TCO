@@ -193,6 +193,7 @@ export const CPU_POWER_CONSUMPTION = {
   AMD_SIENA: 150,
   AMD_GENOAX: 340,
   AMD_GENOA: 300,
+  AMD_MILAN: 300,
 };
 
 // CPU cost per core based on CPU type
@@ -205,6 +206,7 @@ export const CPU_COST_PER_CORE = {
   AMD_SIENA: 57,
   AMD_GENOAX: 175,
   AMD_GENOA: 118,
+  AMD_MILAN: 108,
 };
 
 // Discount tiers based on node count

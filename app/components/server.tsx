@@ -144,6 +144,7 @@ const Server: React.FC<ServerProps> = ({
     amd_siena: CPU_COST_PER_CORE.AMD_SIENA,
     amd_genoax: CPU_COST_PER_CORE.AMD_GENOAX,
     amd_genoa: CPU_COST_PER_CORE.AMD_GENOA,
+    amd_milan: CPU_COST_PER_CORE.AMD_GENOA,
   };
 
   const cpuPowerConsumptionMapping: { [key: string]: number } = {
@@ -155,6 +156,7 @@ const Server: React.FC<ServerProps> = ({
     amd_siena: CPU_POWER_CONSUMPTION.AMD_SIENA,
     amd_genoax: CPU_POWER_CONSUMPTION.AMD_GENOAX,
     amd_genoa: CPU_POWER_CONSUMPTION.AMD_GENOA,
+    amd_milan: CPU_POWER_CONSUMPTION.AMD_GENOA,
   };
 
   const gpuCostMapping: { [key: string]: number } = {
@@ -189,6 +191,7 @@ const Server: React.FC<ServerProps> = ({
     amd_siena: MTTF_VALUES.AMD_SIENA,
     amd_genoax: MTTF_VALUES.AMD_GENOAX,
     amd_genoa: MTTF_VALUES.AMD_GENOA,
+    amd_milan: MTTF_VALUES.AMD_GENOA,
   };
 
   const gpuMttfMapping: { [key: string]: number } = {
@@ -447,6 +450,7 @@ const Server: React.FC<ServerProps> = ({
               <option value="amd_genoax">AMD EPYC Genoa-X</option>
               <option value="amd_siena">AMD EPYC Siena</option>
               <option value="amd_bergamo">AMD EPYC Bergamo</option>
+              <option value="amd_milan">AMD EPYC Milan</option>
             </select>
             <div className="flex flex-wrap justify-center items-center flex-grow xs:w-auto">
               <div className="w-full sm:w-[285px] border-green-500 bg-green-100 border-2 font-bold py-1 px-3 rounded-lg shadow mb-2 sm:mr-[50px]">
